@@ -5,7 +5,7 @@
 export const environment = {
   production: true,
 
-  UrlApi:'https://service.poclab.pe/silac/api',  
+  UrlApi:'https://service.poclab.pe/sire/api',  
   UrlImage:'assets/',
 
   //  UrlApi:'https://sitedev.poclab.pe/silacdev/api',  

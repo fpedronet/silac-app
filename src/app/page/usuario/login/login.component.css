@@ -103,8 +103,8 @@ form button {
   display: block;
     margin: 0;
     padding: 0.65em 1em 1em;
-    /* background: linear-gradient(90deg, #9b1417 0%, #681575 100%);; */
-    background: #da4f14;
+    background: linear-gradient(90deg, #2c4962d9 0%, #012641de 100%);
+    /* background: #2C4962; */
     border: none;
     border-radius: 20px;
     box-sizing: border-box;
