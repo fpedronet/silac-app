@@ -1,0 +1,11 @@
+{
+    "reporteAdmin":{
+        "codigo":"Reporte Administrativo"
+    },
+    "rendicionGasto":{
+        "codigo":"Rendición de Gasto"
+    },
+    "hojaTiempo":{
+        "codigo":"Hoja Tiempo"
+    }
+}

@@ -1,0 +1,157 @@
+<app-spinner></app-spinner>
+
+<div class="example-container" style="height: 100vh;"> 
+  <mat-toolbar color="primary">
+
+    <div fxShow="true" fxHide.gt-sm="true">
+      <button mat-icon-button (click)="abrirmenu()">
+        <mat-icon>menu</mat-icon>
+      </button>
+    </div>
+
+    <a mat-button>      
+      <img style="width: 41px;" src="{{logo}}"/>
+      <span *ngIf="count" > 
+        <mat-form-field style="padding-left:8px;width:224px;font-weight:400">
+          <mat-select 
+          [(ngModel)]="codigo"
+          (selectionChange)="selectempresa($event.value)"
+          >
+            <mat-option *ngFor="let el of menus.listaEmpresa" [value]="el.codigo">
+            {{el.nombreEmpresa}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </span>
+      <span *ngIf="!count" style="padding-left:8px;font-size:15px;font-weight:400">{{empresa}}</span>
+    </a>
+
+    <span class="example-spacer"></span>
+
+    <div fxShow="true" fxHide.lt-md="true" class="menu" >      
+      <nav class="nav1">
+        <ul>
+            <li *ngFor="let m of menus.listaMenu">
+              <a *ngIf="m.url=='/page/home'" (click)="clearLocalStore()" routerLink="{{m.url}}" class="opcion">{{m.desModulo}}</a>
+              <a *ngIf="m.url!='/page/home' && m.url!='/page/cerrar'" class="opcion">{{m.desModulo}}</a>
+              <ul>
+                <li *ngFor="let s of m.listaSubMenu1">
+                  <a *ngIf="m.url==''"  class="opcion">{{s.desPantallaWeb}}</a>
+                  <a *ngIf="m.url!=''" (click)="clearLocalStore()" routerLink="{{s.url}}" class="opcion">{{s.desPantallaWeb}}</a>
+                  <ul>
+                    <li *ngFor="let s1 of s.listaSubMenu2">
+                      <a (click)="clearLocalStore()" routerLink="{{s1.url}}" class="opcion">{{s1.desSubMenuWeb}}</a>                    
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+            </li>
+        </ul>
+      </nav>
+    </div>
+
+    <a style="cursor: pointer;" (click)="abrirperfil()">
+      <div id="abrirmenu"><img style="width: 26px;" src="{{iconSharePoint}}" alt=""/></div> 
+      <span style="font-size: 9px;">Sharepoint</span>
+    </a> 
+
+    <a id="closemenu" style="cursor: pointer;" (click)="closeLogin()">
+      <div style="padding-top: 11px;margin: 0 0 -21px 0;text-align: center;"><mat-icon>logout</mat-icon></div> 
+      <span style="font-size: 9px;">Cerrar sesión</span>
+    </a>    
+     
+  </mat-toolbar>
+
+  <mat-sidenav-container fxFlexFill class="example-container">
+    <mat-sidenav color="primary" #sidenav fxLayout="column" mode="over"  opened="{{isshow}}" fxHide.gt-sm="true">
+        
+      <div>
+        <div class="menu-header-bg">Menu</div>
+
+        <div class="header-content flex">
+          <img src="{{user}}" />
+          <label>
+            <h2>{{username}}</h2>
+            <p>{{userdni}}</p>
+          </label>
+        </div>
+
+        <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+          <defs><path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" /></defs>
+          <g class="parallax">
+              <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" />
+              <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
+              <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
+              <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
+          </g>
+        </svg>
+
+      </div>
+
+      <div fxLayout="column">
+        
+        <mat-accordion class="example-headers-align">
+          <div hideToggle *ngFor="let m of menus.listaMenu">
+                        
+            <mat-expansion-panel *ngIf="m.url=='/page/home'" disabled="">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <a class="menuvertical" *ngIf="m.url=='/page/home'" routerLink="{{m.url}}" (click)="clearLocalStore()">
+                    <mat-icon>home</mat-icon>
+                    {{m.desModulo}}
+                  </a>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+            </mat-expansion-panel>  
+           
+            <mat-divider *ngIf="m.url=='/page/home'"></mat-divider>
+
+            <mat-expansion-panel *ngIf="m.url!='/page/home' && m.url!='/page/cerrar'">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <a *ngIf="m.url==''"  class="menuvertical"><mat-icon>peopleoutline</mat-icon>{{m.desModulo}}</a>
+                  <a *ngIf="m.url!=''"  class="menuvertical" routerLink="{{m.url}}" (click)="clearLocalStore()"><mat-icon>peopleoutline</mat-icon>{{m.desModulo}}</a>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+
+              <div class="submenu" *ngFor="let s of m.listaSubMenu1">
+                <mat-expansion-panel>
+                  <mat-expansion-panel-header style="margin-left:-25px;margin-top:-15px;">
+                    <mat-panel-title>
+                      <a *ngIf="m.url==''" class="menuvertical"><mat-icon>menuopen</mat-icon>{{s.desPantallaWeb}}</a>
+                      <a *ngIf="m.url!=''" class="menuvertical" routerLink="{{s.url}}" (click)="clearLocalStore()"><mat-icon>menuopen</mat-icon>{{s.desPantallaWeb}}</a>
+                    </mat-panel-title>
+                  </mat-expansion-panel-header>
+                  <p class="submenu" *ngFor="let r of s.listaSubMenu2">
+                    <a class="menuvertical" routerLink="{{r.url}}" (click)="clearLocalStore()">{{r.desSubMenuWeb}}</a>
+                  </p>
+                </mat-expansion-panel>
+              </div>
+            </mat-expansion-panel>
+            
+            <mat-divider *ngIf="m.url!='/page/home' && m.url!='/page/cerrar'"></mat-divider>
+
+            <mat-expansion-panel *ngIf="m.url=='/page/cerrar'" disabled="">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <a class="menuvertical" (click)="closeLogin()">
+                    <mat-icon>logout</mat-icon>
+                    {{m.desModulo}}
+                  </a>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+            </mat-expansion-panel> 
+
+          </div>       
+        </mat-accordion>
+
+      </div>
+    </mat-sidenav>
+
+    <mat-sidenav-content style="background: #fff;" fxFlexFill>
+      <router-outlet></router-outlet>
+   </mat-sidenav-content>
+
+  </mat-sidenav-container>
+
+</div>

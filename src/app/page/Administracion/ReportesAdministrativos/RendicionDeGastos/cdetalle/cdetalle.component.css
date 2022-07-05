@@ -1,0 +1,19 @@
+#contenedor {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  #contenedor > .titlemodal {
+    width: 70%;
+  }
+
+
+  :host zxing-scanner::ng-deep video {
+    max-height: 50vh;    
+    object-fit: contain;
+}
+:host zxing-scanner::ng-deep {
+    border-style: solid;
+    border-color: #5d78ff;
+} 
