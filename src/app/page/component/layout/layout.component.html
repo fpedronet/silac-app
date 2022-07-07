@@ -11,7 +11,7 @@
 
     <a mat-button>      
       <img style="width: 41px;" src="{{logo}}"/>
-      <span *ngIf="count" > 
+      <!-- <span *ngIf="count" > 
         <mat-form-field style="padding-left:8px;width:224px;font-weight:400">
           <mat-select 
           [(ngModel)]="codigo"
@@ -23,7 +23,7 @@
           </mat-select>
         </mat-form-field>
       </span>
-      <span *ngIf="!count" style="padding-left:8px;font-size:15px;font-weight:400">{{empresa}}</span>
+      <span *ngIf="!count" style="padding-left:8px;font-size:15px;font-weight:400">{{empresa}}</span> -->
     </a>
 
     <span class="example-spacer"></span>
@@ -50,10 +50,10 @@
       </nav>
     </div>
 
-    <a style="cursor: pointer;" (click)="abrirperfil()">
+    <!-- <a style="cursor: pointer;" (click)="abrirperfil()">
       <div id="abrirmenu"><img style="width: 26px;" src="{{iconSharePoint}}" alt=""/></div> 
       <span style="font-size: 9px;">Sharepoint</span>
-    </a> 
+    </a>  -->
 
     <a id="closemenu" style="cursor: pointer;" (click)="closeLogin()">
       <div style="padding-top: 11px;margin: 0 0 -21px 0;text-align: center;"><mat-icon>logout</mat-icon></div> 

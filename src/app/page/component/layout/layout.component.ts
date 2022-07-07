@@ -44,7 +44,6 @@ export class LayoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.listar();   
-    // this.startTimer();
   }
 
   listar(){
@@ -54,51 +53,33 @@ export class LayoutComponent implements OnInit {
     if(session!=null){
       this.username= session.nombreConocido.toUpperCase();
       this.userdni =  session.dniEmp;
-      this.user = session.strFoto !== ''?session.strFoto : this.user;
-      let empresaselect = session.codigoempresa;
+      // this.user = session.strFoto !== ''?session.strFoto : this.user;
+      // let empresaselect = session.codigoempresa;
 
-      this.spinner.showLoading();
-      this.ConfigPermisoService.listar(empresaselect).subscribe(data=>{
-        this.menus.listaEmpresa = data.listaEmpresa;
+      // this.spinner.showLoading();
+      // this.ConfigPermisoService.listar(empresaselect).subscribe(data=>{
+      //   this.menus.listaEmpresa = data.listaEmpresa;
         
-        if(empresaselect!=null){
-          this.codigo = empresaselect;
-          this.empresa = data.listaEmpresa?.filter(x=>x.codigo==empresaselect)[0].nombreEmpresa
-        }else{
-          this.codigo = data.listaEmpresa![0].codigo;
-          this.empresa = data.listaEmpresa![0].nombreEmpresa;
-        }
+      //   if(empresaselect!=null){
+      //     this.codigo = empresaselect;
+      //     this.empresa = data.listaEmpresa?.filter(x=>x.codigo==empresaselect)[0].nombreEmpresa
+      //   }else{
+      //     this.codigo = data.listaEmpresa![0].codigo;
+      //     this.empresa = data.listaEmpresa![0].nombreEmpresa;
+      //   }
 
-        this.count = (data.listaEmpresa?.length!>1)? true: false;     
-        this.menus.listaMenu = data.listaMenu;
+      //   this.count = (data.listaEmpresa?.length!>1)? true: false;     
+      //   this.menus.listaMenu = data.listaMenu;
 
-        localStorage.setItem(environment.CODIGO_EMPRESA, this.codigo!);
-        localStorage.setItem(environment.PASSWORD_SHAREPOINT, data.contraseniaSharepoint!);
+      //   localStorage.setItem(environment.CODIGO_EMPRESA, this.codigo!);
+      //   localStorage.setItem(environment.PASSWORD_SHAREPOINT, data.contraseniaSharepoint!);
   
-        this.spinner.hideLoading();
-      });
+      //   this.spinner.hideLoading();
+      // });
     }else{
       localStorage.clear();
       this.router.navigate(['']);
     }  
-  }
-
-  selectempresa(idbanco: number){
-    this.spinner.showLoading();
-    let split = this.router.url.split('/');
-    localStorage.setItem(environment.CODIGO_EMPRESA, idbanco.toString()!);
-
-    if(split.length > 3 && split.length <=4){
-
-      window.location.reload();
-
-    }else if(split.length >= 5){
-      this.router.navigate(["page/home"]);
-    }
-    else{
-      window.location.reload();
-    }
-
   }
 
   clearLocalStore(){
@@ -109,14 +90,7 @@ export class LayoutComponent implements OnInit {
   closeLogin(){
     this.isshow = false;
     localStorage.clear();
-    // this.router.navigate(['']);
     window.location.reload();
-  }
-
-  abrirperfil(){
-    const dialogRef =this.dialog.open(PerfilComponent, {
-       width: '400px',
-    });
   }
 
 
@@ -128,16 +102,4 @@ export class LayoutComponent implements OnInit {
       this.isshow = true;  
     }
   }
-
-  // startTimer() {
-  //   this.interval = setInterval(() => {
-  //       let session = this.usuarioService.sessionUsuario();
-  //       if(session==null){
-  //         clearInterval(this.interval);
-  //         this.usuarioService.closeLogin();
-  //         window.location.reload();
-  //       }
-
-  //   },30000)
-  // }
 }
