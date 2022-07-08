@@ -45,24 +45,25 @@ export class GuardService implements CanActivate {
       }
 
       //3) OBTENIENDO EL ID DEL USUARIO PARA TRAER LAS OPCIONES DE MENU Y LOS PERMISO
-      let session = this.usuarioService.sessionUsuario();
-      return this.configPermisoService.configmenu().pipe(map(x => {
-        let cont = 0;
-        for (let m of x.listaConfigMenu!) {
-          if (url.startsWith(m.vUrl!)) {
-            cont++;
-            break;
-          }
-        }
+      // let session = this.usuarioService.sessionUsuario();
+      // return this.configPermisoService.configmenu().pipe(map(x => {
+      //   let cont = 0;
+      //   for (let m of x.listaConfigMenu!) {
+      //     if (url.startsWith(m.vUrl!)) {
+      //       cont++;
+      //       break;
+      //     }
+      //   }
         
-        if (cont > 0) {
-          return true;
-        } else {
-          this.router.navigate(['/page/not-403']);
-          return false;
-        }
+      //   if (cont > 0) {
+      //     return true;
+      //   } else {
+      //     this.router.navigate(['/page/not-403']);
+      //     return false;
+      //   }
 
-      }))     
+      // }))   
+      return true;  
     } 
     else {
       localStorage.clear();
