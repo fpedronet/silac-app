@@ -11,18 +11,13 @@ import { InterceptorService } from '../_interceptors/interceptor.service';
 import { Not404Component } from './configuracion/not404/not404.component';
 import { Not403Component } from './configuracion/not403/not403.component';
 
-
-import { PerfilComponent } from './component/perfil/perfil.component';
-
-
 @NgModule({
   declarations: [
     ConfirmComponent,
     LayoutComponent,
     HomeComponent,
     Not404Component,
-    Not403Component,
-    PerfilComponent
+    Not403Component
   ],
   imports: [
     MaterialModule,

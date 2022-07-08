@@ -9,7 +9,6 @@ import { UsuarioService } from 'src/app/_service/configuracion/usuario.service';
 
 import { MenuResponse } from 'src/app/_model/configuracion/menu';
 import { MatDialog } from '@angular/material/dialog';
-import { PerfilComponent } from '../perfil/perfil.component';
 
 
 @Component({
@@ -52,7 +51,7 @@ export class LayoutComponent implements OnInit {
 
     if(session!=null){
       this.username= session.nombreConocido.toUpperCase();
-      this.userdni =  session.dniEmp;
+      this.userdni =  session.documento;
       // this.user = session.strFoto !== ''?session.strFoto : this.user;
       // let empresaselect = session.codigoempresa;
 

@@ -46,14 +46,14 @@ export class LoginComponent implements OnInit {
   login(){
     let model = new Usuario();
 
-    model.usuario = this.form.value['usuario'];
-    model.contrasenia= this.form.value['clave'];
+    model.vUsuario = this.form.value['usuario'];
+    model.vContrasena= this.form.value['clave'];
 
-    if(model.usuario==null || model.contrasenia==""){
-      if(model.usuario==null || model.usuario==""){
+    if(model.vUsuario==null || model.vContrasena==""){
+      if(model.vUsuario==null || model.vContrasena==""){
         this.notifierService.showNotification(environment.ALERT,'Mensaje','Ingresa el usuario');
       }
-      else if(model.contrasenia==null || model.contrasenia==""){
+      else if(model.vContrasena==null || model.vContrasena==""){
         this.notifierService.showNotification(environment.ALERT,'Mensaje','Ingresa la contraseña');
       }
       this.spinner.hideLoading();

@@ -1,17 +1,16 @@
 import { Byte } from "@angular/compiler/src/util";
 
 export class Usuario{
-    ideUsuario?: string;
-    usuario? : string;
-    contrasenia? : string;
-    id? : string;
-    key? : string;
+    nIdUsuario?: number;
+    vUsuario? : string;
+    vContrasena? : string;
 }
 
 export class TokenUsuario{
-    ideUsuario? : number;
+    idPersona? : number;
+    idUsuario? : number;
     nombreConocido? : string;
-    dniEmp? : string;
+    documento? : string;
     access_token? : string;
     typeResponse? : number;
     mensaje? : string;

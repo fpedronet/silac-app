@@ -48,15 +48,15 @@ export class UsuarioService {
   sessionUsuario(){
     let helper = new JwtHelperService();
     let token = localStorage.getItem(environment.TOKEN_NAME);
-    let codigoempresa = localStorage.getItem(environment.CODIGO_EMPRESA);
-    let contraseniaSharepoint = localStorage.getItem(environment.PASSWORD_SHAREPOINT);
+    // let codigoempresa = localStorage.getItem(environment.CODIGO_EMPRESA);
+    // let contraseniaSharepoint = localStorage.getItem(environment.PASSWORD_SHAREPOINT);
 
     // if (!helper.isTokenExpired(token!)){
       if(token!=null){
         let decodedToken = helper.decodeToken(token!);       
-        decodedToken.codigoempresa =codigoempresa;
-        decodedToken.contraseniaSharepoint = contraseniaSharepoint;
-        decodedToken.strFoto = localStorage.getItem(environment.FOTO);
+        // decodedToken.codigoempresa =codigoempresa;
+        // decodedToken.contraseniaSharepoint = contraseniaSharepoint;
+        // decodedToken.strFoto = localStorage.getItem(environment.FOTO);
         return decodedToken;
       }else{
         return null
