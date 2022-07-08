@@ -140,8 +140,8 @@ div {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 12px;
-    margin-right:125px;
+    /* padding: 12px; */
+    margin-right:17px;
   }
   .menu .nav1 ul{
     list-style: none;
@@ -152,7 +152,7 @@ div {
       text-decoration: none;
       font-size: 60%;
       color:#fff;
-      padding: 1px 35px;
+      padding: 1px 25px;
       display: block;
       font-family:sans-serif
   }

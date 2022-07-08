@@ -46,10 +46,10 @@ export class GuardService implements CanActivate {
 
       //3) OBTENIENDO EL ID DEL USUARIO PARA TRAER LAS OPCIONES DE MENU Y LOS PERMISO
       let session = this.usuarioService.sessionUsuario();
-      return this.configPermisoService.configmenu(session.codigoempresa).pipe(map(x => {
+      return this.configPermisoService.configmenu().pipe(map(x => {
         let cont = 0;
         for (let m of x.listaConfigMenu!) {
-          if (url.startsWith(m.url!)) {
+          if (url.startsWith(m.vUrl!)) {
             cont++;
             break;
           }

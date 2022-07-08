@@ -35,7 +35,6 @@ export class LayoutComponent implements OnInit {
   empresa?: string = "";
   logo?: string =environment.UrlImage + "logoMenu.png";
   user?: string =environment.UrlImage + "userMenu.png";
-  iconSharePoint?: string =environment.UrlImage + "sharePoint-2.png";
   username: string = "";
   userdni: string = "";
   isshow: boolean = false;
@@ -52,29 +51,14 @@ export class LayoutComponent implements OnInit {
     if(session!=null){
       this.username= session.nombreConocido.toUpperCase();
       this.userdni =  session.documento;
-      // this.user = session.strFoto !== ''?session.strFoto : this.user;
-      // let empresaselect = session.codigoempresa;
 
-      // this.spinner.showLoading();
-      // this.ConfigPermisoService.listar(empresaselect).subscribe(data=>{
-      //   this.menus.listaEmpresa = data.listaEmpresa;
-        
-      //   if(empresaselect!=null){
-      //     this.codigo = empresaselect;
-      //     this.empresa = data.listaEmpresa?.filter(x=>x.codigo==empresaselect)[0].nombreEmpresa
-      //   }else{
-      //     this.codigo = data.listaEmpresa![0].codigo;
-      //     this.empresa = data.listaEmpresa![0].nombreEmpresa;
-      //   }
+      this.spinner.showLoading();
+      this.ConfigPermisoService.listar().subscribe(data=>{
+    
+        this.menus.listaMenu = data.listaMenu;
 
-      //   this.count = (data.listaEmpresa?.length!>1)? true: false;     
-      //   this.menus.listaMenu = data.listaMenu;
-
-      //   localStorage.setItem(environment.CODIGO_EMPRESA, this.codigo!);
-      //   localStorage.setItem(environment.PASSWORD_SHAREPOINT, data.contraseniaSharepoint!);
-  
-      //   this.spinner.hideLoading();
-      // });
+        this.spinner.hideLoading();
+      });
     }else{
       localStorage.clear();
       this.router.navigate(['']);
