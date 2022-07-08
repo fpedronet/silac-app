@@ -10,6 +10,8 @@ import { PageRoutingModule } from './page-routing.module';
 import { InterceptorService } from '../_interceptors/interceptor.service';
 import { Not404Component } from './configuracion/not404/not404.component';
 import { Not403Component } from './configuracion/not403/not403.component';
+import { CordenComponent } from './Orden/corden/corden.component';
+import { LordenComponent } from './orden/lorden/lorden.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +19,9 @@ import { Not403Component } from './configuracion/not403/not403.component';
     LayoutComponent,
     HomeComponent,
     Not404Component,
-    Not403Component
+    Not403Component,
+    CordenComponent,
+    LordenComponent
   ],
   imports: [
     MaterialModule,

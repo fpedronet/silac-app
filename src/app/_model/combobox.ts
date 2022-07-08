@@ -1,21 +1,25 @@
-export class Combobox {
+export class TbMaestra {
     constructor() {
-        this.valor = '';
-        this.descripcion = '';
-        this.etiqueta = '';
+        this.vValor = '';
+        this.vDescripcion = '';
+        this.vEtiqueta = '';
         this.isChecked = false;
         this.visual = true;
-        this.aux1 = '';
-        this.aux2 = '';
-        this.aux3 = '';
+        this.vAux1 = '';
+        this.vAux2 = '';
+        this.vAux3 = '';
+        this.vAux4 = '';
+        this.vAux5 = '';
     }
-    valor?: string;
-    descripcion?: string;
-    etiqueta?: string;
+    vValor?: string;
+    vDescripcion?: string;
+    vEtiqueta?: string;
+    nOrden?: number;
     isChecked?: boolean;
     visual?: boolean;
-    aux1?: string;
-    aux2?: string;
-    aux3?: string;
-    arrayAux1?: number[];
+    vAux1?: string;
+    vAux2?: string;
+    vAux3?: string;
+    vAux4?: string;
+    vAux5?: string;
 }

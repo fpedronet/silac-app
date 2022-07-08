@@ -1,13 +1,12 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { Combobox } from '../_model/combobox';
-import { dataCollection } from '../_model/dataCollection';
+import { TbMaestra } from '../_model/combobox';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ComboboxService {
+export class TbmaestraService {
 
   private url: string = `${environment.UrlApi}/tablamaestra`;
   static http: any;
@@ -18,14 +17,6 @@ export class ComboboxService {
 
     let href = `${this.url}/GetAllTablaMaestra`;
     let urls = `${href}?Etiquetas=${etiquetas.join('|')}`;
-    //debugger;
-    return this.http.get<dataCollection>(urls);
+    return this.http.get<TbMaestra>(urls);
   }
-
-  obtenerProveedor(ruc: string){
-    let urls = `${this.url}/GetFirstProveedor?ruc=${ruc}`;
-
-    return this.http.get<Combobox>(urls);
-  }
-  
 }
