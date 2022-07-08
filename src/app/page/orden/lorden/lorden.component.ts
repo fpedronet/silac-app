@@ -1,8 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import { MatStepper } from '@angular/material/stepper';
-import { TbMaestra } from 'src/app/_model/combobox';
-import { Permiso } from 'src/app/_model/permiso';
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-lorden',
@@ -11,7 +7,9 @@ import { Permiso } from 'src/app/_model/permiso';
 })
 export class LordenComponent implements OnInit {
 
+  constructor() { }
+
   ngOnInit(): void {
-    
   }
+
 }

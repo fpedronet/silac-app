@@ -5,7 +5,9 @@ import { GuardService } from '../_service/guard.service';
 import { HomeComponent } from './home/home.component';
 
 import { Not403Component } from './configuracion/not403/not403.component';
-import { CordenComponent } from './Orden/corden/corden.component';
+
+import { LordenComponent } from './orden/lorden/lorden.component';
+import { CordenComponent } from './orden/corden/corden.component';
 
 const routes: Routes = [
   {path:'home', component: HomeComponent},
@@ -17,8 +19,8 @@ const routes: Routes = [
   // {path:'donante/donacion/create', component: CdonacionComponent, canActivate: [GuardService]},
   // {path:'donante/donacion/edit/:id/:edit', component: CdonacionComponent, canActivate: [GuardService]},
 
+  {path:'laboratorio/ordenes', component: LordenComponent},
   {path:'laboratorio/ordenes/create', component: CordenComponent}
-  // {path:'donante/donacion/create', component: CdonacionComponent, canActivate: [GuardService]},
   // {path:'donante/donacion/edit/:id/:edit', component: CdonacionComponent, canActivate: [GuardService]},
 
 ];
