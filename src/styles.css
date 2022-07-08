@@ -45,7 +45,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .btnHeader{
   /* background-color: #002b8bc9; */
-  color: #4c60d0;
+  color: #2c4a62;
 }
 
 .btnnext{
@@ -84,7 +84,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 .mat-toolbar.cardtitle{
-  background: #394ec7;
+  background: #be3900;
   color: white;
   height:4px;
   font-size:17px;
@@ -92,12 +92,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .title-label{
   text-align: center;
-  color: #c13c04;
+  color: #2c4a62;
   padding-top: 4px;  
 }
 
 .sub-title-label{
-  color: #c13c04;
+  color: #2c4a62;
   padding-top: 4px;
   font-weight: 500
 }
@@ -313,7 +313,7 @@ form{
 }
 
 .mat-stepper-horizontal-line{
-  border-color:#394ec7;
+  border-color:#2c4a62;
   border-top-width:2px;
 }
 
