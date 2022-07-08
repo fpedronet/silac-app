@@ -4,14 +4,12 @@ export class Usuario{
     ideUsuario?: string;
     usuario? : string;
     contrasenia? : string;
-    contraseniaSharepoint? : string;
     id? : string;
     key? : string;
 }
 
 export class TokenUsuario{
     ideUsuario? : number;
-    idePersona? : number;
     nombreConocido? : string;
     dniEmp? : string;
     access_token? : string;
