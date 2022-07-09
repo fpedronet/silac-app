@@ -9,19 +9,19 @@ import { Not403Component } from './configuracion/not403/not403.component';
 import { LordenComponent } from './orden/lorden/lorden.component';
 import { CordenComponent } from './orden/corden/corden.component';
 
+import { CpermisoComponent } from './configuracion/permiso/cpermiso/cpermiso.component';
+
 const routes: Routes = [
   {path:'home', component: HomeComponent},
 
   {path: 'not-403', component: Not403Component},
 
   /********* Como ejemplo *******/
-  // {path:'donante/donacion', component: LdonacionComponent, canActivate: [GuardService]},
-  // {path:'donante/donacion/create', component: CdonacionComponent, canActivate: [GuardService]},
-  // {path:'donante/donacion/edit/:id/:edit', component: CdonacionComponent, canActivate: [GuardService]},
 
   {path:'laboratorio/ordenes', component: LordenComponent, canActivate: [GuardService]},
-  {path:'laboratorio/ordenes/create', component: CordenComponent, canActivate: [GuardService]}
-  // {path:'donante/donacion/edit/:id/:edit', component: CdonacionComponent, canActivate: [GuardService]},
+  {path:'laboratorio/ordenes/create', component: CordenComponent, canActivate: [GuardService]},
+  
+  {path:'configuracion/permiso', component: CpermisoComponent, canActivate: [GuardService]},
 
 ];
 

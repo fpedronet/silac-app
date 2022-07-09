@@ -12,6 +12,7 @@ import { Not404Component } from './configuracion/not404/not404.component';
 import { Not403Component } from './configuracion/not403/not403.component';
 import { CordenComponent } from './orden/corden/corden.component';
 import { LordenComponent } from './orden/lorden/lorden.component';
+import { CpermisoComponent } from './configuracion/permiso/cpermiso/cpermiso.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { LordenComponent } from './orden/lorden/lorden.component';
     Not403Component,
     CordenComponent,
     LordenComponent,
+    CpermisoComponent,
   ],
   imports: [
     MaterialModule,

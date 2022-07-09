@@ -1,0 +1,38 @@
+<mat-toolbar color="primary" class="example-toolbar submenu example-button">
+    <!-- <div class="example-button-rowR">
+      <button mat-stroked-button class="btnHeader" #tooltip="matTooltip" matTooltip="Atrás" routerLink="/page/laboratorio/ordenes">
+        <mat-icon class="maticon">subdirectory_arrow_left</mat-icon>
+      </button>
+    </div> -->
+    <div class="example-button-row">
+      <button mat-stroked-button class="btnHeader" #tooltip="matTooltip" matTooltip="Guardar" type="submit" [disabled]="frmGrupo.invalid" form="ngForm">
+        <mat-icon class="maticon">save</mat-icon>
+      </button>
+    </div>
+</mat-toolbar>
+
+<div class="container">  
+<mat-card class="cardborde">   
+  <mat-toolbar class="cardtitle"></mat-toolbar>
+
+  <h2 class="title-label">PERMISO</h2>  
+
+  <mat-divider></mat-divider>
+  
+  <div id="content"> 
+      <div style="width: 100%; float:left;margin-bottom: -17px;">
+        <div style="text-align: center; color: #1a0da4; font-weight:600;">
+          <span>CODIGO: ###</span>
+        </div> 
+      </div> 
+  </div>
+
+  <br style="clear:both;"/>
+  <form onkeydown="return event.key != 'Enter';" class="forms" id="ngForm" #frmGrupo="ngForm">
+
+
+   
+  </form>
+ 
+</mat-card>
+</div>
