@@ -5,10 +5,10 @@ import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { UsuarioService } from 'src/app/_service/configuracion/usuario.service';
-import { NotifierService } from '../../component/notifier/notifier.service';
-import { SpinnerService } from '../../component/spinner/spinner.service';
+import { NotifierService } from '../component/notifier/notifier.service';
+import { SpinnerService } from '../component/spinner/spinner.service';
 
-import { Usuario } from './../../../_model/configuracion/usuario';
+import { Usuario } from './../../_model/configuracion/usuario';
 
 @Component({
   selector: 'app-login',

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { LayoutComponent } from './page/component/layout/layout.component';
 import { Not404Component } from './page/configuracion/not404/not404.component';
-import { LoginComponent } from './page/usuario/login/login.component';
+import { LoginComponent } from './page/logeo/login.component';
 import { GuardService } from './_service/guard.service';
 
 const routes: Routes = [

@@ -18,7 +18,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { LoginComponent } from './page/usuario/login/login.component';
+import { LoginComponent } from './page/logeo/login.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { ToastrModule } from 'ngx-toastr';
 import { SpinnerModule } from './page/component/spinner/spinner.module';
