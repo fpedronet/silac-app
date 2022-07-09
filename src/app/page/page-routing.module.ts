@@ -19,8 +19,8 @@ const routes: Routes = [
   // {path:'donante/donacion/create', component: CdonacionComponent, canActivate: [GuardService]},
   // {path:'donante/donacion/edit/:id/:edit', component: CdonacionComponent, canActivate: [GuardService]},
 
-  {path:'laboratorio/ordenes', component: LordenComponent},
-  {path:'laboratorio/ordenes/create', component: CordenComponent}
+  {path:'laboratorio/ordenes', component: LordenComponent, canActivate: [GuardService]},
+  {path:'laboratorio/ordenes/create', component: CordenComponent, canActivate: [GuardService]}
   // {path:'donante/donacion/edit/:id/:edit', component: CdonacionComponent, canActivate: [GuardService]},
 
 ];

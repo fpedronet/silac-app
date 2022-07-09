@@ -1,8 +1,5 @@
 export class Permiso {
-    vertodos?:boolean;
+    ver?:boolean;
     guardar?:boolean;
     imprimir?:boolean;
-    reenviar?:boolean;
-    revisar?:boolean;
-    procesar?:boolean;
 }

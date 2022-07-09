@@ -12,6 +12,8 @@ import { ConfimService } from '../../component/confirm/confim.service';
 import { NotifierService } from '../../component/notifier/notifier.service';
 import { SpinnerService } from '../../component/spinner/spinner.service';
 
+import forms from 'src/assets/json/formulario.json';
+
 @Component({
   selector: 'app-corden',
   templateUrl: './corden.component.html',
@@ -206,20 +208,15 @@ export class CordenComponent implements OnInit {
   }
 
   obtenerpermiso(){
-    /*this.spinner.showLoading();
-    this.configPermisoService.obtenerpermiso(forms.reporteAdmin.codigo).subscribe(data=>{
+    this.spinner.showLoading();
+    this.configPermisoService.obtenerpermiso(forms.orden.codigo).subscribe(data=>{
+      debugger;
       this.permiso = data;
-      //debugger;
-
-      //this.permiso.revisar = false;
-      //this.permiso.procesar = false;
-
       this.spinner.hideLoading();
-    }); */
+    });
   }
 
   changestepper(stepper: any, numTab: number = -1){
-    //debugger;
     if(numTab === -1)
       this.currentTab = stepper._selectedIndex;
     else

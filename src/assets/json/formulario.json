@@ -1,11 +1,23 @@
 {
-    "reporteAdmin":{
-        "codigo":"Reporte Administrativo"
+    "orden":{
+        "codigo":"0201"
     },
-    "rendicionGasto":{
-        "codigo":"Rendición de Gasto"
+    "usuario":{
+        "codigo":"0301"
     },
-    "hojaTiempo":{
-        "codigo":"Hoja Tiempo"
+    "perfil":{
+        "codigo":"0302"
+    },
+    "interface":{
+        "codigo":"0303"
+    },
+    "examen":{
+        "codigo":"0304"
+    },
+    "generarreporte":{
+        "codigo":"0401"
+    },
+    "reporteanalitico":{
+        "codigo":"0402"
     }
 }
