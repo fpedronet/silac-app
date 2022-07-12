@@ -4,7 +4,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { TbMaestra } from 'src/app/_model/combobox';
-import { Orden } from 'src/app/_model/orden';
+import { Orden } from 'src/app/_model/laboratorio/orden';
 import { Permiso } from 'src/app/_model/permiso';
 import { ConfigPermisoService } from 'src/app/_service/configpermiso.service';
 import { TbmaestraService } from 'src/app/_service/tbmaestra.service';

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Orden } from 'src/app/_model/orden';
+import { Orden } from 'src/app/_model/laboratorio/orden';
 
 @Component({
   selector: 'app-lorden',
