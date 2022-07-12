@@ -19,15 +19,63 @@
       <mat-divider></mat-divider>
       <form style="padding: 0;">     
         
-        <!-- <div class="example-loading-shade" *ngIf="loading || existRegistro">
+        <div class="example-loading-shade" *ngIf="loading || existRegistro">
           <mat-spinner *ngIf="loading"></mat-spinner>
           <div class="example-rate-limit-reached" *ngIf="existRegistro">
             No se encontraron registros.
           </div>
-        </div> -->
+        </div>
   
         <div class="example-container mat-elevation-z0">
+          <mat-table [dataSource]="dataSource" matSort>
+           
+            <ng-container matColumnDef="codigo">
+              <mat-header-cell *matHeaderCellDef>Código</mat-header-cell>
+              <mat-cell *matCellDef="let element" data-label="Código"> 
+                <div style="font-weight:600;color: #7f388a;">{{element.codigo}}</div>     
+              </mat-cell>
+            </ng-container>
           
+            <ng-container matColumnDef="natencion">
+              <mat-header-cell *matHeaderCellDef> N° Atención </mat-header-cell>
+              <mat-cell *matCellDef="let element" data-label="N° Atención"> {{element.nombres}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="fecha">
+              <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
+              <mat-cell *matCellDef="let element" data-label="Fecha"> {{element.nombres}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="documento">
+              <mat-header-cell *matHeaderCellDef> Documento </mat-header-cell>
+              <mat-cell *matCellDef="let element" data-label="Documento"> {{element.nombres}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="nombres">
+              <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
+              <mat-cell *matCellDef="let element" data-label="Nombre"> {{element.nombres}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="sexo">
+              <mat-header-cell *matHeaderCellDef> Sexo </mat-header-cell>
+              <mat-cell *matCellDef="let element" data-label="Sexo"> {{element.nombres}} </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="edad">
+              <mat-header-cell *matHeaderCellDef> Edad </mat-header-cell>
+              <mat-cell *matCellDef="let element" data-label="Edad"> {{element.nombres}} </mat-cell>
+            </ng-container>                       
+                        
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          
+          </mat-table>
+          <mat-paginator 
+            [length]="countRegistro" 
+            [pageSizeOptions]="[5, 10, 20]" 
+            showFirstLastButtons 
+            aria-label="Select page of users">
+          </mat-paginator>
         </div>
   
       </form>    
