@@ -13,6 +13,8 @@ import { Not403Component } from './configuracion/not403/not403.component';
 import { CordenComponent } from './orden/corden/corden.component';
 import { LordenComponent } from './orden/lorden/lorden.component';
 import { CpermisoComponent } from './configuracion/permiso/cpermiso/cpermiso.component';
+import { CexamenComponent } from './configuracion/cexamen/cexamen.component';
+import { LexamenComponent } from './configuracion/lexamen/lexamen.component';
 
 @NgModule({
   declarations: [
@@ -24,6 +26,8 @@ import { CpermisoComponent } from './configuracion/permiso/cpermiso/cpermiso.com
     CordenComponent,
     LordenComponent,
     CpermisoComponent,
+    CexamenComponent,
+    LexamenComponent,
   ],
   imports: [
     MaterialModule,

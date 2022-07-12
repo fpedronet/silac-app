@@ -27,8 +27,12 @@ export class CordenComponent implements OnInit {
   form: FormGroup = new FormGroup({});
   permiso: Permiso = {};
 
-  tablasMaestras = ['USUARIO'];
+  tablasMaestras = ['TDOC', 'SEXO', 'ORIPA', 'SERV'];
+  tbDocu: TbMaestra[] = [];
   tbSexo: TbMaestra[] = [];
+  tbOrig: TbMaestra[] = [];
+  tbServ: TbMaestra[] = [];
+  tbProcedencia: TbMaestra[] = [];
   nombresUsuario?: string = '';
 
   codigo?: number;
@@ -66,12 +70,40 @@ export class CordenComponent implements OnInit {
 
     this.route.params.subscribe((data: Params)=>{
       this.id = (data["id"]==undefined)?0:parseInt(data["id"]);
+      this.listarComodatos().then(res => {
         this.obtener(true);
+      });
     });
   }
 
   ngAfterViewInit() {
     this.stepper._getIndicatorType = () => 'number';
+  }
+
+  async listarComodatos(){
+    return new Promise(async (resolve) => {
+    
+      this.tbmaestraService.cargarDatos(this.tablasMaestras).subscribe(data=>{
+        if(data === undefined){
+          this.notifierService.showNotification(0,'Mensaje','Error en el servidor');
+        }
+        else{
+          if(data.items === null){
+            this.notifierService.showNotification(0,'Mensaje','No se ha encontrado información');
+          }
+          else{
+            var tbCombobox: TbMaestra[] = data.items;
+          
+            this.tbDocu = this.obtenerSubtabla(tbCombobox,'TDOC');
+            this.tbSexo = this.obtenerSubtabla(tbCombobox,'SEXO');
+            this.tbOrig = this.obtenerSubtabla(tbCombobox,'ORIPA');
+            this.tbServ = this.obtenerSubtabla(tbCombobox,'SERV');
+          }          
+        }
+
+        resolve('ok')
+      });
+    })
   }
 
   obtenerSubtabla(tb: TbMaestra[], cod: string){
@@ -83,18 +115,18 @@ export class CordenComponent implements OnInit {
       'nIdOrden': new FormControl({ value: 0, disabled: false}),
       'nNumero': new FormControl({ value: 0, disabled: false}),
       'dFecha': new FormControl({ value: new Date(), disabled: false}),
-      //'vTipDocu': new FormControl({ value: '', disabled: false}),
+      'vTipDocu': new FormControl({ value: '', disabled: false}),
       'vDocumento': new FormControl({ value: '', disabled: false}),
-      //'vHC': new FormControl({ value: 0, disabled: false}),
-      //'dFecNacimiento': new FormControl({ value: '', disabled: false}),
-      //'nEdad': new FormControl({ value: '', disabled: false}),
-      //'vApPaterno': new FormControl({ value: '', disabled: false}),
-      //'vApMaterno': new FormControl({ value: '', disabled: false}),
-      //'vPrimerNombre': new FormControl({ value: '', disabled: false}),
-      //'vSegundoNombre': new FormControl({ value: '', disabled: false}),
+      'vHC': new FormControl({ value: 0, disabled: false}),
+      'dFecNacimiento': new FormControl({ value: '', disabled: false}),
+      'nEdad': new FormControl({ value: '', disabled: false}),
+      'vApPaterno': new FormControl({ value: '', disabled: false}),
+      'vApMaterno': new FormControl({ value: '', disabled: false}),
+      'vPrimerNombre': new FormControl({ value: '', disabled: false}),
+      'vSegundoNombre': new FormControl({ value: '', disabled: false}),
       'vSexo': new FormControl({ value: '', disabled: false}),
-      //'vProcedencia': new FormControl({ value: '', disabled: false}),
-      //'vCama': new FormControl({ value: '', disabled: false}),
+      'vProcedencia': new FormControl({ value: '', disabled: false}),
+      'vCama': new FormControl({ value: '', disabled: false}),
       //'vOrigen': new FormControl({ value: '', disabled: false}),
       //'vServicio': new FormControl({ value: '', disabled: false}),
     });
