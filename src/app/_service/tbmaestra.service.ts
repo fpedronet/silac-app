@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { TbMaestra } from '../_model/combobox';
+import { dataCollection } from '../_model/dataCollection';
 
 @Injectable({
   providedIn: 'root'
@@ -17,6 +18,6 @@ export class TbmaestraService {
 
     let href = `${this.url}/GetAllTablaMaestra`;
     let urls = `${href}?Etiquetas=${etiquetas.join('|')}`;
-    return this.http.get<TbMaestra>(urls);
+    return this.http.get<dataCollection>(urls);
   }
 }

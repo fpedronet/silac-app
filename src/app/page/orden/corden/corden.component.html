@@ -66,13 +66,17 @@
                     </mat-grid-tile>
                 </mat-grid-list>
 
-                <!--mat-form-field appearance="outline">
-                    <mat-select [disabled]="id>0" placeholder="Tipo de documento" formControlName="TipDocu" required>
-                      <mat-option *ngFor="let el of tbTipoDocu" [value]="el.codigo">
-                        {{el.descripcion}}
-                      </mat-option>              
-                    </mat-select>
-                </mat-form-field-->
+                <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                    <mat-grid-tile [colspan]="12">
+                        <mat-form-field appearance="outline">
+                            <mat-select placeholder="T. Documento" formControlName="vTipDocu" required>
+                            <mat-option *ngFor="let el of tbDocu" [value]="el.vValor">
+                                {{el.vDescripcion}}
+                            </mat-option>              
+                            </mat-select>
+                        </mat-form-field>
+                    </mat-grid-tile>
+                </mat-grid-list>
 
                 <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
                     <mat-grid-tile [colspan]="12">
@@ -92,11 +96,97 @@
                 <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
                     <mat-grid-tile [colspan]="12">
                         <mat-form-field appearance="outline">
+                            <mat-label>H.C.</mat-label>
+                            <input type="text" [readonly]="!edit" matInput placeholder="H.C." formControlName="vHC" minlength="1" maxlength="15" required>
+                        </mat-form-field>
+                    </mat-grid-tile>
+                </mat-grid-list>
+
+                <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                    <mat-grid-tile [colspan]="12">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Fecha de Nacimiento</mat-label>
+                            <input matInput [matDatepicker]="dFecha" [max]="fechaMax" placeholder="dd/mm/yyyy" formControlName="dFecNacimiento" [disabled]="!edit" required>
+                            <mat-datepicker-toggle matSuffix [for]="dFecNacimiento"></mat-datepicker-toggle>
+                            <mat-datepicker #dFecNacimiento></mat-datepicker>
+                        </mat-form-field>
+                    </mat-grid-tile>
+                </mat-grid-list>
+
+                <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                    <mat-grid-tile [colspan]="12">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Edad</mat-label>
+                            <input type="text" [readonly]="!edit" matInput placeholder="Edad" formControlName="nEdad" minlength="1" maxlength="15" required>
+                        </mat-form-field>
+                    </mat-grid-tile>
+                </mat-grid-list>
+
+                <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                    <mat-grid-tile [colspan]="12">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Ap. Paterno</mat-label>
+                            <input type="text" [readonly]="!edit" matInput placeholder="Ap. Paterno" formControlName="vApPaterno" minlength="1" maxlength="15" required>
+                        </mat-form-field>
+                    </mat-grid-tile>
+                </mat-grid-list>
+
+                <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                    <mat-grid-tile [colspan]="12">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Ap. Materno</mat-label>
+                            <input type="text" [readonly]="!edit" matInput placeholder="Ap. Materno" formControlName="vApPaterno" minlength="1" maxlength="15" required>
+                        </mat-form-field>
+                    </mat-grid-tile>
+                </mat-grid-list>
+
+                <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                    <mat-grid-tile [colspan]="12">
+                        <mat-form-field appearance="outline">
+                            <mat-label>1er Nombre</mat-label>
+                            <input type="text" [readonly]="!edit" matInput placeholder="1er Nombre" formControlName="vPrimerNombre" minlength="1" maxlength="15" required>
+                        </mat-form-field>
+                    </mat-grid-tile>
+                </mat-grid-list>
+
+                <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                    <mat-grid-tile [colspan]="12">
+                        <mat-form-field appearance="outline">
+                            <mat-label>2do Nombre</mat-label>
+                            <input type="text" [readonly]="!edit" matInput placeholder="2do Nombre" formControlName="vSegundoNombre" minlength="1" maxlength="15" required>
+                        </mat-form-field>
+                    </mat-grid-tile>
+                </mat-grid-list>
+
+                <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                    <mat-grid-tile [colspan]="12">
+                        <mat-form-field appearance="outline">
                             <mat-select placeholder="Sexo" formControlName="vSexo" required>
                             <mat-option *ngFor="let el of tbSexo" [value]="el.vValor">
                                 {{el.vDescripcion}}
                             </mat-option>              
                             </mat-select>
+                        </mat-form-field>
+                    </mat-grid-tile>
+                </mat-grid-list>
+
+                <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                    <mat-grid-tile [colspan]="12">
+                        <mat-form-field appearance="outline">
+                            <mat-select placeholder="Procedencia" formControlName="vProcedencia" required>
+                            <mat-option *ngFor="let el of tbProcedencia" [value]="el.vValor">
+                                {{el.vDescripcion}}
+                            </mat-option>              
+                            </mat-select>
+                        </mat-form-field>
+                    </mat-grid-tile>
+                </mat-grid-list>
+
+                <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                    <mat-grid-tile [colspan]="12">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Cama</mat-label>
+                            <input type="text" [readonly]="!edit" matInput placeholder="Cama" formControlName="vCama" minlength="1" maxlength="15" required>
                         </mat-form-field>
                     </mat-grid-tile>
                 </mat-grid-list>
