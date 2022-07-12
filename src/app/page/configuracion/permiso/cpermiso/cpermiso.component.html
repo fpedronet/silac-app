@@ -31,7 +31,7 @@
             <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
               <div class="content contentTable">          
 
-                <table>
+                <table class="styled-table">
                   <thead>
                     <tr>
                       <th>PERFIL</th>  
@@ -39,14 +39,14 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr *ngFor="let c of listaPerfil">
+                    <tr *ngFor="let c of listaPerfil" class="selected">
                       <td>
                         {{c.vDescripcion}}
                       </td>
-                      <td>                        
-                        <button mat-stroked-button class="btnHeader" type="button" (click)="listarMenu(c.nIdPerfil!)">
-                          <mat-icon class="maticon">edit</mat-icon>
-                        </button>
+                      <td>      
+                        <a class="pointer ver" (click)="listarMenu(c.nIdPerfil!)">
+                          <mat-icon>visibility</mat-icon>
+                       </a>
                     
                       </td>
                     </tr>
@@ -63,7 +63,7 @@
              
               <div class="content contentTable">          
 
-                <table>
+                <table class="styled-table">
                   <thead>
                     <tr>
                       <th>MODULO</th>  

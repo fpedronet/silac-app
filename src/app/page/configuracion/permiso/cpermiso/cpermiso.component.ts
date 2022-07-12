@@ -50,6 +50,9 @@ export class CpermisoComponent implements OnInit {
   }
 
   listarMenu(id: number){    
+
+    // $(this).addClass("selected").siblings().removeClass("selected");
+
     this.idperfil = id;
     this.spinner.showLoading();
     this.permisoService.listar(id).subscribe(data=>{
