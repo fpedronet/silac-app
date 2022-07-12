@@ -21,6 +21,7 @@
   </div>
 
   <br style="clear:both;"/>
+  <br>
 
   <form onkeydown="return event.key != 'Enter';" class="forms" id="ngForm" [formGroup]="form" #frmGrupo="ngForm" (ngSubmit)="guardar()"> 
     <div class="content" style="height: 70vh;">
@@ -29,31 +30,49 @@
 
           <div fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="50%">
             <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
-              <div class="content contentTable">          
 
-                <table class="styled-table">
-                  <thead>
-                    <tr>
-                      <th>PERFIL</th>  
-                      <th>SELECIONAR</th>              
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let c of listaPerfil" class="selected">
-                      <td>
-                        {{c.vDescripcion}}
-                      </td>
-                      <td>      
-                        <a class="pointer ver" (click)="listarMenu(c.nIdPerfil!)">
-                          <mat-icon>visibility</mat-icon>
-                       </a>
-                    
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-      
-              </div>
+              <mat-accordion class="example-headers-align">
+
+                <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                     PERFIL
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      <span></span>
+                      <mat-icon>account_circle</mat-icon>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+              
+                  <div class="content contentTable">          
+
+                    <table class="styled-table">
+                      <thead>
+                        <tr>
+                          <th>PERFIL</th>  
+                          <th>SELECIONAR</th>              
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let c of listaPerfil" class="selected">
+                          <td>
+                            {{c.vDescripcion}}
+                          </td>
+                          <td>      
+                            <a class="pointer ver" (click)="listarMenu(c.nIdPerfil!)">
+                              <mat-icon>visibility</mat-icon>
+                           </a>
+                        
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+          
+                  </div>
+
+                </mat-expansion-panel>
+
+              </mat-accordion>
 
             </mat-grid-list>  
           </div>
@@ -61,35 +80,52 @@
           <div fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="50%">
             <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
              
-              <div class="content contentTable">          
+              <mat-accordion class="example-headers-align">
 
-                <table class="styled-table">
-                  <thead>
-                    <tr>
-                      <th>MODULO</th>  
-                      <th>PANTALLA</th>  
-                      <th>SELECIONAR</th>              
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr *ngFor="let c of listaMenu">
-                      <td>
-                        {{c.vModulo}}
-                      </td>
-                      <td>
-                        {{c.vPantalla}}
-                      </td>
-                      <td style="text-align: center;">
-                        <label class="radio">
-                          <input  type="checkbox" [checked]="c.seleccionado" name="btn{{c.vCodPantalla}}" (click)="seleccionarMenu(c.vCodPantalla!, c.seleccionado!)">
-                          <span class="check"></span>
-                        </label>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-      
-              </div>
+                <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
+                  <mat-expansion-panel-header>
+                    <mat-panel-title>
+                     OPCIÓN MENU
+                    </mat-panel-title>
+                    <mat-panel-description>
+                      <span></span>
+                      <mat-icon>account_circle</mat-icon>
+                    </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  
+                  <div class="content contentTable">          
+
+                    <table class="styled-table">
+                      <thead>
+                        <tr>
+                          <th>MODULO</th>  
+                          <th>PANTALLA</th>  
+                          <th>SELECIONAR</th>              
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let c of listaMenu">
+                          <td>
+                            {{c.vModulo}}
+                          </td>
+                          <td>
+                            {{c.vPantalla}}
+                          </td>
+                          <td style="text-align: center;">
+                            <label class="radio">
+                              <input  type="checkbox" [checked]="c.seleccionado" name="btn{{c.vCodPantalla}}" (click)="seleccionarMenu(c.vCodPantalla!, c.seleccionado!)">
+                              <span class="check"></span>
+                            </label>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+          
+                  </div>
+
+                </mat-expansion-panel>
+
+              </mat-accordion>
 
             </mat-grid-list>  
           </div>

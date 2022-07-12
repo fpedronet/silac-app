@@ -317,6 +317,29 @@ form{
   border-top-width:2px;
 }
 
+.example-headers-align .mat-expansion-panel-header{
+  background:#d6d6d67a;
+  }
+  .mat-expansion-panel-header.mat-expanded{
+    height: 52px;
+    background:#d6d6d67a;
+  }
+  .example-headers-align .mat-expansion-panel-header-title,
+  .example-headers-align .mat-expansion-panel-header-description {
+    flex-basis: 0;
+    color:#1a0da4;
+  }
+  .example-headers-align .mat-expansion-panel-header-description {
+    justify-content: space-between;
+    align-items: center;
+  }
+  .example-headers-align .mat-form-field + .mat-form-field {
+    margin-left: 8px;
+  }
+  .contentTable{
+    margin-top: 7px;
+    height:58vh;
+  }
 @media (max-width:1200px){
   .example-button{
     display:flex;
