@@ -1,9 +1,4 @@
 <mat-toolbar color="primary" class="example-toolbar submenu example-button">
-    <!-- <div class="example-button-rowR">
-      <button mat-stroked-button class="btnHeader" #tooltip="matTooltip" matTooltip="Atrás" routerLink="/page/laboratorio/ordenes">
-        <mat-icon class="maticon">subdirectory_arrow_left</mat-icon>
-      </button>
-    </div> -->
     <div class="example-button-row">
       <button mat-stroked-button class="btnHeader" #tooltip="matTooltip" matTooltip="Guardar" type="submit" [disabled]="frmGrupo.invalid" form="ngForm">
         <mat-icon class="maticon">save</mat-icon>
@@ -15,24 +10,92 @@
 <mat-card class="cardborde">   
   <mat-toolbar class="cardtitle"></mat-toolbar>
 
-  <h2 class="title-label">PERMISO</h2>  
+  <h2 class="title-label">CREAR PERMISO</h2>  
 
   <mat-divider></mat-divider>
-  
+
   <div id="content"> 
-      <div style="width: 100%; float:left;margin-bottom: -17px;">
-        <div style="text-align: center; color: #1a0da4; font-weight:600;">
-          <span>CODIGO: ###</span>
-        </div> 
-      </div> 
+    <div style="width: 100%; float:left;margin-bottom: -17px;"> 
+      <div style="text-align: center; color: #1a0da4; font-weight: 500;padding-top: 11px;">PERFIL SELECCIONADO: <span style="font-weight: 600; color: #be3900;text-transform: uppercase;">{{nombreperfil}}</span></div> 
+    </div> 
   </div>
 
   <br style="clear:both;"/>
-  <form onkeydown="return event.key != 'Enter';" class="forms" id="ngForm" #frmGrupo="ngForm">
 
+  <form onkeydown="return event.key != 'Enter';" class="forms" id="ngForm" [formGroup]="form" #frmGrupo="ngForm" (ngSubmit)="guardar()"> 
+    <div class="content" style="height: 70vh;">
 
-   
-  </form>
- 
+      <div fxLayout="row wrap" fxLayoutGap="16px grid">
+
+          <div fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="50%">
+            <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+              <div class="content contentTable">          
+
+                <table>
+                  <thead>
+                    <tr>
+                      <th>PERFIL</th>  
+                      <th>SELECIONAR</th>              
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let c of listaPerfil">
+                      <td>
+                        {{c.vDescripcion}}
+                      </td>
+                      <td>                        
+                        <button mat-stroked-button class="btnHeader" type="button" (click)="listarMenu(c.nIdPerfil!)">
+                          <mat-icon class="maticon">edit</mat-icon>
+                        </button>
+                    
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+      
+              </div>
+
+            </mat-grid-list>  
+          </div>
+
+          <div fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="50%">
+            <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+             
+              <div class="content contentTable">          
+
+                <table>
+                  <thead>
+                    <tr>
+                      <th>MODULO</th>  
+                      <th>PANTALLA</th>  
+                      <th>SELECIONAR</th>              
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let c of listaMenu">
+                      <td>
+                        {{c.vModulo}}
+                      </td>
+                      <td>
+                        {{c.vPantalla}}
+                      </td>
+                      <td style="text-align: center;">
+                        <label class="radio">
+                          <input  type="checkbox" [checked]="c.seleccionado" name="btn{{c.vCodPantalla}}" (click)="seleccionarMenu(c.vCodPantalla!, c.seleccionado!)">
+                          <span class="check"></span>
+                        </label>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+      
+              </div>
+
+            </mat-grid-list>  
+          </div>
+
+      </div>
+    </div>
+  </form> 
 </mat-card>
 </div>

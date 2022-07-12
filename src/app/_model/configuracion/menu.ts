@@ -15,6 +15,7 @@ export class MenuDto {
     vDescripcion?:string;
     vUrl?:string;
     vPermiso?:string;
+    seleccionado?:boolean;
     listaSubMenu1?:SubMenu1Dto[]
 }
 
