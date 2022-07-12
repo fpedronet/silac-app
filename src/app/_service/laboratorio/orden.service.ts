@@ -16,7 +16,7 @@ export class OrdenService {
   private url: string = `${environment.UrlApi}/orden`;
 
   listar() {
-    let req = new OrdenRequest{};
+    let req = new OrdenRequest();
    
     let urls = `${this.url}/GetAllOrden`;
     return this.http.post<dataCollection>(urls,req);
