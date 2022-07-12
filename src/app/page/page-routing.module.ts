@@ -10,6 +10,7 @@ import { LordenComponent } from './orden/lorden/lorden.component';
 import { CordenComponent } from './orden/corden/corden.component';
 
 import { CpermisoComponent } from './configuracion/permiso/cpermiso/cpermiso.component';
+import { LexamenComponent } from './configuracion/lexamen/lexamen.component';
 
 const routes: Routes = [
   {path:'home', component: HomeComponent},
@@ -20,6 +21,9 @@ const routes: Routes = [
 
   {path:'laboratorio/ordenes', component: LordenComponent, canActivate: [GuardService]},
   {path:'laboratorio/ordenes/create', component: CordenComponent, canActivate: [GuardService]},
+
+  {path:'configuracion/examenes', component: LexamenComponent, canActivate: [GuardService]},
+  //{path:'configuracion/examenes', component: CordenComponent, canActivate: [GuardService]},
   
   {path:'configuracion/permiso', component: CpermisoComponent, canActivate: [GuardService]},
 
