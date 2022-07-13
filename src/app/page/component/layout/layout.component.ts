@@ -5,10 +5,10 @@ import { environment } from 'src/environments/environment';
 import forms from 'src/assets/json/formulario.json';
 
 import { ConfigPermisoService } from './../../../_service/configpermiso.service';
-import { UsuarioService } from 'src/app/_service/configuracion/usuario.service';
 
 import { MenuResponse } from 'src/app/_model/configuracion/menu';
 import { MatDialog } from '@angular/material/dialog';
+import { LogeoService } from 'src/app/_service/configuracion/logeo.service';
 
 
 @Component({
@@ -25,7 +25,7 @@ export class LayoutComponent implements OnInit {
     private dialog: MatDialog,
     private spinner : SpinnerService,
     private ConfigPermisoService : ConfigPermisoService,
-    private usuarioService: UsuarioService,
+    private logeoService : LogeoService
   ) { }
 
   menus: MenuResponse = {};
@@ -46,7 +46,7 @@ export class LayoutComponent implements OnInit {
 
   listar(){
  
-    let session = this.usuarioService.sessionUsuario();
+    let session = this.logeoService.sessionUsuario();
 
     if(session!=null){
       this.username= session.nombreConocido.toUpperCase();

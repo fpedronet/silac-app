@@ -15,6 +15,8 @@ import { LordenComponent } from './orden/lorden/lorden.component';
 import { CpermisoComponent } from './configuracion/permiso/cpermiso/cpermiso.component';
 import { CexamenComponent } from './configuracion/cexamen/cexamen.component';
 import { LexamenComponent } from './configuracion/lexamen/lexamen.component';
+import { LusuarioComponent } from './configuracion/usuario/lusuario/lusuario.component';
+import { CusuarioComponent } from './configuracion/usuario/cusuario/cusuario.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +30,8 @@ import { LexamenComponent } from './configuracion/lexamen/lexamen.component';
     CpermisoComponent,
     CexamenComponent,
     LexamenComponent,
+    LusuarioComponent,
+    CusuarioComponent,
   ],
   imports: [
     MaterialModule,

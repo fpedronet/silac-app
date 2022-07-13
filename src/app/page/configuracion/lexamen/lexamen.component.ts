@@ -3,13 +3,13 @@ import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Examen } from 'src/app/_model/configuracion/examen';
 import { ConfigPermisoService } from 'src/app/_service/configpermiso.service';
-import { UsuarioService } from 'src/app/_service/configuracion/usuario.service';
 import { ConfimService } from '../../component/confirm/confim.service';
 import { SpinnerService } from '../../component/spinner/spinner.service';
 import { CexamenComponent } from '../cexamen/cexamen.component';
 import forms from 'src/assets/json/formulario.json';
 import { Permiso } from 'src/app/_model/permiso';
 import { Router } from '@angular/router';
+import { LogeoService } from 'src/app/_service/configuracion/logeo.service';
 
 @Component({
   selector: 'app-lexamen',
@@ -25,7 +25,7 @@ export class LexamenComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private spinner: SpinnerService,
-    private usuarioService : UsuarioService,
+    private logeoService : LogeoService,
     private configPermisoService : ConfigPermisoService,
     private confirmService : ConfimService,
   ) { }

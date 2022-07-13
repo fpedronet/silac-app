@@ -5,8 +5,8 @@ import { Observable, throwError } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { NotifierService } from '../page/component/notifier/notifier.service';
 import { SpinnerService } from '../page/component/spinner/spinner.service';
-import { UsuarioService } from '../_service/configuracion/usuario.service';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { LogeoService } from '../_service/configuracion/logeo.service';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class InterceptorService implements HttpInterceptor {
   constructor(
     private notifierService : NotifierService,
     private spinner : SpinnerService,
-    private usuarioService : UsuarioService,
+    private logeoService : LogeoService
   ) { }
 
 intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<unknown>> {
@@ -56,13 +56,13 @@ intercept(req: HttpRequest<unknown>, next: HttpHandler): Observable<HttpEvent<un
   }
 
   handleRefreshToken(req: HttpRequest<any>, next: HttpHandler){
-   return this.usuarioService.refreshtoken().pipe(
+   return this.logeoService.refreshtoken().pipe(
     switchMap((data:any)=>{
-      this.usuarioService.savetoken(data);
+      this.logeoService.savetoken(data);
         return next.handle(this.AddTokenheader(req, data.access_token));
     }),
     catchError(errorMsg => {
-      this.usuarioService.closeLogin();
+      this.logeoService.closeLogin();
       return throwError(errorMsg);      
     })
    );

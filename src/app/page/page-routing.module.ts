@@ -12,6 +12,10 @@ import { CordenComponent } from './orden/corden/corden.component';
 import { CpermisoComponent } from './configuracion/permiso/cpermiso/cpermiso.component';
 import { LexamenComponent } from './configuracion/lexamen/lexamen.component';
 
+import { LusuarioComponent } from './configuracion/usuario/lusuario/lusuario.component';
+import { CusuarioComponent } from './configuracion/usuario/cusuario/cusuario.component';
+
+
 const routes: Routes = [
   {path:'home', component: HomeComponent},
 
@@ -26,6 +30,9 @@ const routes: Routes = [
   //{path:'configuracion/examenes', component: CordenComponent, canActivate: [GuardService]},
   
   {path:'configuracion/permiso', component: CpermisoComponent, canActivate: [GuardService]},
+
+  {path:'configuracion/usuario', component: LusuarioComponent, canActivate: [GuardService]},
+  {path:'configuracion/usuario/create', component: CusuarioComponent, canActivate: [GuardService]},
 
 ];
 
