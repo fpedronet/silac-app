@@ -39,8 +39,9 @@ export class CexamenComponent implements OnInit {
   form: FormGroup = new FormGroup({});
   loading = true;
 
-  tablasMaestras = ['AREA'];
+  tablasMaestras = ['AREXA', 'TMUE'];
   tbArea: TbMaestra[] = [];
+  tbMuestra: TbMaestra[] = [];
   /*carBuscaAuto: number = 1;
   nroMuestraAuto: number = 0;
 
@@ -65,7 +66,20 @@ export class CexamenComponent implements OnInit {
     this.form = new FormGroup({
       'nIdExamen': new FormControl({ value: examen.nIdExamen, disabled: false}),
       'vCodExamen': new FormControl({ value: examen.vCodExamen, disabled: this.edit}),
-      'vDescripcion': new FormControl({ value: examen.vDescripcion, disabled: this.edit})
+      'vDescripcion': new FormControl({ value: examen.vDescripcion, disabled: this.edit}),
+      'vCodAreaExamen': new FormControl({ value: examen.vCodAreaExamen, disabled: this.edit}),
+      'vCodTipoMuestra': new FormControl({ value: examen.vCodTipoMuestra, disabled: this.edit}),
+      'vFormato': new FormControl({ value: examen.vFormato, disabled: this.edit}),
+      'vFormula': new FormControl({ value: examen.vFormula, disabled: this.edit}),
+      'vCodSubGrupo': new FormControl({ value: examen.vCodSubGrupo, disabled: this.edit}),
+      'vTipoRespuesta': new FormControl({ value: examen.vTipoRespuesta, disabled: this.edit}),
+      'vRespuesta': new FormControl({ value: examen.vRespuesta, disabled: this.edit}),
+
+      'vAbreviatura': new FormControl({ value: examen.vAbreviatura, disabled: this.edit}),
+      'vUndMed': new FormControl({ value: examen.vUndMed, disabled: this.edit}),
+      'vRangoRef': new FormControl({ value: examen.vRangoRef, disabled: this.edit}),
+      'nOrden': new FormControl({ value: examen.nOrden, disabled: this.edit}),
+      'nCalculado': new FormControl({ value: examen.nCalculado, disabled: this.edit})
     });
   }
 
@@ -109,7 +123,8 @@ export class CexamenComponent implements OnInit {
         else{
           var tbCombobox: TbMaestra[] = data.items;
         
-          this.tbArea = this.obtenerSubtabla(tbCombobox,'AREA');
+          this.tbArea = this.obtenerSubtabla(tbCombobox,'AREXA');
+          this.tbMuestra = this.obtenerSubtabla(tbCombobox,'TMUE');
         }          
       }
       this.spinner.hideLoading();
