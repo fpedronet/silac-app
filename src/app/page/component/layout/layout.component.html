@@ -77,9 +77,9 @@
           <div hideToggle *ngFor="let m of menus.listaMenu">
                         
             <mat-expansion-panel *ngIf="m.vUrl=='/page/home'" disabled="">
-              <mat-expansion-panel-header>
+              <mat-expansion-panel-header style="background: #fff;">
                 <mat-panel-title>
-                  <a class="menuvertical" *ngIf="m.vUrl=='/page/home'" routerLink="{{m.vUrl}}" (click)="clearLocalStore()">
+                  <a style="font-size: 15px;font-weight: 400;color: #0f0473;" class="menuvertical" *ngIf="m.vUrl=='/page/home'" routerLink="{{m.vUrl}}" (click)="clearLocalStore()">
                     <mat-icon>{{m.vDescripcion}}</mat-icon>
                     {{m.vModulo}}
                   </a>
@@ -90,16 +90,16 @@
             <mat-divider *ngIf="m.vUrl=='/page/home'"></mat-divider>
 
             <mat-expansion-panel *ngIf="m.vUrl!='/page/home' && m.vUrl!='/page/cerrar' && m.vUrl!='/page/tracking'">
-              <mat-expansion-panel-header>
+              <mat-expansion-panel-header style="background: #fff;">
                 <mat-panel-title>
-                  <a style="font-size: 17px;font-weight: 400;color: #464242;">
+                  <a style="font-size: 15px;font-weight: 400;color: #0f0473;">
                     <mat-icon>{{m.vDescripcion}}</mat-icon>
                     {{m.vModulo}}
                   </a>
                 </mat-panel-title>
               </mat-expansion-panel-header>
               <p class="submenu" *ngFor="let s of m.listaSubMenu1">
-                <a style="font-size: 17px;font-weight: 400;color: #696868;" routerLink="{{s.vUrl}}" (click)="clearLocalStore()">
+                <a style="font-size: 15px;font-weight: 400;color: #0f0473;" routerLink="{{s.vUrl}}" (click)="clearLocalStore()">
                   <mat-icon>format_list_bulleted</mat-icon>
                   {{s.vPantalla}}
                 </a>
@@ -107,7 +107,7 @@
             </mat-expansion-panel>
             
             <mat-expansion-panel *ngIf="m.vUrl=='/page/tracking'" disabled="">
-              <mat-expansion-panel-header>
+              <mat-expansion-panel-header style="background: #fff;">
                 <mat-panel-title>
                   <a class="menuvertical" routerLink="{{m.vUrl}}">
                     <mat-icon>{{m.vDescripcion}}</mat-icon>
@@ -120,9 +120,9 @@
             <mat-divider *ngIf="m.vUrl!='/page/home' && m.vUrl!='/page/cerrar'"></mat-divider>
 
             <mat-expansion-panel *ngIf="m.vUrl=='/page/cerrar'" disabled="">
-              <mat-expansion-panel-header>
+              <mat-expansion-panel-header style="background: #fff;">
                 <mat-panel-title>
-                  <a class="menuvertical" (click)="closeLogin()">
+                  <a style="font-size: 15px;font-weight: 400;color: #0f0473;" class="menuvertical" (click)="closeLogin()">
                     <mat-icon>logout</mat-icon>
                     {{m.vModulo}}
                   </a>

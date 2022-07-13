@@ -19,7 +19,7 @@ export class UsuarioService {
 
   listar(req: UsuarioRequest) {
   
-    let urls = `${this.url}/GetAllOrden`;
+    let urls = `${this.url}/GetAllUsuario`;
     return this.http.post<dataCollection>(urls,req);
   }
 

@@ -32,43 +32,43 @@
             <ng-container matColumnDef="codigo">
               <mat-header-cell *matHeaderCellDef>Código</mat-header-cell>
               <mat-cell *matCellDef="let element" data-label="Código"> 
-                <div style="font-weight:600;color: #7f388a;">{{element.codigo}}</div>     
+                <div style="font-weight:600;color: #7f388a;">{{element.nIdUsuario}}</div>     
               </mat-cell>
             </ng-container>
           
             <ng-container matColumnDef="documento">
               <mat-header-cell *matHeaderCellDef> Documento </mat-header-cell>
-              <mat-cell *matCellDef="let element" data-label="Documento"> {{element.nombres}} </mat-cell>
+              <mat-cell *matCellDef="let element" data-label="Documento"> {{element.vDocumento}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="appaterno">
               <mat-header-cell *matHeaderCellDef> Ap. Paterno </mat-header-cell>
-              <mat-cell *matCellDef="let element" data-label="appaterno"> {{element.nombres}} </mat-cell>
+              <mat-cell *matCellDef="let element" data-label="appaterno"> {{element.vApPaterno}} </mat-cell>
             </ng-container>
             
             <ng-container matColumnDef="apmaterno">
                 <mat-header-cell *matHeaderCellDef> Ap. Materno </mat-header-cell>
-                <mat-cell *matCellDef="let element" data-label="apmaterno"> {{element.nombres}} </mat-cell>
+                <mat-cell *matCellDef="let element" data-label="apmaterno"> {{element.vApMaterno}} </mat-cell>
               </ng-container>
               
             <ng-container matColumnDef="nombre">
                 <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
-                <mat-cell *matCellDef="let element" data-label="nombre"> {{element.nombres}} </mat-cell>
+                <mat-cell *matCellDef="let element" data-label="nombre"> {{element.vPrimerNombre}} </mat-cell>
               </ng-container>
 
             <ng-container matColumnDef="sexo">
               <mat-header-cell *matHeaderCellDef> Sexo </mat-header-cell>
-              <mat-cell *matCellDef="let element" data-label="Sexo"> {{element.nombres}} </mat-cell>
+              <mat-cell *matCellDef="let element" data-label="Sexo"> {{element.vSexo}} </mat-cell>
             </ng-container>
 
             <ng-container matColumnDef="fnacimiento">
               <mat-header-cell *matHeaderCellDef> F. Nacimiento </mat-header-cell>
-              <mat-cell *matCellDef="let element" data-label="fnacimiento"> {{element.nombres}} </mat-cell>
+              <mat-cell *matCellDef="let element" data-label="fnacimiento"> {{element.vFechaNac}} </mat-cell>
             </ng-container> 
             
             <ng-container matColumnDef="usuario">
                 <mat-header-cell *matHeaderCellDef> Usuario </mat-header-cell>
-                <mat-cell *matCellDef="let element" data-label="usuario"> {{element.nombres}} </mat-cell>
+                <mat-cell *matCellDef="let element" data-label="usuario"> {{element.vUsuario}} </mat-cell>
             </ng-container> 
                         
             <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>

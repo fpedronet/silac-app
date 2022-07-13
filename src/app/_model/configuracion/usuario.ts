@@ -1,9 +1,11 @@
 import { pagination } from "../pagination";
+import { Persona } from "./persona";
 
-export class Usuario{
+export class Usuario extends Persona {
     nIdUsuario?: number;
     vUsuario? : string;
     vContrasena? : string;
+    vNombreCompleto?: string;
 }
 
 export class TokenUsuario{
@@ -17,5 +19,5 @@ export class TokenUsuario{
 }
 
 export class UsuarioRequest extends pagination {
-    nombreConocido? : string;
+    vData? : string;
 }

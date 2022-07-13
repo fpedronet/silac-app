@@ -62,7 +62,7 @@ export class LusuarioComponent implements OnInit {
           ).pipe(catchError(() => observableOf(null)));
         }),
         map(res => {
-
+          console.log(res);
            this.loading = false;
            this.existRegistro = res === null;
 
@@ -74,7 +74,7 @@ export class LusuarioComponent implements OnInit {
           return res.items;
         }),
       ).subscribe(data => (this.dataSource = data));
-      
+  
   }
 
 
