@@ -1,3 +1,4 @@
+import { pagination } from "../pagination";
 
 export class Usuario{
     nIdUsuario?: number;
@@ -13,4 +14,8 @@ export class TokenUsuario{
     access_token? : string;
     typeResponse? : number;
     mensaje? : string;
+}
+
+export class UsuarioRequest extends pagination {
+    nombreConocido? : string;
 }

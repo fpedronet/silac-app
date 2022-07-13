@@ -7,10 +7,11 @@ import { Router } from '@angular/router';
 import { merge, of as observableOf } from 'rxjs';
 import { catchError, map, startWith, switchMap} from 'rxjs/operators';
 
-import { Usuario } from 'src/app/_model/configuracion/usuario';
+import { Usuario, UsuarioRequest } from 'src/app/_model/configuracion/usuario';
 
 import { NotifierService } from 'src/app/page/component/notifier/notifier.service';
 import { SpinnerService } from 'src/app/page/component/spinner/spinner.service';
+import { UsuarioService } from 'src/app/_service/configuracion/usuario.service';
 
 @Component({
   selector: 'app-lusuario',
@@ -35,46 +36,46 @@ export class LusuarioComponent implements OnInit {
     private dialog: MatDialog,
     private spinner: SpinnerService,    
     private notifierService : NotifierService,
-    // private ordenService: OrdenService,
+    private usuarioService: UsuarioService
   ) { }
 
   ngOnInit(): void {
   }
 
-  // ngAfterViewInit() {
-  //   let req = new OrdenRequest();
+  ngAfterViewInit() {
+    let req = new UsuarioRequest();
 
-  //   this.ordenService = new OrdenService(this.http);
-  //   this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+    this.usuarioService = new UsuarioService(this.http);
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
  
-  //   req.page = this.paginator.pageIndex;
-  //   req.pages =  this.paginator.pageSize;
-  //   req.column = (this.sort.active == undefined)? '' : this.sort.active
-  //   req.order = this.sort.direction
+    req.page = this.paginator.pageIndex;
+    req.pages =  this.paginator.pageSize;
+    req.column = (this.sort.active == undefined)? '' : this.sort.active
+    req.order = this.sort.direction
 
-  //   merge(this.sort.sortChange, this.paginator.page)
-  //     .pipe(
-  //       startWith({}),
-  //       switchMap(() => {
-  //         return this.ordenService!.listar(
-  //           req
-  //         ).pipe(catchError(() => observableOf(null)));
-  //       }),
-  //       map(res => {
+    merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          return this.usuarioService!.listar(
+            req
+          ).pipe(catchError(() => observableOf(null)));
+        }),
+        map(res => {
 
-  //          this.loading = false;
-  //          this.existRegistro = res === null;
+           this.loading = false;
+           this.existRegistro = res === null;
 
-  //         if (res === null) {
-  //           return [];
-  //         }
+          if (res === null) {
+            return [];
+          }
 
-  //         this.countRegistro = res.pagination.total;
-  //         return res.items;
-  //       }),
-  //     ).subscribe(data => (this.dataSource = data));
+          this.countRegistro = res.pagination.total;
+          return res.items;
+        }),
+      ).subscribe(data => (this.dataSource = data));
       
-  // }
+  }
 
 
 }
