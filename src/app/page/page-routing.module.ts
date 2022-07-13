@@ -33,6 +33,7 @@ const routes: Routes = [
 
   {path:'configuracion/usuario', component: LusuarioComponent, canActivate: [GuardService]},
   {path:'configuracion/usuario/create', component: CusuarioComponent, canActivate: [GuardService]},
+  {path:'configuracion/usuario/edit/:id/:edit', component: CusuarioComponent, canActivate: [GuardService]},
 
 ];
 
