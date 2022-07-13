@@ -4,5 +4,8 @@ export class Orden {
 }
 
 export class OrdenRequest {
-
+    page?: number;
+    pages?: number;
+    column?: string;
+    order?: string
 }

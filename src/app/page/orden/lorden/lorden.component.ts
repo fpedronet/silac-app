@@ -1,10 +1,18 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 import { Router } from '@angular/router';
-import { Orden } from 'src/app/_model/laboratorio/orden';
+import { merge, of as observableOf } from 'rxjs';
+import { catchError, map, startWith, switchMap} from 'rxjs/operators';
+
+import { Orden, OrdenRequest } from 'src/app/_model/laboratorio/orden';
+
+import { SpinnerService } from 'src/app/page/component/spinner/spinner.service';
 import { NotifierService } from '../../component/notifier/notifier.service';
-import { SpinnerService } from '../../component/spinner/spinner.service';
+import { OrdenService } from 'src/app/_service/laboratorio/orden.service';
+
 
 @Component({
   selector: 'app-lorden',
@@ -19,57 +27,56 @@ export class LordenComponent implements OnInit {
   existRegistro = false;
   countRegistro = 0;
 
+  
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
+  
   constructor(
     private http: HttpClient,
     private router: Router,
     private dialog: MatDialog,
     private spinner: SpinnerService,    
     private notifierService : NotifierService,
-    // private usuarioService: UsuarioService,
+    private ordenService: OrdenService,
   ) { }
 
   ngOnInit(): void {
   }
 
   
-  // ngAfterViewInit() {
-  //   this.predonanteService = new PredonanteService(this.http);
-  //   this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+  ngAfterViewInit() {
+    let req = new OrdenRequest();
 
-  //   merge(this.sort.sortChange, this.paginator.page)
-  //     .pipe(
-  //       startWith({}),
-  //       switchMap(() => {
-  //         // this.loading = true;
-  //         let filtro = this.usuarioService.sessionFiltro();
-  //         let codigobanco = this.usuarioService.sessionUsuario().codigobanco;
-          
-  //         return this.predonanteService!.listar(
-  //           codigobanco,
-  //           parseInt(filtro![3]),
-  //           parseInt(filtro![1]),
-  //           parseInt(filtro![2]),
-  //           filtro![0],
-  //           new Date(filtro![4]),
-  //           new Date(filtro![5]),
-  //           this.paginator.pageIndex,
-  //           this.paginator.pageSize
-  //         ).pipe(catchError(() => observableOf(null)));
-  //       }),
-  //       map(res => {
+    this.ordenService = new OrdenService(this.http);
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+ 
+    req.page = this.paginator.pageIndex;
+    req.pages =  this.paginator.pageSize;
+    req.column = (this.sort.active == undefined)? '' : this.sort.active
+    req.order = this.sort.direction
 
-  //          this.loading = false;
-  //          this.existRegistro = res === null;
+    merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          return this.ordenService!.listar(
+            req
+          ).pipe(catchError(() => observableOf(null)));
+        }),
+        map(res => {
 
-  //         if (res === null) {
-  //           return [];
-  //         }
+           this.loading = false;
+           this.existRegistro = res === null;
 
-  //         this.countRegistro = res.pagination.total;
-  //         return res.items;
-  //       }),
-  //     ).subscribe(data => (this.dataSource = data));
+          if (res === null) {
+            return [];
+          }
+
+          this.countRegistro = res.pagination.total;
+          return res.items;
+        }),
+      ).subscribe(data => (this.dataSource = data));
       
-  // }
+  }
 
 }
