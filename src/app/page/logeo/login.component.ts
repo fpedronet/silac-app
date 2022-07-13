@@ -4,11 +4,11 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { UsuarioService } from 'src/app/_service/configuracion/usuario.service';
 import { NotifierService } from '../component/notifier/notifier.service';
 import { SpinnerService } from '../component/spinner/spinner.service';
 
 import { Usuario } from './../../_model/configuracion/usuario';
+import { LogeoService } from 'src/app/_service/configuracion/logeo.service';
 
 @Component({
   selector: 'app-login',
@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private notifierService : NotifierService,
     private spinner : SpinnerService,
-    private usuarioService : UsuarioService
+    private logeoService : LogeoService
   ) { }
 
 
@@ -61,7 +61,7 @@ export class LoginComponent implements OnInit {
     }else{
 
       this.spinner.showLoading();
-      this.usuarioService.login(model).subscribe(data=>{
+      this.logeoService.login(model).subscribe(data=>{
 
         if(data.typeResponse==environment.EXITO){
           localStorage.setItem(environment.TOKEN_NAME, data.access_token!);

@@ -5,7 +5,7 @@ import { environment } from 'src/environments/environment';
 
 import { ConfigPermisoService } from './configpermiso.service';
 import { map } from 'rxjs';
-import { UsuarioService } from './configuracion/usuario.service';
+import { LogeoService } from './configuracion/logeo.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ import { UsuarioService } from './configuracion/usuario.service';
 export class GuardService implements CanActivate {
 
   constructor(
-    private usuarioService: UsuarioService,
+    private logeoService : LogeoService,
     private router: Router,
     private configPermisoService : ConfigPermisoService,
   ) { }
@@ -45,7 +45,7 @@ export class GuardService implements CanActivate {
       }
 
       //3) OBTENIENDO EL ID DEL USUARIO PARA TRAER LAS OPCIONES DE MENU Y LOS PERMISO
-      let session = this.usuarioService.sessionUsuario();
+      let session = this.logeoService.sessionUsuario();
       return this.configPermisoService.configmenu().pipe(map(x => {
         let cont = 0;
 

@@ -1,5 +1,4 @@
 import { environment } from 'src/environments/environment';
-import { UsuarioService } from 'src/app/_service/configuracion/usuario.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { NotifierService } from '../component/notifier/notifier.service';
 
@@ -17,6 +16,7 @@ import {
   ApexTooltip
 } from "ng-apexcharts";
 import { SpinnerService } from '../component/spinner/spinner.service';
+import { LogeoService } from 'src/app/_service/configuracion/logeo.service';
 
 export type ChartOptions = {
   series: any;
@@ -41,7 +41,7 @@ export type ChartOptions = {
 export class HomeComponent implements OnInit {
 
   constructor(
-    private usuarioService: UsuarioService,
+    private logeoService : LogeoService,
     private spinner: SpinnerService,
     private notifier: NotifierService,
   ) { }
@@ -51,7 +51,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
 
-    this.usuario = this.usuarioService.sessionUsuario()?.nombreConocido;
+    this.usuario = this.logeoService.sessionUsuario()?.nombreConocido;
 
   }
 

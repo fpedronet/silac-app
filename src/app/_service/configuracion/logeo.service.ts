@@ -11,7 +11,7 @@ import { Response } from '../../_model/response';
 @Injectable({
   providedIn: 'root'
 })
-export class UsuarioService {
+export class LogeoService {
 
   private url: string = `${environment.UrlApi}/usuario`;
   
@@ -39,31 +39,16 @@ export class UsuarioService {
     localStorage.setItem(environment.TOKEN_NAME, token.access_token!);
   }
 
- actualizarpasswordsharePoint(usuario: Usuario){
-    let urls = `${this.url}/PostActualizarPasswordSharePoint`;
-
-    return this.http.post<Response>(urls, usuario);
-  }
-
   sessionUsuario(){
     let helper = new JwtHelperService();
     let token = localStorage.getItem(environment.TOKEN_NAME);
-    // let codigoempresa = localStorage.getItem(environment.CODIGO_EMPRESA);
-    // let contraseniaSharepoint = localStorage.getItem(environment.PASSWORD_SHAREPOINT);
 
-    // if (!helper.isTokenExpired(token!)){
       if(token!=null){
-        let decodedToken = helper.decodeToken(token!);       
-        // decodedToken.codigoempresa =codigoempresa;
-        // decodedToken.contraseniaSharepoint = contraseniaSharepoint;
-        // decodedToken.strFoto = localStorage.getItem(environment.FOTO);
+        let decodedToken = helper.decodeToken(token!);     
         return decodedToken;
       }else{
         return null
       }
-    // }else{
-    //   return null;
-    // }
   }
 
   sessionFiltro(){
@@ -88,9 +73,6 @@ export class UsuarioService {
 
   closeLogin(){
     localStorage.clear();
-    //this.router.navigate(['']);
     window.location.reload();
-    // return false;
   }
-
 }

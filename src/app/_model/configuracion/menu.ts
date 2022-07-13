@@ -1,5 +1,3 @@
-import { EmpresaPorUsuario } from "./usuario";
-
 export class MenuResponse {
     listaMenu?:MenuDto[];
     listaConfigMenu?:ConfiguracionMenu[];
