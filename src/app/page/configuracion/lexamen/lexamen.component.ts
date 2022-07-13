@@ -1,7 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { Router } from 'express';
 import { Examen } from 'src/app/_model/configuracion/examen';
 import { ConfigPermisoService } from 'src/app/_service/configpermiso.service';
 import { UsuarioService } from 'src/app/_service/configuracion/usuario.service';
@@ -10,6 +9,7 @@ import { SpinnerService } from '../../component/spinner/spinner.service';
 import { CexamenComponent } from '../cexamen/cexamen.component';
 import forms from 'src/assets/json/formulario.json';
 import { Permiso } from 'src/app/_model/permiso';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-lexamen',
