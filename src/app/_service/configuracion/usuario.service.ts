@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { SortDirection } from '@angular/material/sort';
 import { Router } from '@angular/router';
 import { Usuario, UsuarioRequest } from 'src/app/_model/configuracion/usuario';
 import { dataCollection } from 'src/app/_model/dataCollection';
@@ -17,9 +18,16 @@ export class UsuarioService {
     private http: HttpClient
     ) { }
 
-  listar(req: UsuarioRequest) {
+  listar(data: string, page: number,pages: number, column: string, order: SortDirection) {
   
     let urls = `${this.url}/GetAllUsuario`;
+    let req = new UsuarioRequest();
+
+    req.page = page;
+    req.pages =  pages;
+    req.column = (column==undefined)?'':column;
+    req.order = order;
+
     return this.http.post<dataCollection>(urls,req);
   }
 

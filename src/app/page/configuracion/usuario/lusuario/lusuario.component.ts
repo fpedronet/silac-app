@@ -25,7 +25,7 @@ import { ConfigPermisoService } from 'src/app/_service/configpermiso.service';
 export class LusuarioComponent implements OnInit {
 
   dataSource: Usuario[] = [];
-  displayedColumns: string[] = ['codigo', 'documento', 'appaterno', 'apmaterno', 'nombre', 'sexo', 'fnacimiento','usuario','accion'];
+  displayedColumns: string[] = ['nIdUsuario', 'vDocumento', 'vApPaterno', 'vApMaterno', 'vPrimerNombre', 'vSexo', 'vFechaNac','vUsuario','accion'];
   loading = true;
   existRegistro = false;
   countRegistro = 0;
@@ -58,23 +58,20 @@ export class LusuarioComponent implements OnInit {
   }
 
 
-  ngAfterViewInit() {
-    let req = new UsuarioRequest();
-
+  ngAfterViewInit() {  
     this.usuarioService = new UsuarioService(this.http);
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
- 
-    req.page = this.paginator.pageIndex;
-    req.pages =  this.paginator.pageSize;
-    req.column = (this.sort.active == undefined)? '' : this.sort.active
-    req.order = this.sort.direction
-
+    
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         startWith({}),
         switchMap(() => {
           return this.usuarioService!.listar(
-            req
+            "",
+            this.paginator.pageIndex,
+            this.paginator.pageSize,
+            this.sort.active,
+            this.sort.direction,
           ).pipe(catchError(() => observableOf(null)));
         }),
         map(res => {
