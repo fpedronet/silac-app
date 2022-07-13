@@ -11,7 +11,10 @@ export class Examen{
     vCodAreaExamen?: string;
     vFormula?: string;
     vFormato?: string;
+    vCodSubGrupo?: string;
     vTipoRespuesta?: string;
+    vRespuesta?: string;
     vDetalles?: string;
     nIncDetalle?: number;
+    nCalculado?: number;
 }

@@ -35,10 +35,8 @@ export class LexamenComponent implements OnInit {
   }
 
   obtenerpermiso(){
-    this.spinner.showLoading();
-    this.configPermisoService.obtenerpermiso(forms.reporteAdmin.codigo).subscribe(data=>{
+    this.configPermisoService.obtenerpermiso(forms.examen.codigo).subscribe(data=>{
       this.permiso = data;
-       this.spinner.hideLoading();
     });   
   }
 
