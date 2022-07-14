@@ -7,6 +7,7 @@ export class Perfil{
     dFecUsuReg?: Date;
     nIdUsuMod?: number;
     dFecUsuMod?: Date;
+    seleccionado?: boolean;
 }
 
 export class PerfilResponse{

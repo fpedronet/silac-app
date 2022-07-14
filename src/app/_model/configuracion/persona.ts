@@ -6,6 +6,7 @@ export class Persona{
     vSegundoNombre?: string;
     vApPaterno?: string;
     vApMaterno?: string;
+    vNombreCompleto?: string;
     dFechaNac?: Date;
     vFechaNac?: string;
     nEdad?: number;

@@ -1,11 +1,21 @@
+import { Byte } from '@angular/compiler/src/util';
 import { pagination } from "../pagination";
+import { Perfil } from './perfil';
 import { Persona } from "./persona";
 
 export class Usuario extends Persona {
     nIdUsuario?: number;
     vUsuario? : string;
     vContrasena? : string;
-    vNombreCompleto?: string;
+    dFecUltConex?: Date;
+    swt? : number;
+    iFirma? : Byte;
+    iFoto? : Byte;
+    vCodExternoTipo? : string;
+    vCodExternoNum? : string;
+    vColegiatura? : string;
+    nIdPerfil? : string;
+    listaPerfil?:Perfil[];
 }
 
 export class TokenUsuario{

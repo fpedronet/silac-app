@@ -24,7 +24,7 @@
   <br>
 
   <form onkeydown="return event.key != 'Enter';" class="forms" id="ngForm" [formGroup]="form" #frmGrupo="ngForm" (ngSubmit)="guardar()"> 
-    <div class="content" style="height: 70vh;">
+    <div class="content" style="height: 75vh;">
 
       <div fxLayout="row wrap" fxLayoutGap="16px grid">
 
@@ -78,11 +78,11 @@
           </div>
 
           <div fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="50%">
-            <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+            <mat-grid-list cols="12" rowHeight="80px" gutterSize="15px">
              
               <mat-accordion class="example-headers-align">
 
-                <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
+                <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
                      OPCIÓN MENU
@@ -112,9 +112,8 @@
                             {{c.vPantalla}}
                           </td>
                           <td style="text-align: center;">
-                            <label class="radio">
+                            <label class="checkbox">
                               <input  type="checkbox" [checked]="c.seleccionado" name="btn{{c.vCodPantalla}}" (click)="seleccionarMenu(c.vCodPantalla!, c.seleccionado!)">
-                              <span class="check"></span>
                             </label>
                           </td>
                         </tr>
