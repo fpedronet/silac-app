@@ -1,1 +1,118 @@
-<p>cusuario works!</p>
+<mat-toolbar color="primary" class="example-toolbar submenu example-button">
+    <div class="example-button-rowR">
+      <button mat-stroked-button class="btnHeader" routerLink="/page/configuracion/usuario">
+        <mat-icon class="maticon">subdirectory_arrow_left</mat-icon>
+      </button>
+    </div>
+    <div class="example-button-row">
+      <button *ngIf="edit && permiso.guardar" mat-stroked-button class="btnHeader" type="submit" [disabled]="frmGrupo.invalid" form="ngForm">
+        <mat-icon class="maticon">save</mat-icon>
+      </button>
+    </div>
+</mat-toolbar>
+
+<div class="container">  
+    <mat-card class="cardborde">   
+    <mat-toolbar class="cardtitle"></mat-toolbar>
+
+    <h2 *ngIf="id==0" class="title-label">CREAR USUARIO</h2>
+    <h2 *ngIf="id!==0 && !edit" class="title-label">VER USUARIO</h2>
+    <h2 *ngIf="id!==0 && edit" class="title-label">EDITAR USUARIO</h2>
+
+    <mat-divider></mat-divider>
+    
+    <!-- <div id="content"> 
+        <div style="width: 100%; float:left;margin-bottom: -17px;"> 
+        <div style="text-align: center; color: #1a0da4; font-weight: 500;padding-top: 11px;">{{nombres}}</div> 
+        <div style="text-align: center; color: #1a0da4; font-weight:600">{{documento}}</div> 
+        </div> 
+    </div> -->
+
+    <br style="clear:both;"/>
+
+        <form onkeydown="return event.key != 'Enter';" class="forms" id="ngForm" [formGroup]="form" #frmGrupo="ngForm" (ngSubmit)="guardar()">
+
+            <div class="content">
+                <div fxLayout="row-reverse wrap" fxLayoutGap="16px grid">
+                    <div fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="50%">                             
+                        <mat-grid-list cols="12" rowHeight="275px" gutterSize="15px">
+                            <!-- <mat-grid-tile *ngIf="muestraSangre && form.value['IdePersona']!==0" [colspan]="4">
+                                <mat-card style="margin-bottom: 1.34375em; text-align: center; width: 100%; background-color: {{colFondo}};">
+                                    <mat-card-title style="color: {{colLetra}}!important;">
+                                    {{abo}}
+                                    </mat-card-title>
+                                    <mat-card-subtitle style="color: {{colLetra}}!important;">
+                                    {{rh}}
+                                    </mat-card-subtitle>
+                                </mat-card>
+                            </mat-grid-tile> -->
+                            <!-- <mat-grid-tile *ngIf="muestraSangre && form.value['IdePersona']!==0" [colspan]="8">
+                            <div class="grid-imagen">
+                                <div style="display: inline-block;">
+                                <div *ngIf="codigo !== ''" style="text-align:center;">
+                                    <label style="text-align: center; color: #1a0da4; font-weight: 600;font-size:18px;">{{codigo}}</label>                                 
+                                </div>
+                                <webcam [height]="222" [width]="200" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
+                                        [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable"
+                                        [videoOptions]="videoOptions"
+                                        [mirrorImage]="mirrorOptions"
+                                        [imageQuality]="1"
+                                        (cameraSwitched)="cameraWasSwitched($event)"
+                                        (initError)="handleInitError($event)"
+                                ></webcam>
+                                <div class="snapshot" *ngIf="webcamImage && !showWebcam">
+                                    <img [src]="webcamImage.imageAsDataUrl"/>
+                                </div>
+                                
+                                <img *ngIf="fotoUrl==='' && (!webcamImage && !showWebcam)" [src]="foto" style="max-width: 200px; height: 222px;">
+                                <img *ngIf="fotoUrl!=='' && (!webcamImage && !showWebcam)" [src]="fotoUrl" style="max-width: 200px; height: 222px;">
+                                
+                                </div>
+                                <div *ngIf="edit" style="display: flex;">
+                                <input class="file-select" type="file" accept="image/*" (change)="subirFoto($event)">
+                                <button *ngIf="showWebcam" class="photo-btn" type="button" (click)="triggerSnapshot()">Tomar foto</button>
+                                <button *ngIf="!showWebcam" class="photo-btn" type="button" (click)="toggleWebcam()">Nueva foto</button>
+                                <button class="photo-btn" type="button" (click)="resetImage()">Limpiar</button>
+                                </div>
+                            </div>  
+                            
+                            </mat-grid-tile> -->
+                            <mat-grid-tile [colspan]="12">                                   
+                            <div class="grid-imagen">
+                                <div style="display: inline-block;">
+                                <webcam [height]="222" [width]="200" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
+                                        [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable"
+                                        [videoOptions]="videoOptions"
+                                        [mirrorImage]="mirrorOptions"
+                                        [imageQuality]="1"
+                                        (cameraSwitched)="cameraWasSwitched($event)"
+                                        (initError)="handleInitError($event)"
+                                ></webcam>
+                                <div class="snapshot" *ngIf="webcamImage && !showWebcam">
+                                    <img [src]="webcamImage.imageAsDataUrl"/>
+                                </div>
+                                
+                                <img *ngIf="fotoUrl==='' && (!webcamImage && !showWebcam)" [src]="foto" style="max-width: 200px; height: 222px;">
+                                <img *ngIf="fotoUrl!=='' && (!webcamImage && !showWebcam)" [src]="fotoUrl" style="max-width: 200px; height: 222px;">
+                                </div>
+                                <div *ngIf="edit" style="display: flex;">
+                                <input class="file-select" type="file" accept="image/*" (change)="subirFoto($event)">
+                                <button *ngIf="showWebcam" class="photo-btn" type="button" (click)="triggerSnapshot()">Tomar foto</button>
+                                <button *ngIf="!showWebcam" class="photo-btn" type="button" (click)="toggleWebcam()">Nueva foto</button>
+                                <button class="photo-btn" type="button" (click)="resetImage()">Limpiar</button>
+                                </div>
+                            </div>  
+                                
+                            </mat-grid-tile>
+                        </mat-grid-list>
+
+                        
+                    </div>
+                    
+                    
+                </div>
+            </div>
+
+        </form>
+    </mat-card>
+</div>
