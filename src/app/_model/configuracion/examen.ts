@@ -32,3 +32,9 @@ export class Examen{
     vDetalles?: string;
     nIncDetalle?: number;
 }
+
+export class PerfilExamen{
+    nIdPerfilExamen?: number;
+    vDescripcion?: string;
+    listaExamenes?: Examen[];
+}

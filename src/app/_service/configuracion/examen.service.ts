@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Examen } from 'src/app/_model/configuracion/examen';
+import { Examen, PerfilExamen } from 'src/app/_model/configuracion/examen';
 import { dataCollection } from 'src/app/_model/dataCollection';
 import { environment } from 'src/environments/environment';
 import { Response } from 'src/app/_model/response';
@@ -16,10 +16,10 @@ export class ExamenService {
 
   private url: string = `${environment.UrlApi}/examen`;
 
-  /*listar(codigo: string, idePantalla: number, ideUsuario: number, lstEstados: number[], fechaIni?: Date, fechaFin?: Date, tipo?: string, page?: number,pages?: number) {   
-    let urls = `${this.url}/GetAllRendicionM`;
-    return this.http.post<dataCollection>(urls);
-  }*/
+  listar(search?: string, page?: number,pages?: number, column?: string, order?: string) {   
+    let urls = `${this.url}/GetAllExamen?search=${search}&page=${page}&pages=${pages}&column=${column}&order=${order}`;
+    return this.http.get<dataCollection>(urls);
+  }
 
   obtener(id: number){
     let urls = `${this.url}/GetFirstRendicion?id=${id}`;
@@ -29,6 +29,16 @@ export class ExamenService {
 
   guardar(model: Examen){
     let urls = `${this.url}/PostSaveExamen`;
+    return this.http.post<Response>(urls, model);
+  }
+
+  listarPerfil(search?: string, page?: number,pages?: number, column?: string, order?: string) {   
+    let urls = `${this.url}/GetAllPerfilExamen?search=${search}&page=${page}&pages=${pages}&column=${column}&order=${order}`;
+    return this.http.get<dataCollection>(urls);
+  }
+
+  guardarPerfil(model: PerfilExamen){
+    let urls = `${this.url}/PostSavePerfilExamen`;
     return this.http.post<Response>(urls, model);
   }
 }

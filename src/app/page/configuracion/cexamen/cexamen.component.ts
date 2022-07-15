@@ -127,7 +127,9 @@ export class CexamenComponent implements OnInit {
           this.tbMuestra = this.obtenerSubtabla(tbCombobox,'TMUE');
           this.tbGrupo = this.obtenerSubtabla(tbCombobox,'SGRPO');
           this.tbRpta = this.obtenerSubtabla(tbCombobox,'RPTA');
-        }          
+
+          this.obtener(this.examen);
+        }
       }
       this.spinner.hideLoading();
     });
@@ -215,7 +217,11 @@ export class CexamenComponent implements OnInit {
     this.examenService.guardar(model).subscribe(data=>{
       this.notifierService.showNotification(data.typeResponse!,'Mensaje',data.message!);
 
-      if(data.typeResponse==environment.EXITO){      
+      if(data.typeResponse==environment.EXITO){
+        this.form.patchValue({
+          nIdExamen: data.ide
+        });
+
         this.spinner.hideLoading();
 
         //Guarda caché de valores ingresados
