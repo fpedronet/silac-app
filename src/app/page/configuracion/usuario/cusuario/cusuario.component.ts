@@ -7,6 +7,7 @@ import { environment } from 'src/environments/environment';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 
 import forms from 'src/assets/json/formulario.json';
+import jsonPais from 'src/assets/json/ubigeo/pais.json';
 import jsonDepartamento from 'src/assets/json/ubigeo/departamentos.json';
 import jsonProvincia from 'src/assets/json/ubigeo/provincias.json';
 import jsonDistrito from 'src/assets/json/ubigeo/distritos.json';
@@ -49,6 +50,9 @@ export class CusuarioComponent implements OnInit {
   listaTipoGenero?: TbMaestra[] = [];
   listaEstadoCivil?: TbMaestra[] = [];
   listaPerfil: Perfil[] = [];
+  // listaPais: Ubigeo[] = [];
+  listaPais: Ubigeo[] = jsonPais;
+
 
   codDistrito: string = '';
   controlDistritos = new FormControl();
@@ -148,7 +152,6 @@ export class CusuarioComponent implements OnInit {
       this.listaTipoDocumento = this.obtenerSubtabla(data.items,'TDOC');
       this.listaTipoGenero = this.obtenerSubtabla(data.items,'SEXO');
       this.listaEstadoCivil = this.obtenerSubtabla(data.items,'ESCIV');
-
       this.obtener();
     });
   }
@@ -341,7 +344,7 @@ export class CusuarioComponent implements OnInit {
     var tbDpto: Ubigeo[] = jsonDepartamento;
     var tbProv: Ubigeo[] = jsonProvincia;
     var tbDist: Ubigeo[] = jsonDistrito;
-
+  
     return new Promise(async (resolve) => {
       tbDist.sort((a, b) => (a.name === undefined || b.name === undefined) ? 1 : (a.name < b.name ? -1 : (a.name > b.name ? 1 : 0)));
       
