@@ -35,4 +35,9 @@ export class UsuarioService {
     let urls = `${this.url}/PostSaveUsuario`;
     return this.http.post<Response>(urls, model);
   }
+
+  obtener(id: number){
+    let urls = `${this.url}/GetFirstUsuario?id=${id}`;
+    return this.http.get<Usuario>(urls);
+  }
 }

@@ -1,0 +1,109 @@
+.example-right-align {
+    text-align: right;
+  }
+  
+  .checkbox {
+    color:#3f51b5;
+    position: relative;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 15px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+  .checkbox input {
+  position: absolute;
+  cursor: pointer;
+  width: 20px;
+  height: 20px;
+  margin: -11px 0px 1px -10px;
+  }
+  
+  .checkbox .check {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  }
+  
+  .checkbox:hover input ~ .check {
+  border: 2px solid #3f51b5;
+  }
+  
+  .checkbox input:checked ~ .check {
+  background-color: #3f51b5;
+  border:none;
+  }
+  
+  .checkbox .check:after {
+  content: "";
+  position: absolute;
+  display: none;
+  }
+  
+  .checkbox input:checked ~ .check:after {
+  display: block;
+  }
+  
+  .checkbox .check:after {
+  top: 9px;
+  left: 9px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+  }
+  
+  table tr:hover {
+    background-color: #d14c1321;
+    cursor: pointer;
+  }
+  .styled-table tbody tr:last-of-type {
+    border-bottom: 2px solid #1a0da4a6;
+  }
+  
+  table {
+      margin: auto;
+       border-collapse: collapse;
+       overflow-x: auto;
+       display: block;
+       width: fit-content;
+       max-width: 100%;
+       box-shadow: 0 0 1px 1px rgba(0, 0, 0, .1);
+     }
+     
+     td, th {
+       border: solid rgb(233, 233, 233) 1px;
+       padding: .5rem;
+     }
+     
+     th {
+        text-transform: uppercase;
+        color: #4d41a8;
+        font-weight:500;
+          font-size:13px;
+     }
+     
+     
+     td {
+       white-space: nowrap;
+       border-bottom: none;
+       color: rgb(100 100 100);
+     }
+     
+     td:first-of-type, th:first-of-type {
+       border-left: none;
+       font-size:13px;
+     }
+     
+     td:last-of-type, th:last-of-type {
+       border-right: none;
+     }
+  

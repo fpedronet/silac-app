@@ -12,6 +12,9 @@ import { ConfigPermisoService } from 'src/app/_service/configpermiso.service';
 import { Permiso } from 'src/app/_model/permiso';
 import { map, Observable, startWith, Subject } from 'rxjs';
 import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
+import { TbmaestraService } from 'src/app/_service/tbmaestra.service';
+import { TbMaestra } from 'src/app/_model/combobox';
+import { Perfil } from 'src/app/_model/configuracion/perfil';
 
 @Component({
   selector: 'app-cusuario',
@@ -25,11 +28,23 @@ export class CusuarioComponent implements OnInit {
 
   id: number = 0;
   edit: boolean = true;
+  codEstado: string = "0";
+  nombres: string = "";
+  documento: string = "";
+  currentTab: number = 0;
 
-  foto?: string =environment.UrlImage + "people.png";
-  fotoUrl: string = '';
+  fechaNac: Date | null = null;
+  maxDate: Date = new Date();
+  minDate: Date = new Date();
+
+  tablasMaestras = ['TDOC', 'SEXO'];
+  listaTipoDocumento?: TbMaestra[] = [];
+  listaTipoGenero?: TbMaestra[] = [];
+  listaPerfil: Perfil[] = [];
 
   //Webcam
+  public foto?: string =environment.UrlImage + "people.png";
+  public fotoUrl: string = '';
   public showWebcam = false;
   public allowCameraSwitch = true;
   public multipleWebcamsAvailable = false;
@@ -44,6 +59,7 @@ export class CusuarioComponent implements OnInit {
   private trigger: Subject<void> = new Subject<void>();
   private nextWebcam: Subject<boolean|string> = new Subject<boolean|string>();
 
+  //costructor
   constructor(
     private route: ActivatedRoute,
     private router: Router,
@@ -51,6 +67,7 @@ export class CusuarioComponent implements OnInit {
     private notifierService : NotifierService,
     private usuarioService: UsuarioService,
     private configPermisoService : ConfigPermisoService,
+    private tbmaestraService : TbmaestraService
   ) { }
 
   ngOnInit(): void {
@@ -60,32 +77,33 @@ export class CusuarioComponent implements OnInit {
       this.multipleWebcamsAvailable = mediaDevices && mediaDevices.length > 1;
     });
     
+    this.route.params.subscribe((data: Params)=>{
+      this.id = (data["id"]==undefined)? 0:data["id"];
+      this.edit = (data["edit"]==undefined) ? true : ((data["edit"]=='true') ? true : false)      
+    });
+
     this.inicializar();
 
     this.obtenerpermiso();
+
+    this.listarCombo();
   }
 
   inicializar(){
     this.form = new FormGroup({
-      // 'idePreDonante': new FormControl({ value: 0, disabled: false}),
-      // 'tipoExtraccion': new FormControl({ value: '', disabled: true}),
-      // 'codigo': new FormControl({ value: '', disabled: false}),
-      // 'fecha': new FormControl({ value: new Date(), disabled: false}),
-      // 'pesoDonacion': new FormControl({ value: '', disabled: false}),
-      // 'tallaDonacion': new FormControl({ value: '', disabled: false}),
-      // 'hemoglobina': new FormControl({ value: '', disabled: false}),
-      // 'hematocrito': new FormControl({ value: '', disabled: false}),
-      // 'plaquetas': new FormControl({ value: '', disabled: false}),
-      // 'presionArterial1': new FormControl({ value: '', disabled: false}),
-      // 'presionArterial2': new FormControl({ value: '', disabled: false}),
-      // 'presionArterial': new FormControl({ value: '', disabled: false}),
-      // 'frecuenciaCardiaca': new FormControl({ value: '', disabled: false}),
-      // 'ideGrupo': new FormControl({ value: '', disabled: false}),
-      // 'aspectoGeneral': new FormControl({ value: '', disabled: false}),
-      // 'lesionesVenas': new FormControl({ value: '', disabled: false}),
-      // 'estadoVenoso': new FormControl({ value: '', disabled: false}),
-      // 'obsedrvaciones': new FormControl({ value: '', disabled: false}),
-      // 'temperatura': new FormControl({ value: '', disabled: false})
+      'nIdUsuario': new FormControl({ value: 0, disabled: false}),
+      'vDocumento': new FormControl({ value: '', disabled: false}),
+      'vTipDocu': new FormControl({ value: '', disabled: false}),
+      'vApPaterno': new FormControl({ value: '', disabled: false}),
+      'vApMaterno': new FormControl({ value: '', disabled: false}),
+      'vPrimerNombre': new FormControl({ value: '', disabled: false}),
+      'vSegundoNombre': new FormControl({ value: '', disabled: false}),
+      'vSexo': new FormControl({ value: '', disabled: false}),
+      'nEdad': new FormControl({ value: '', disabled: false}),
+      'dFechaNac': new FormControl({ value: '', disabled: false}),
+      'vUsuario': new FormControl({ value: '', disabled: false}),
+      'vContrasena': new FormControl({ value: '', disabled: false}),
+      'vColegiatura': new FormControl({ value: '', disabled: false})
     });
   }
 
@@ -93,6 +111,54 @@ export class CusuarioComponent implements OnInit {
     this.configPermisoService.obtenerpermiso(forms.usuario.codigo).subscribe(data=>{
       this.permiso = data;
     });   
+  }
+
+  listarCombo(){
+    this.tbmaestraService.cargarDatos(this.tablasMaestras).subscribe(data=>{
+      this.listaTipoDocumento = this.obtenerSubtabla(data.items,'TDOC');
+      this.listaTipoGenero = this.obtenerSubtabla(data.items,'SEXO');
+      this.obtener();
+    });
+  }
+
+  obtener(){
+    this.usuarioService.obtener(this.id).subscribe(data=>{
+      this.form = new FormGroup({
+        'nIdUsuario': new FormControl({ value: data.nIdUsuario, disabled: false}),
+        'vDocumento': new FormControl({ value: data.vDocumento, disabled: false}),
+        'vTipDocu': new FormControl({ value: data.vTipDocu, disabled: false}),
+        'vApPaterno': new FormControl({ value: data.vApPaterno, disabled: false}),
+        'vApMaterno': new FormControl({ value: data.vApMaterno, disabled: false}),
+        'vPrimerNombre': new FormControl({ value: data.vPrimerNombre, disabled: false}),
+        'vSegundoNombre': new FormControl({ value: data.vSegundoNombre, disabled: false}),
+        'vSexo': new FormControl({ value: data.vSexo, disabled: false}),
+        'nEdad': new FormControl({ value: data.nEdad, disabled: false}),
+        'dFechaNac': new FormControl({ value: data.dFechaNac, disabled: false}),
+        'vUsuario': new FormControl({ value: data.vUsuario, disabled: false}),
+        'vContrasena': new FormControl({ value: data.vContrasena, disabled: false}),
+        'vColegiatura': new FormControl({ value: data.vColegiatura, disabled: false})
+      });
+
+      var listaIdPerfil = data.nIdPerfil!.split("|");
+
+      data.listaPerfil?.forEach(y=>{
+        var select = listaIdPerfil.filter(x=>x == y.nIdPerfil?.toString())[0];
+
+        if(select!=null || select!=undefined){
+          y.seleccionado = true
+        }else{
+          y.seleccionado = false
+        }
+      });
+
+      this.listaPerfil = data.listaPerfil!;
+      console.log(this.listaPerfil);
+      this.nombres = data.vNombreCompleto!;
+      this.documento = data.vDocumento!;
+      this.codEstado = (data.swt!=null)? data.swt!.toString()! : "0";
+
+
+    });
   }
 
   subirFoto(fileInput: any) {
@@ -143,14 +209,87 @@ export class CusuarioComponent implements OnInit {
     return this.nextWebcam.asObservable();
   }
 
+  obtenerSubtabla(tb: TbMaestra[], cod: string){
+    return tb.filter(e => e.vEtiqueta?.toString()?.trim() === cod);
+  }
+
   resetImage(){
     this.fotoUrl = '';
     this.webcamImage = null;
     this.showWebcam = false;
   }
 
+  changestepper(stepper: any, numTab: number = -1){
+    if(numTab === -1)
+      this.currentTab = stepper._selectedIndex;
+    else
+      this.currentTab = numTab;
+  }
 
+  cambiaFechaNac(dateStr: string){
+    var arrDate = this.separarFecha(dateStr);
+    if(arrDate.length === 0)
+      this.fechaNac = null;
+    else{
+      var d = new Date(arrDate[2], arrDate[1]-1, arrDate[0]);
+      if(d < this.minDate || d > this.maxDate)
+        this.fechaNac = null;
+      else
+        this.updateFechaNac(d);
+    }
+  }
 
+  separarFecha(cad: string){
+    var arrStr: string[] = [];
+    var arr: number[] = [];
+    arrStr = cad.split('/');
+    if(arrStr.length !== 3)
+      return arr;
+    else{
+      for (let str of arrStr){
+        let num = parseInt(str);
+        if(num === null){
+          arr = [];
+          break;
+        }
+        else
+          arr.push(num)
+      }
+      return arr;
+    }
+  }
+
+  updateFechaNac(d: Date){
+    this.fechaNac = d;
+    if(this.form.get('Edad') !== undefined){
+      var edad = this.calcularEdad(d);
+      this.form.patchValue({
+        Edad: edad.toString()
+      });
+    }
+  }
+
+  calcularEdad(date: Date) {
+    var hoy = new Date();
+    var cumpleanos = new Date(date);
+    var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+    var m = hoy.getMonth() - cumpleanos.getMonth();
+
+    if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
+        edad--;
+    }
+
+    return edad;
+  }
+
+  changeestado(estado: string){
+    this.codEstado= estado;
+  }
+
+  seleccionarPerfil(id: number, seleccionado: boolean){
+    var result  = this.listaPerfil.filter(y=>y.nIdPerfil == id)[0];
+    result!.seleccionado= (seleccionado==false)? true : false;
+  }
 
   guardar(){
 
