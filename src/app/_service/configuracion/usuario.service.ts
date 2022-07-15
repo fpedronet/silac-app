@@ -32,6 +32,7 @@ export class UsuarioService {
   }
 
   guardar(model: Usuario){
+    debugger;
     let urls = `${this.url}/PostSaveUsuario`;
     return this.http.post<Response>(urls, model);
   }

@@ -15,6 +15,7 @@ import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { TbmaestraService } from 'src/app/_service/tbmaestra.service';
 import { TbMaestra } from 'src/app/_model/combobox';
 import { Perfil } from 'src/app/_model/configuracion/perfil';
+import { Usuario } from 'src/app/_model/configuracion/usuario';
 
 @Component({
   selector: 'app-cusuario',
@@ -92,6 +93,7 @@ export class CusuarioComponent implements OnInit {
   inicializar(){
     this.form = new FormGroup({
       'nIdUsuario': new FormControl({ value: 0, disabled: false}),
+      'nIdPersona': new FormControl({ value: 0, disabled: false}),
       'vDocumento': new FormControl({ value: '', disabled: false}),
       'vTipDocu': new FormControl({ value: '', disabled: false}),
       'vApPaterno': new FormControl({ value: '', disabled: false}),
@@ -125,6 +127,7 @@ export class CusuarioComponent implements OnInit {
     this.usuarioService.obtener(this.id).subscribe(data=>{
       this.form = new FormGroup({
         'nIdUsuario': new FormControl({ value: data.nIdUsuario, disabled: false}),
+        'nIdPersona': new FormControl({ value: data.nIdPersona, disabled: false}),
         'vDocumento': new FormControl({ value: data.vDocumento, disabled: false}),
         'vTipDocu': new FormControl({ value: data.vTipDocu, disabled: false}),
         'vApPaterno': new FormControl({ value: data.vApPaterno, disabled: false}),
@@ -139,20 +142,21 @@ export class CusuarioComponent implements OnInit {
         'vColegiatura': new FormControl({ value: data.vColegiatura, disabled: false})
       });
 
-      var listaIdPerfil = data.nIdPerfil!.split("|");
+      if(data.nIdPerfil!="" && data.nIdPerfil!=null){
+        var listaIdPerfil = data.nIdPerfil!.split("|");
 
-      data.listaPerfil?.forEach(y=>{
-        var select = listaIdPerfil.filter(x=>x == y.nIdPerfil?.toString())[0];
-
-        if(select!=null || select!=undefined){
-          y.seleccionado = true
-        }else{
-          y.seleccionado = false
-        }
-      });
+        data.listaPerfil?.forEach(y=>{
+          var select = listaIdPerfil.filter(x=>x == y.nIdPerfil?.toString())[0];
+  
+          if(select!=null || select!=undefined){
+            y.seleccionado = true
+          }else{
+            y.seleccionado = false
+          }
+        });
+      }
 
       this.listaPerfil = data.listaPerfil!;
-      console.log(this.listaPerfil);
       this.nombres = data.vNombreCompleto!;
       this.documento = data.vDocumento!;
       this.codEstado = (data.swt!=null)? data.swt!.toString()! : "0";
@@ -292,6 +296,37 @@ export class CusuarioComponent implements OnInit {
   }
 
   guardar(){
+    let model = new Usuario();
+
+    model.nIdUsuario= this.form.value['nIdUsuario'];
+    model.nIdPersona= this.form.value['nIdPersona'];
+    model.vTipDocu= this.form.value['vTipDocu'];
+    model.vDocumento= this.form.value['vDocumento'];
+    model.vApPaterno= this.form.value['vApPaterno'];
+    model.vApMaterno= this.form.value['vApMaterno'];
+    model.vPrimerNombre= this.form.value['vPrimerNombre'];
+    model.vSegundoNombre= this.form.value['vSegundoNombre'];
+    model.vSexo= this.form.value['vSexo'];
+    model.nEdad= this.form.value['nEdad'];
+    model.vUsuario= this.form.value['vUsuario'];
+    model.vContrasena= this.form.value['vContrasena'];
+    model.vColegiatura= this.form.value['vColegiatura'];
+    model.swt= Number(this.codEstado);
+    model.listaPerfil = this.listaPerfil;
+    model.vFirma = this.webcamImage?this.webcamImage.imageAsDataUrl:this.fotoUrl;
+
+    this.spinner.showLoading();
+    this.usuarioService.guardar(model).subscribe(data=>{
+
+    this.notifierService.showNotification(data.typeResponse!,'Mensaje',data.message!);
+
+      if(data.typeResponse==environment.EXITO){
+        this.router.navigate(['/page/configuracion/usuario']);
+        this.spinner.hideLoading();
+      }else{
+        this.spinner.hideLoading();
+      }
+    });
 
   }
 

@@ -10,7 +10,9 @@ export class Usuario extends Persona {
     dFecUltConex?: Date;
     swt? : number;
     iFirma? : Byte;
+    vFirma? : string;
     iFoto? : Byte;
+    vFoto? : string;
     vCodExternoTipo? : string;
     vCodExternoNum? : string;
     vColegiatura? : string;
