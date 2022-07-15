@@ -3,6 +3,9 @@
       <button mat-stroked-button class="btnHeader" #tooltip="matTooltip" matTooltip="Guardar" type="submit" [disabled]="frmGrupo.invalid" form="ngForm">
         <mat-icon class="maticon">save</mat-icon>
       </button>
+      <button mat-stroked-button class="btnHeader" #tooltip="matTooltip" matTooltip="Limpiar" type="button" (click)="limpiar()">
+        <mat-icon class="maticon">cleaning_services</mat-icon>
+      </button>
     </div>
 </mat-toolbar>
 
@@ -10,15 +13,10 @@
 <mat-card class="cardborde">   
   <mat-toolbar class="cardtitle"></mat-toolbar>
 
-  <h2 class="title-label">CREAR PERMISO</h2>  
+  <h2 *ngIf="curPerfil.nIdPerfilExamen === 0" class="title-label">CREAR PERFIL</h2>
+  <h2 *ngIf="curPerfil.nIdPerfilExamen !== 0" class="title-label">EDITAR PERFIL</h2>
 
   <mat-divider></mat-divider>
-
-  <div id="content"> 
-    <div style="width: 100%; float:left;margin-bottom: -17px;"> 
-      <div style="text-align: center; color: #1a0da4; font-weight: 500;padding-top: 11px;">PERFIL SELECCIONADO: <span style="font-weight: 600; color: #be3900;text-transform: uppercase;">{{nombreperfil}}</span></div> 
-    </div> 
-  </div>
 
   <br style="clear:both;"/>
   <br>
@@ -30,48 +28,96 @@
 
           <div fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="50%">
             <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+              <mat-dialog-content class="modal">
+
+                <form *ngIf="edit" onkeydown="return event.key != 'Enter';" class="forms" id="ngForm" [formGroup]="form" #frmGrupo="ngForm" >
+                  <div class="content">
+                  <div fxLayout="row wrap" fxLayoutGap="16px grid">
+                  
+                  <div [hidden]="true">
+                    <mat-form-field appearance="outline">
+                        <input matInput placeholder="Id" formControlName="nIdPerfilExamen">
+                    </mat-form-field>
+                  </div>
+            
+                    <div div fxFlex="60%" fxFlex.xs="60%" fxFlex.sm="60%" style="padding: 0px 0px 0px 0px;">
+                      <mat-grid-list cols="12" rowHeight="80px" gutterSize="15px">
+                        <mat-grid-tile [colspan]="12">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Nombre de perfil</mat-label>
+                                <input type="text" matInput placeholder="Perfil" formControlName="vDescripcion" minlength="1" maxlength="50" required>
+                            </mat-form-field>
+                        </mat-grid-tile>
+                      </mat-grid-list>
+                    </div>
+                  </div>
+                  </div>
+                </form>
+                </mat-dialog-content>
 
               <mat-accordion class="example-headers-align">
 
                 <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
                   <mat-expansion-panel-header>
                     <mat-panel-title>
-                     PERFIL
+                     PERFILES
                     </mat-panel-title>
                     <mat-panel-description>
                       <span></span>
-                      <mat-icon>account_circle</mat-icon>
+                      <mat-icon>group_work</mat-icon>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
               
                   <div class="content contentTable">          
 
-                    <table class="styled-table">
-                      <thead>
-                        <tr>
-                          <th>PERFIL</th>  
-                          <th>SELECIONAR</th>              
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor="let c of listaPerfil" class="selected">
-                          <td>
-                            {{c.vDescripcion}}
-                          </td>
-                          <td>      
-                            <a class="pointer ver" (click)="listarMenu(0)">
-                              <mat-icon>visibility</mat-icon>
-                           </a>
+                    <form style="padding: 0;">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Búsqueda</mat-label>
+                        <input matInput (keyup)="buscaTextoP($event)" placeholder="Búsqueda" #searchBarP>
+                        <mat-icon matSuffix>search</mat-icon>
+                      </mat-form-field>
+                      
+                      <div class="example-loading-shade" *ngIf="loading || existRegistro">
+                        <mat-spinner *ngIf="loading"></mat-spinner>
+                        <div class="example-rate-limit-reached" *ngIf="existRegistro">
+                          No se encontraron registros.
+                        </div>
+                      </div>
+                
+                      <div class="example-container mat-elevation-z0">
+                        <mat-table [dataSource]="listaPerfil" matSort>
                         
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+                          <ng-container matColumnDef="vDescripcion">
+                            <mat-header-cell *matHeaderCellDef> Perfil </mat-header-cell>
+                            <mat-cell *matCellDef="let element" data-label="Perfil"> {{element.vDescripcion}} </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="accion">
+                            <mat-header-cell *matHeaderCellDef> </mat-header-cell>
+                            <mat-cell *matCellDef="let element" data-label="Acción">            
+                              <a class="pointer edit" matTooltip="Editar" (click)="mostrarExamenes(element)">
+                                <mat-icon>visibility</mat-icon>
+                              </a>
+                            </mat-cell>
+                          </ng-container>
+                                      
+                          <mat-header-row *matHeaderRowDef="displayedColumnsP"></mat-header-row>
+                          <mat-row *matRowDef="let row; columns: displayedColumnsP;"></mat-row>
+                        
+                        </mat-table>
+                        <mat-paginator 
+                          [length]="countRegistroP" 
+                          [pageSizeOptions]="[5, 10, 20]" 
+                          showFirstLastButtons 
+                          aria-label="Select page of users">
+                        </mat-paginator>
+                      </div>
+                
+                    </form>
           
                   </div>
 
                 </mat-expansion-panel>
-
               </mat-accordion>
 
             </mat-grid-list>  
@@ -85,41 +131,83 @@
                 <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
                   <mat-expansion-panel-header>
                     <mat-panel-title>
-                     OPCIÓN MENU
+                     EXÁMANES ACTUALES
                     </mat-panel-title>
                     <mat-panel-description>
                       <span></span>
-                      <mat-icon>account_circle</mat-icon>
+                      <mat-icon>assignment</mat-icon>
                     </mat-panel-description>
                   </mat-expansion-panel-header>
                   
                   <div class="content contentTable">          
 
-                    <table class="styled-table">
-                      <thead>
-                        <tr>
-                          <th>MODULO</th>  
-                          <th>PANTALLA</th>  
-                          <th>SELECIONAR</th>              
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor="let c of listaExamen">
-                          <td>
-                            {{c.vCodExamen}
-                          </td>
-                          <td>
-                            {{c.vDescripcion}}
-                          </td>
-                          <!--td style="text-align: center;">
-                            <label class="radio">
-                              <input  type="checkbox" [checked]="c.seleccionado" name="btn{{c.vCodPantalla}}" (click)="seleccionarMenu(c.vCodPantalla!, c.seleccionado!)">
-                              <span class="check"></span>
-                            </label>
-                          </td-->
-                        </tr>
-                      </tbody>
-                    </table>
+                    <form style="padding: 0;">
+                      <!--mat-form-field appearance="outline">
+                        <mat-label>Búsqueda</mat-label>
+                        <input matInput (keyup)="buscaTextoP($event)" placeholder="Búsqueda" #input>
+                        <mat-icon matSuffix>search</mat-icon>
+                      </mat-form-field-->
+                      
+                      <div class="example-loading-shade" *ngIf="curPerfil.nIdPerfilExamen === 0 || curPerfil.listaExamenes.length > 0">
+                        <mat-spinner *ngIf="loading"></mat-spinner>
+                        <div class="example-rate-limit-reached" *ngIf="curPerfil.listaExamenes.length === 0">
+                          No se han seleccionado exámenes.
+                        </div>
+                        <div class="example-rate-limit-reached" *ngIf="curPerfil === undefined">
+                          Seleccione un perfil.
+                        </div>
+                      </div>
+                
+                      <div class="example-container mat-elevation-z0">
+                        <!--mat-table [dataSource]="curPerfil.listaExamenes">
+
+                          <ng-container matColumnDef="vDescripcion">
+                            <mat-header-cell *matHeaderCellDef> Código </mat-header-cell>
+                            <mat-cell *matCellDef="let element" data-label="Código"> {{element.vCodExamen}} </mat-cell>
+                          </ng-container>
+                        
+                          <ng-container matColumnDef="vDescripcion">
+                            <mat-header-cell *matHeaderCellDef> Examen </mat-header-cell>
+                            <mat-cell *matCellDef="let element" data-label="Examen"> {{element.vDescripcion}} </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="vUndMed">
+                            <mat-header-cell *matHeaderCellDef> Ud. de medida </mat-header-cell>
+                            <mat-cell *matCellDef="let element" data-label="Ud. de medida"> {{element.vUndMed}} </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="vCodTipoMuestra">
+                            <mat-header-cell *matHeaderCellDef> Muestra </mat-header-cell>
+                            <mat-cell *matCellDef="let element" data-label="Muestra"> {{element.vCodTipoMuestra}} </mat-cell>
+                          </ng-container>
+              
+                          <ng-container matColumnDef="vCodAreaExamen">
+                            <mat-header-cell *matHeaderCellDef> Área </mat-header-cell>
+                            <mat-cell *matCellDef="let element" data-label="Área"> {{element.vCodAreaExamen}} </mat-cell>
+                          </ng-container> 
+
+                          <ng-container matColumnDef="accion">
+                            <mat-header-cell *matHeaderCellDef [ngClass]="'widthTable web'"> </mat-header-cell>
+                            <mat-cell *matCellDef="let element" [ngClass]="'widthTable web'" data-label="Accion">            
+                              <a class="pointer edit" matTooltip="Editar" (click)="mostrarExamenes(element)">
+                                <mat-icon>arrow_downward</mat-icon>
+                              </a>
+                            </mat-cell>
+                          </ng-container>
+                                      
+                          <mat-header-row *matHeaderRowDef="displayedColumnsE"></mat-header-row>
+                          <mat-row *matRowDef="let row; columns: displayedColumnsE;"></mat-row>
+                        
+                        </mat-table-->
+                        <mat-paginator 
+                          [length]="curPerfil.listaExamenes.length" 
+                          [pageSizeOptions]="[5, 10, 20]" 
+                          showFirstLastButtons 
+                          aria-label="Select page of users">
+                        </mat-paginator>
+                      </div>
+                
+                    </form>
           
                   </div>
 
