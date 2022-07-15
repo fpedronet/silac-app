@@ -18,5 +18,9 @@ export class Persona{
     vCorreo2?: string;
     nTalla?: number;
     nPeso?: number;
+    vCodPais?: string;
+    vCodDepa?: string;
+    vCodProv?: string;
+    vCodDist?: string;
     vDireccion?: string;
 }

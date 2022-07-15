@@ -1,8 +1,15 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
-import { environment } from 'src/environments/environment';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { Observable, startWith, map, Subject } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
+
 import forms from 'src/assets/json/formulario.json';
+import jsonDepartamento from 'src/assets/json/ubigeo/departamentos.json';
+import jsonProvincia from 'src/assets/json/ubigeo/provincias.json';
+import jsonDistrito from 'src/assets/json/ubigeo/distritos.json';
 
 import { SpinnerService } from 'src/app/page/component/spinner/spinner.service';
 import { UsuarioService } from 'src/app/_service/configuracion/usuario.service';
@@ -10,12 +17,11 @@ import { NotifierService } from 'src/app/page/component/notifier/notifier.servic
 import { ConfigPermisoService } from 'src/app/_service/configpermiso.service';
 
 import { Permiso } from 'src/app/_model/permiso';
-import { map, Observable, startWith, Subject } from 'rxjs';
-import { WebcamImage, WebcamInitError, WebcamUtil } from 'ngx-webcam';
 import { TbmaestraService } from 'src/app/_service/tbmaestra.service';
 import { TbMaestra } from 'src/app/_model/combobox';
 import { Perfil } from 'src/app/_model/configuracion/perfil';
 import { Usuario } from 'src/app/_model/configuracion/usuario';
+import { Distrito, Ubigeo } from 'src/app/_model/distrito';
 
 @Component({
   selector: 'app-cusuario',
@@ -38,10 +44,18 @@ export class CusuarioComponent implements OnInit {
   maxDate: Date = new Date();
   minDate: Date = new Date();
 
-  tablasMaestras = ['TDOC', 'SEXO'];
+  tablasMaestras = ['TDOC', 'SEXO','ESCIV'];
   listaTipoDocumento?: TbMaestra[] = [];
   listaTipoGenero?: TbMaestra[] = [];
+  listaEstadoCivil?: TbMaestra[] = [];
   listaPerfil: Perfil[] = [];
+
+  codDistrito: string = '';
+  controlDistritos = new FormControl();
+  filterDistritos: Observable<Distrito[]> | undefined;
+  distritos: Distrito[] = [];
+  carBuscaDistrito: number = 2;
+  nroDistritosMuestra: number = 15;
 
   //Webcam
   public foto?: string =environment.UrlImage + "people.png";
@@ -87,6 +101,8 @@ export class CusuarioComponent implements OnInit {
 
     this.obtenerpermiso();
 
+    this.listarDistritos();
+
     this.listarCombo();
   }
 
@@ -103,9 +119,21 @@ export class CusuarioComponent implements OnInit {
       'vSexo': new FormControl({ value: '', disabled: false}),
       'nEdad': new FormControl({ value: '', disabled: false}),
       'dFechaNac': new FormControl({ value: '', disabled: false}),
+      'vEstCivil': new FormControl({ value: '', disabled: false}),
       'vUsuario': new FormControl({ value: '', disabled: false}),
       'vContrasena': new FormControl({ value: '', disabled: false}),
-      'vColegiatura': new FormControl({ value: '', disabled: false})
+      'vColegiatura': new FormControl({ value: '', disabled: false}),
+      'vCelular': new FormControl({ value: '', disabled: false}),
+      'vTelefono': new FormControl({ value: '', disabled: false}),
+      'vCorreo1': new FormControl({ value: '', disabled: false}),
+      'vCorreo2': new FormControl({ value: '', disabled: false}),
+      'nPeso': new FormControl({ value: '', disabled: false}),
+      'nTalla': new FormControl({ value: '', disabled: false}),
+      'vCodPais': new FormControl({ value: '', disabled: false}),
+      'vCodDepa': new FormControl({ value: '', disabled: false}),
+      'vCodProv': new FormControl({ value: '', disabled: false}),
+      'vCodDist': new FormControl({ value: '', disabled: false}),
+      'vDireccion': new FormControl({ value: '', disabled: false})
     });
   }
 
@@ -119,6 +147,8 @@ export class CusuarioComponent implements OnInit {
     this.tbmaestraService.cargarDatos(this.tablasMaestras).subscribe(data=>{
       this.listaTipoDocumento = this.obtenerSubtabla(data.items,'TDOC');
       this.listaTipoGenero = this.obtenerSubtabla(data.items,'SEXO');
+      this.listaEstadoCivil = this.obtenerSubtabla(data.items,'ESCIV');
+
       this.obtener();
     });
   }
@@ -137,10 +167,22 @@ export class CusuarioComponent implements OnInit {
         'vSexo': new FormControl({ value: data.vSexo, disabled: false}),
         'nEdad': new FormControl({ value: data.nEdad, disabled: false}),
         'dFechaNac': new FormControl({ value: data.dFechaNac, disabled: false}),
+        'vEstCivil': new FormControl({ value: data.vEstCivil, disabled: false}),
         'vUsuario': new FormControl({ value: data.vUsuario, disabled: false}),
         'vContrasena': new FormControl({ value: data.vContrasena, disabled: false}),
-        'vColegiatura': new FormControl({ value: data.vColegiatura, disabled: false})
-      });
+        'vColegiatura': new FormControl({ value: data.vColegiatura, disabled: false}),
+        'vCelular': new FormControl({ value: data.vCelular, disabled: false}),
+        'vTelefono': new FormControl({ value: data.vTelefono, disabled: false}),
+        'vCorreo1': new FormControl({ value: data.vCorreo1, disabled: false}),
+        'vCorreo2': new FormControl({ value: data.vCorreo2, disabled: false}),
+        'nPeso': new FormControl({ value: data.nPeso, disabled: false}),
+        'nTalla': new FormControl({ value: data.nTalla, disabled: false}),
+        'vCodPais': new FormControl({ value: data.vCodPais, disabled: false}),
+        'vCodDepa': new FormControl({ value: data.vCodDepa, disabled: false}),
+        'vCodProv': new FormControl({ value: data.vCodProv, disabled: false}),
+        'vCodDist': new FormControl({ value: data.vCodDist, disabled: false}),
+        'vDireccion': new FormControl({ value: data.vDireccion, disabled: false})
+        });
 
       if(data.nIdPerfil!="" && data.nIdPerfil!=null){
         var listaIdPerfil = data.nIdPerfil!.split("|");
@@ -293,6 +335,61 @@ export class CusuarioComponent implements OnInit {
   seleccionarPerfil(id: number, seleccionado: boolean){
     var result  = this.listaPerfil.filter(y=>y.nIdPerfil == id)[0];
     result!.seleccionado= (seleccionado==false)? true : false;
+  }
+
+  async listarDistritos(){
+    var tbDpto: Ubigeo[] = jsonDepartamento;
+    var tbProv: Ubigeo[] = jsonProvincia;
+    var tbDist: Ubigeo[] = jsonDistrito;
+
+    return new Promise(async (resolve) => {
+      tbDist.sort((a, b) => (a.name === undefined || b.name === undefined) ? 1 : (a.name < b.name ? -1 : (a.name > b.name ? 1 : 0)));
+      
+      tbDist.forEach(d => {
+        var distrito: Distrito = new Distrito();
+
+        distrito.dist = d;
+        distrito.prov = tbProv.find(e => d.id?.startsWith(e.id!));
+        distrito.dpto = tbDpto.find(e => d.id?.startsWith(e.id!));
+
+        this.distritos.push(distrito);
+      });
+  
+      this.filterDistritos = this.controlDistritos.valueChanges.pipe(
+        startWith(''),
+        map(value => (typeof value === 'string'?value:value.dist.descripcion)),
+        map(name  => (name?this.buscarDistritos(name):[]))
+      )
+
+      if(this.distritos.length === 0)
+        resolve('error')
+      else
+        resolve('ok')
+    })
+  }
+
+  buscarDistritos(name: string): Distrito[]{
+    this.codDistrito = '';
+    var results: Distrito[] = [];
+    if(name.length >= this.carBuscaDistrito){
+      var filtro = name.toLowerCase();
+      results = this.distritos.filter(e => e.dist?.name?.toLowerCase().includes(filtro));
+    }    
+    return results.slice(0,this.nroDistritosMuestra);
+  }
+
+  mostrarDistrito(d: Distrito): string{
+    var result = '';
+    if(d !== undefined && d !== null && d !== '' && d.dist?.name !== '')
+      result = d.dist?.name! + ', ' + d.prov?.name! + ', ' + d.dpto?.name!;
+    return result;
+  }
+
+  changeDistrito(event: any){
+    var distrito = event.option.value;
+    if(distrito !== undefined){
+      this.codDistrito = distrito.dist.codigo;
+    }
   }
 
   guardar(){
