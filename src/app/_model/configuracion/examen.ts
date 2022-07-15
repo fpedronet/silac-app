@@ -1,4 +1,19 @@
 export class Examen{
+    constructor() {
+        this.nIdExamen = 0
+        this.vCodExamen = '',
+        this.vDescripcion = '',
+        this.vCodAreaExamen = '',
+        this.vCodTipoMuestra = '',
+        this.vFormato = '',
+        this.vFormula = '',
+        this.vAbreviatura = '',
+        this.vUndMed = '',
+        this.vRangoRef = '',
+        this.vCodSubGrupo = '',
+        this.vTipoRespuesta = '',
+        this.vRespuesta = ''        
+    }
     nIdExamen?: number;
     vCodExamen?: string;
     vDescripcion?: string;
@@ -16,5 +31,10 @@ export class Examen{
     vRespuesta?: string;
     vDetalles?: string;
     nIncDetalle?: number;
-    nCalculado?: number;
+}
+
+export class PerfilExamen{
+    nIdPerfilExamen?: number;
+    vDescripcion?: string;
+    listaExamenes?: Examen[];
 }

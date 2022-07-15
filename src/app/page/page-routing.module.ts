@@ -14,6 +14,7 @@ import { LexamenComponent } from './configuracion/lexamen/lexamen.component';
 
 import { LusuarioComponent } from './configuracion/usuario/lusuario/lusuario.component';
 import { CusuarioComponent } from './configuracion/usuario/cusuario/cusuario.component';
+import { LperfilexamenComponent } from './configuracion/perfil/lperfilexamen/lperfilexamen.component';
 
 
 const routes: Routes = [
@@ -34,6 +35,8 @@ const routes: Routes = [
   {path:'configuracion/usuario', component: LusuarioComponent, canActivate: [GuardService]},
   {path:'configuracion/usuario/create', component: CusuarioComponent, canActivate: [GuardService]},
   {path:'configuracion/usuario/edit/:id/:edit', component: CusuarioComponent, canActivate: [GuardService]},
+
+  {path:'configuracion/perfil', component: LperfilexamenComponent, canActivate: [GuardService]},
 
 ];
 

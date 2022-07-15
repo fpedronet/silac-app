@@ -17,6 +17,7 @@ import { CexamenComponent } from './configuracion/cexamen/cexamen.component';
 import { LexamenComponent } from './configuracion/lexamen/lexamen.component';
 import { LusuarioComponent } from './configuracion/usuario/lusuario/lusuario.component';
 import { CusuarioComponent } from './configuracion/usuario/cusuario/cusuario.component';
+import { LperfilexamenComponent } from './configuracion/perfil/lperfilexamen/lperfilexamen.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { CusuarioComponent } from './configuracion/usuario/cusuario/cusuario.com
     LexamenComponent,
     LusuarioComponent,
     CusuarioComponent,
+    LperfilexamenComponent,
   ],
   imports: [
     MaterialModule,

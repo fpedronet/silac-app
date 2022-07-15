@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Examen } from 'src/app/_model/configuracion/examen';
 import { ConfigPermisoService } from 'src/app/_service/configpermiso.service';
@@ -10,6 +10,11 @@ import forms from 'src/assets/json/formulario.json';
 import { Permiso } from 'src/app/_model/permiso';
 import { Router } from '@angular/router';
 import { LogeoService } from 'src/app/_service/configuracion/logeo.service';
+import { MatSort } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
+import { merge, of as observableOf } from 'rxjs';
+import { catchError, map, startWith, switchMap} from 'rxjs/operators';
+import { ExamenService } from 'src/app/_service/configuracion/examen.service';
 
 @Component({
   selector: 'app-lexamen',
@@ -19,6 +24,16 @@ import { LogeoService } from 'src/app/_service/configuracion/logeo.service';
 export class LexamenComponent implements OnInit {
 
   permiso: Permiso = {};
+
+  dataSource: Examen[] = [];
+  displayedColumns: string[] = ['vCodExamen','vDescripcion', 'vAbreviatura', 'vUndMed', 'vCodTipoMuestra', 'vCodAreaExamen', 'vFormula', 'accion'];
+  loading = true;
+  existRegistro = false;
+  countRegistro = 0;
+
+  
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+  @ViewChild(MatSort) sort!: MatSort;
   
   constructor(
     private http: HttpClient,
@@ -28,6 +43,7 @@ export class LexamenComponent implements OnInit {
     private logeoService : LogeoService,
     private configPermisoService : ConfigPermisoService,
     private confirmService : ConfimService,
+    private examenService : ExamenService
   ) { }
 
   ngOnInit(): void {
@@ -49,9 +65,62 @@ export class LexamenComponent implements OnInit {
       panelClass: 'full-screen-modal',
       disableClose: true,
       data: {
-        curExamen: examen
+        curExamen: examen,
+        edit: this.permiso.guardar
       }
     });
+
+    dialogRef.afterClosed().subscribe(res => {
+      if(res!=""){
+
+        this.paginator.pageIndex = 0,
+        //this.paginator.pageSize = 5
+        this.ngAfterViewInit();
+        }
+    })
   }
 
+  ngAfterViewInit(search: string = '') {
+
+    this.examenService = new ExamenService(this.http);
+    this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
+ 
+    var page = this.paginator.pageIndex;
+    var pages =  this.paginator.pageSize;
+    var column = (this.sort.active == undefined)? '' : this.sort.active
+    var order = this.sort.direction
+
+    merge(this.sort.sortChange, this.paginator.page)
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          return this.examenService!.listar(
+            search, page, pages, column, order
+          ).pipe(catchError(() => observableOf(null)));
+        }),
+        map(res => {
+
+           this.loading = false;
+           this.existRegistro = res === null;
+
+          if (res === null) {
+            return [];
+          }
+
+          this.countRegistro = res.pagination.total;
+          return res.items;
+        }),
+      ).subscribe(data => (this.dataSource = data));
+      
+  }
+
+  buscaTexto(event: Event) {
+  
+    let data = (event.target as HTMLInputElement).value;
+    this.ngAfterViewInit(data);
+  }
+
+  actualizar(){
+    this.ngAfterViewInit();
+  }
 }
