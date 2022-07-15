@@ -155,12 +155,12 @@ export class CusuarioComponent implements OnInit {
           }
         });
       }
-
+    
       this.listaPerfil = data.listaPerfil!;
       this.nombres = data.vNombreCompleto!;
       this.documento = data.vDocumento!;
       this.codEstado = (data.swt!=null)? data.swt!.toString()! : "0";
-
+      this.fotoUrl =(data.vFirma !== undefined && data.vFirma !== null)? data.vFirma! : this.foto!;
 
     });
   }
@@ -296,6 +296,7 @@ export class CusuarioComponent implements OnInit {
   }
 
   guardar(){
+    debugger;
     let model = new Usuario();
 
     model.nIdUsuario= this.form.value['nIdUsuario'];
@@ -307,6 +308,7 @@ export class CusuarioComponent implements OnInit {
     model.vPrimerNombre= this.form.value['vPrimerNombre'];
     model.vSegundoNombre= this.form.value['vSegundoNombre'];
     model.vSexo= this.form.value['vSexo'];
+    model.dFechaNac= this.form.value['dFechaNac'];
     model.nEdad= this.form.value['nEdad'];
     model.vUsuario= this.form.value['vUsuario'];
     model.vContrasena= this.form.value['vContrasena'];
