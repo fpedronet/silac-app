@@ -71,8 +71,8 @@ export class CexamenComponent implements OnInit {
       'vDescripcion': new FormControl({ value: examen.vDescripcion, disabled: !this.edit}),
       'vCodAreaExamen': new FormControl({ value: examen.vCodAreaExamen, disabled: !this.edit}),
       'vCodTipoMuestra': new FormControl({ value: examen.vCodTipoMuestra, disabled: !this.edit}),
-      'vFormato': new FormControl({ value: examen.vFormato, disabled: !this.edit}),
       'vFormula': new FormControl({ value: examen.vFormula, disabled: !this.edit}),
+      'vFormato': new FormControl({ value: examen.vFormato, disabled: !this.edit}),      
 
       'vAbreviatura': new FormControl({ value: examen.vAbreviatura, disabled: !this.edit}),
       'vUndMed': new FormControl({ value: examen.vUndMed, disabled: !this.edit}),
@@ -95,11 +95,23 @@ export class CexamenComponent implements OnInit {
       }*/
     }
 
+    //debugger;
+
     this.form.patchValue({
       nIdExamen: examen.nIdExamen,
       vCodExamen: examen.vCodExamen,
-      vDescripcion: examen.vDescripcion
-      //monto: rendDet.monto === 0?'0.00':rendDet.monto?.toFixed(2),
+      vDescripcion: examen.vDescripcion,
+      vCodAreaExamen: examen.vCodAreaExamen,
+      vCodTipoMuestra: examen.vCodTipoMuestra,
+      vFormula: examen.vFormula,
+      vFormato: examen.vFormato,
+
+      vAbreviatura: examen.vAbreviatura,
+      vUndMed: examen.vUndMed,
+      vRangoRef: examen.vRangoRef,
+      vCodSubGrupo: examen.vCodSubGrupo,
+      vTipoRespuesta: examen.vTipoRespuesta,
+      vRespuesta: examen.vRespuesta
     });
 
     /*var sedeFind = this.tbSede.find(e => e.valor === rendDet.ideSede?.toString()); //Ruc
@@ -171,13 +183,17 @@ export class CexamenComponent implements OnInit {
       rendDet.codMoneda = filtro[3];
     }*/
 
+    if(this.examen.nIdExamen === 0)
+      this.form.patchValue({
+        vCodExamen: examen.vCodExamen,
+        vDescripcion: examen.vDescripcion
+      });
+
     this.form.patchValue({
-      vCodExamen: examen.vCodExamen,
-      vDescripcion: examen.vDescripcion,
       vCodAreaExamen: examen.vCodAreaExamen,
       vCodTipoMuestra: examen.vCodTipoMuestra,
-      vFormato: examen.vFormato,
       vFormula: examen.vFormula,
+      vFormato: examen.vFormato,      
 
       vAbreviatura: examen.vAbreviatura,
       vUndMed: examen.vUndMed,
@@ -198,8 +214,8 @@ export class CexamenComponent implements OnInit {
     model.vDescripcion = this.form.value['vDescripcion'];
     model.vCodAreaExamen = this.form.value['vCodAreaExamen'];
     model.vCodTipoMuestra = this.form.value['vCodTipoMuestra'];
-    model.vFormato = this.form.value['vFormato'];
     model.vFormula = this.form.value['vFormula'];
+    model.vFormato = this.form.value['vFormato'];    
     model.vAbreviatura = this.form.value['vAbreviatura'];
     model.vUndMed = this.form.value['vUndMed'];
     model.vRangoRef = this.form.value['vRangoRef'];
@@ -264,13 +280,14 @@ export class CexamenComponent implements OnInit {
   }
 
   camposCambiados(examen: Examen){
+    //debugger;
 
     var codExamen: boolean = examen.vCodExamen !== this.getControlLabel('vCodExamen');
     var descripcion: boolean = examen.vDescripcion !== this.getControlLabel('vDescripcion');
     var area: boolean = examen.vCodAreaExamen !== this.getControlLabel('vCodAreaExamen');
     var muestra: boolean = examen.vCodTipoMuestra !== this.getControlLabel('vCodTipoMuestra');
-    var formato: boolean = examen.vFormato !== this.getControlLabel('vFormato');
     var formula: boolean = examen.vFormula !== this.getControlLabel('vFormula');
+    var formato: boolean = examen.vFormato !== this.getControlLabel('vFormato');
     var abreviatura: boolean = examen.vAbreviatura !== this.getControlLabel('vAbreviatura');
     var unidad: boolean = examen.vUndMed !== this.getControlLabel('vUndMed');
     var rango: boolean = examen.vRangoRef !== this.getControlLabel('vRangoRef');

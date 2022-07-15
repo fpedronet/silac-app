@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Examen } from 'src/app/_model/configuracion/examen';
 import { ConfigPermisoService } from 'src/app/_service/configpermiso.service';
@@ -15,6 +15,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { merge, of as observableOf } from 'rxjs';
 import { catchError, map, startWith, switchMap} from 'rxjs/operators';
 import { ExamenService } from 'src/app/_service/configuracion/examen.service';
+import { MatInput } from '@angular/material/input';
 
 @Component({
   selector: 'app-lexamen',
@@ -31,9 +32,10 @@ export class LexamenComponent implements OnInit {
   existRegistro = false;
   countRegistro = 0;
 
+  @ViewChild(MatSort) sort!: MatSort;
   
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild('searchBar') searchBar!: ElementRef;
   
   constructor(
     private http: HttpClient,
@@ -74,13 +76,18 @@ export class LexamenComponent implements OnInit {
       if(res!=""){
 
         this.paginator.pageIndex = 0,
+        this.searchBar.nativeElement.value = '';
         //this.paginator.pageSize = 5
-        this.ngAfterViewInit();
-        }
+        this.listar();
+      }
     })
   }
 
-  ngAfterViewInit(search: string = '') {
+  ngAfterViewInit(){
+    this.listar();
+  }
+
+  listar(search: string = '') {
 
     this.examenService = new ExamenService(this.http);
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
@@ -117,7 +124,7 @@ export class LexamenComponent implements OnInit {
   buscaTexto(event: Event) {
   
     let data = (event.target as HTMLInputElement).value;
-    this.ngAfterViewInit(data);
+    this.listar(data);
   }
 
   actualizar(){
