@@ -50,7 +50,6 @@ export class CusuarioComponent implements OnInit {
   listaTipoGenero?: TbMaestra[] = [];
   listaEstadoCivil?: TbMaestra[] = [];
   listaPerfil: Perfil[] = [];
-  // listaPais: Ubigeo[] = [];
   listaPais: Ubigeo[] = jsonPais;
 
 
