@@ -1,12 +1,14 @@
 <mat-toolbar color="primary" class="example-toolbar submenu example-button">
     <div class="example-button-rowR">
       <button mat-stroked-button class="btnHeader" routerLink="/page/configuracion/usuario">
-        <mat-icon class="maticon">subdirectory_arrow_left</mat-icon>
+        <mat-icon class="maticonmenu">arrow_back</mat-icon>
+        <span class="maticontitle">Atrás</span>
       </button>
     </div>
     <div class="example-button-row">
       <button *ngIf="edit && permiso.guardar" mat-stroked-button class="btnHeader" type="submit" [disabled]="frmGrupo.invalid" form="ngForm">
-        <mat-icon class="maticon">save</mat-icon>
+        <mat-icon class="maticonmenu">save</mat-icon>
+        <span class="maticontitle">Guardar</span>
       </button>
     </div>
 </mat-toolbar>
