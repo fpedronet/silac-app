@@ -36,7 +36,7 @@ export class CusuarioComponent implements OnInit {
 
   id: number = 0;
   edit: boolean = true;
-  codEstado: string = "0";
+  codEstado: string = "1";
   nombres: string = "";
   documento: string = "";
   currentTab: number = 0;
@@ -52,13 +52,20 @@ export class CusuarioComponent implements OnInit {
   listaPerfil: Perfil[] = [];
   listaPais: Ubigeo[] = jsonPais;
 
+  idTipoDocumento: string = '';
 
+  codDepartamento: string = '';
+  codProvincia: string = '';
   codDistrito: string = '';
   controlDistritos = new FormControl();
   filterDistritos: Observable<Distrito[]> | undefined;
   distritos: Distrito[] = [];
   carBuscaDistrito: number = 2;
   nroDistritosMuestra: number = 15;
+
+  muestraDistrito: boolean = false;
+  distritoColor: string = 'accent'
+  selectedPais: string = '';
 
   //Webcam
   public foto?: string =environment.UrlImage + "people.png";
@@ -104,7 +111,7 @@ export class CusuarioComponent implements OnInit {
 
     this.obtenerpermiso();
 
-    this.listarDistritos();
+    this.listarDistritos(null!, null!, null!);
 
     this.listarCombo();
   }
@@ -147,16 +154,34 @@ export class CusuarioComponent implements OnInit {
   }
 
   listarCombo(){
+    this.spinner.showLoading();
     this.tbmaestraService.cargarDatos(this.tablasMaestras).subscribe(data=>{
       this.listaTipoDocumento = this.obtenerSubtabla(data.items,'TDOC');
       this.listaTipoGenero = this.obtenerSubtabla(data.items,'SEXO');
       this.listaEstadoCivil = this.obtenerSubtabla(data.items,'ESCIV');
+
+      this.idTipoDocumento = this.listaTipoDocumento.length>0? this.listaTipoDocumento[0].vValor! : '';
+
       this.obtener();
     });
   }
 
   obtener(){
     this.usuarioService.obtener(this.id).subscribe(data=>{
+   
+      data.vTipDocu = (data.vTipDocu==null)?  this.idTipoDocumento: data.vTipDocu;
+      data.nPeso = (data.nPeso==0)?  null!: data.nPeso!;
+      data.nTalla = (data.nTalla==0)?  null!: data.nTalla!;
+      data.vCodPais = (data.vCodPais=='' || data.vCodPais==null)?  '01'!: data.vCodPais!;
+
+      this.selectedPais = data.vCodPais;
+      this.muestraDistrito = true;
+      if(this.selectedPais !== '01'){
+        this.codDistrito = '';
+        this.distritoColor = 'accent';
+        this.muestraDistrito = false;
+      }
+
       this.form = new FormGroup({
         'nIdUsuario': new FormControl({ value: data.nIdUsuario, disabled: false}),
         'nIdPersona': new FormControl({ value: data.nIdPersona, disabled: false}),
@@ -185,6 +210,23 @@ export class CusuarioComponent implements OnInit {
         'vCodDist': new FormControl({ value: data.vCodDist, disabled: false}),
         'vDireccion': new FormControl({ value: data.vDireccion, disabled: false})
         });
+        debugger;
+        if(data.vCodDepa!=null && data.vCodProv!=null && data.vCodDist!=null){
+          let departamento: Ubigeo[] = jsonDepartamento;
+          let provincia: Ubigeo[] = jsonProvincia;
+          let distrito: Ubigeo[] = jsonDistrito;
+  
+          departamento = departamento.filter(y=>y.id==data.vCodDepa);
+          provincia = provincia.filter(y=>y.id==data.vCodProv);
+          distrito = distrito.filter(y=>y.id==data.vCodDist);
+  
+          this.listarDistritos(departamento, provincia, distrito).then(res => {
+          });
+           
+          this.codDepartamento = data.vCodDepa!;
+          this.codProvincia = data.vCodProv!;
+          this.codDistrito = data.vCodDist!;
+        }      
 
       if(data.nIdPerfil!="" && data.nIdPerfil!=null){
         var listaIdPerfil = data.nIdPerfil!.split("|");
@@ -203,9 +245,10 @@ export class CusuarioComponent implements OnInit {
       this.listaPerfil = data.listaPerfil!;
       this.nombres = data.vNombreCompleto!;
       this.documento = data.vDocumento!;
-      this.codEstado = (data.swt!=null)? data.swt!.toString()! : "0";
-      this.fotoUrl =(data.vFirma !== undefined && data.vFirma !== null)? data.vFirma! : this.foto!;
-
+      this.codEstado = (data.swt!=null)? data.swt!.toString()! : "1";
+      this.fotoUrl =(data.vFoto !== undefined && data.vFoto !== null)? data.vFoto! : this.foto!;
+      
+      this.spinner.hideLoading();
     });
   }
 
@@ -339,20 +382,27 @@ export class CusuarioComponent implements OnInit {
     result!.seleccionado= (seleccionado==false)? true : false;
   }
 
-  async listarDistritos(){
-    var tbDpto: Ubigeo[] = jsonDepartamento;
-    var tbProv: Ubigeo[] = jsonProvincia;
-    var tbDist: Ubigeo[] = jsonDistrito;
+  async listarDistritos(tbDpto: Ubigeo[], tbProv: Ubigeo[], tbDist: Ubigeo[]){
+    var tbDptos: Ubigeo[] = tbDpto;
+    var tbProvs: Ubigeo[] = tbProv;
+    var tbDists: Ubigeo[] = tbDist;
+
+    if(tbDptos==null && tbProvs==null && tbDists==null){
+      tbDptos = jsonDepartamento;
+      tbProvs = jsonProvincia;
+      tbDists = jsonDistrito;
+    }
+   
   
     return new Promise(async (resolve) => {
-      tbDist.sort((a, b) => (a.name === undefined || b.name === undefined) ? 1 : (a.name < b.name ? -1 : (a.name > b.name ? 1 : 0)));
+      tbDists.sort((a, b) => (a.name === undefined || b.name === undefined) ? 1 : (a.name < b.name ? -1 : (a.name > b.name ? 1 : 0)));
       
-      tbDist.forEach(d => {
+      tbDists.forEach(d => {
         var distrito: Distrito = new Distrito();
 
         distrito.dist = d;
-        distrito.prov = tbProv.find(e => d.id?.startsWith(e.id!));
-        distrito.dpto = tbDpto.find(e => d.id?.startsWith(e.id!));
+        distrito.prov = tbProvs.find(e => d.id?.startsWith(e.id!));
+        distrito.dpto = tbDptos.find(e => d.id?.startsWith(e.id!));
 
         this.distritos.push(distrito);
       });
@@ -387,10 +437,22 @@ export class CusuarioComponent implements OnInit {
     return result;
   }
 
+  changePais(value: string){
+    this.selectedPais = value;
+    this.muestraDistrito = true;
+    if(this.selectedPais !== '01'){
+      this.distritoColor = 'accent';
+      this.muestraDistrito = false;
+    }
+  }
+
   changeDistrito(event: any){
+    debugger;
     var distrito = event.option.value;
     if(distrito !== undefined){
-      this.codDistrito = distrito.dist.codigo;
+      this.codDepartamento = distrito.dpto.id;
+      this.codProvincia = distrito.prov.id;
+      this.codDistrito = distrito.dist.id;
     }
   }
 
@@ -407,14 +469,39 @@ export class CusuarioComponent implements OnInit {
     model.vPrimerNombre= this.form.value['vPrimerNombre'];
     model.vSegundoNombre= this.form.value['vSegundoNombre'];
     model.vSexo= this.form.value['vSexo'];
+    model.vEstCivil= this.form.value['vEstCivil'];
     model.dFechaNac= this.form.value['dFechaNac'];
     model.nEdad= this.form.value['nEdad'];
+    model.vCelular= this.form.value['vCelular'];
+    model.vTelefono= this.form.value['vTelefono'];
+    model.vCorreo1= this.form.value['vCorreo1'];
+    model.vCorreo2= this.form.value['vCorreo2'];
+    model.nPeso= this.form.value['nPeso'];
+    model.nTalla= this.form.value['nTalla'];
+    model.vCodPais = (this.selectedPais=='')?undefined:this.selectedPais;
+    
+    if(this.selectedPais=='01'){
+      model.vCodDepa = (this.codDepartamento=='')?undefined:this.codDepartamento;
+      model.vCodProv = (this.codProvincia=='')?undefined:this.codProvincia;
+      model.vCodDist = (this.codDistrito=='')?undefined:this.codDistrito;
+    }else{
+      model.vCodDepa = undefined;
+      model.vCodProv = undefined;
+      model.vCodDist = undefined;
+    }
+
+    model.vDireccion= this.form.value['vDireccion'];
     model.vUsuario= this.form.value['vUsuario'];
     model.vContrasena= this.form.value['vContrasena'];
     model.vColegiatura= this.form.value['vColegiatura'];
+
     model.swt= Number(this.codEstado);
     model.listaPerfil = this.listaPerfil;
-    model.vFirma = this.webcamImage?this.webcamImage.imageAsDataUrl:this.fotoUrl;
+
+    if(this.fotoUrl!='' && this.fotoUrl!=environment.UrlImage + "people.png"){
+      model.vFoto = this.webcamImage?this.webcamImage.imageAsDataUrl:this.fotoUrl;
+    }
+
 
     this.spinner.showLoading();
     this.usuarioService.guardar(model).subscribe(data=>{
@@ -431,5 +518,46 @@ export class CusuarioComponent implements OnInit {
 
   }
 
+  limpiar(){
+    // this.id = 0;
+    // this.codigo = '';
+
+    // this.resetImage();
+    // this.reiniciaPersona();
+    
+    // //Limpia paciente
+    // this.reiniciaPersona(true);
+    // this.muestraPaciente = false;
+
+    // //Busca origen y campaña de caché
+    // var ideOri = localStorage.getItem('IdeOrigen');
+    // ideOri = ideOri?ideOri:this.curBanco.toString();
+    // var ideCam = localStorage.getItem('IdeCampania');
+    // ideCam = ideCam?ideCam:'1';
+
+    // //Valores por defecto de tipo proc. y extracción
+    // this.form.patchValue({
+    //   CodTipoProcedimiento: this.tbTipoProced[0].codigo
+    // });
+    // this.changeTipoProced(this.tbTipoProced[0].codigo)
+
+    // this.form.patchValue({
+    //   Codigo: '#######',
+    //   TipDocu: '1',
+    //   ViajeSN: 'No',
+    //   Lugar: '',
+    //   Permanencia: '',
+    //   FechaViaje: null,
+    //   Otros: '',
+    //   CodTipoDonacion: '',
+    //   IdeOrigen: ideOri,
+    //   IdeCampania: ideCam,
+    //   Fecha: new Date(),
+    //   CodEstado: 0,
+    //   CodEje: '',
+    //   CodParentesco: '',
+    //   TipRecep: ''
+    // })
+  }
 
 }
