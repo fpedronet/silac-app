@@ -169,6 +169,7 @@ export class CusuarioComponent implements OnInit {
   obtener(){
     this.usuarioService.obtener(this.id).subscribe(data=>{
    
+      let edit2 = (this.id>0)? true : false;
       data.vTipDocu = (data.vTipDocu==null)?  this.idTipoDocumento: data.vTipDocu;
       data.nPeso = (data.nPeso==0)?  null!: data.nPeso!;
       data.nTalla = (data.nTalla==0)?  null!: data.nTalla!;
@@ -183,34 +184,34 @@ export class CusuarioComponent implements OnInit {
       }
 
       this.form = new FormGroup({
-        'nIdUsuario': new FormControl({ value: data.nIdUsuario, disabled: false}),
-        'nIdPersona': new FormControl({ value: data.nIdPersona, disabled: false}),
-        'vDocumento': new FormControl({ value: data.vDocumento, disabled: false}),
-        'vTipDocu': new FormControl({ value: data.vTipDocu, disabled: false}),
-        'vApPaterno': new FormControl({ value: data.vApPaterno, disabled: false}),
-        'vApMaterno': new FormControl({ value: data.vApMaterno, disabled: false}),
-        'vPrimerNombre': new FormControl({ value: data.vPrimerNombre, disabled: false}),
-        'vSegundoNombre': new FormControl({ value: data.vSegundoNombre, disabled: false}),
-        'vSexo': new FormControl({ value: data.vSexo, disabled: false}),
-        'nEdad': new FormControl({ value: data.nEdad, disabled: false}),
-        'dFechaNac': new FormControl({ value: data.dFechaNac, disabled: false}),
-        'vEstCivil': new FormControl({ value: data.vEstCivil, disabled: false}),
-        'vUsuario': new FormControl({ value: data.vUsuario, disabled: false}),
-        'vContrasena': new FormControl({ value: data.vContrasena, disabled: false}),
-        'vColegiatura': new FormControl({ value: data.vColegiatura, disabled: false}),
-        'vCelular': new FormControl({ value: data.vCelular, disabled: false}),
-        'vTelefono': new FormControl({ value: data.vTelefono, disabled: false}),
-        'vCorreo1': new FormControl({ value: data.vCorreo1, disabled: false}),
-        'vCorreo2': new FormControl({ value: data.vCorreo2, disabled: false}),
-        'nPeso': new FormControl({ value: data.nPeso, disabled: false}),
-        'nTalla': new FormControl({ value: data.nTalla, disabled: false}),
-        'vCodPais': new FormControl({ value: data.vCodPais, disabled: false}),
-        'vCodDepa': new FormControl({ value: data.vCodDepa, disabled: false}),
-        'vCodProv': new FormControl({ value: data.vCodProv, disabled: false}),
-        'vCodDist': new FormControl({ value: data.vCodDist, disabled: false}),
-        'vDireccion': new FormControl({ value: data.vDireccion, disabled: false})
+        'nIdUsuario': new FormControl({ value: data.nIdUsuario, disabled: !this.edit}),
+        'nIdPersona': new FormControl({ value: data.nIdPersona, disabled: !this.edit}),
+        'vDocumento': new FormControl({ value: data.vDocumento, disabled: edit2}),
+        'vTipDocu': new FormControl({ value: data.vTipDocu, disabled: edit2}),
+        'vApPaterno': new FormControl({ value: data.vApPaterno, disabled: !this.edit}),
+        'vApMaterno': new FormControl({ value: data.vApMaterno, disabled: !this.edit}),
+        'vPrimerNombre': new FormControl({ value: data.vPrimerNombre, disabled: !this.edit}),
+        'vSegundoNombre': new FormControl({ value: data.vSegundoNombre, disabled: !this.edit}),
+        'vSexo': new FormControl({ value: data.vSexo, disabled: !this.edit}),
+        'nEdad': new FormControl({ value: data.nEdad, disabled: !this.edit}),
+        'dFechaNac': new FormControl({ value: data.dFechaNac, disabled: !this.edit}),
+        'vEstCivil': new FormControl({ value: data.vEstCivil, disabled: !this.edit}),
+        'vUsuario': new FormControl({ value: data.vUsuario, disabled: !this.edit}),
+        'vContrasena': new FormControl({ value: data.vContrasena, disabled: !this.edit}),
+        'vColegiatura': new FormControl({ value: data.vColegiatura, disabled: !this.edit}),
+        'vCelular': new FormControl({ value: data.vCelular, disabled: !this.edit}),
+        'vTelefono': new FormControl({ value: data.vTelefono, disabled: !this.edit}),
+        'vCorreo1': new FormControl({ value: data.vCorreo1, disabled: !this.edit}),
+        'vCorreo2': new FormControl({ value: data.vCorreo2, disabled: !this.edit}),
+        'nPeso': new FormControl({ value: data.nPeso, disabled: !this.edit}),
+        'nTalla': new FormControl({ value: data.nTalla, disabled: !this.edit}),
+        'vCodPais': new FormControl({ value: data.vCodPais, disabled: !this.edit}),
+        'vCodDepa': new FormControl({ value: data.vCodDepa, disabled: !this.edit}),
+        'vCodProv': new FormControl({ value: data.vCodProv, disabled: !this.edit}),
+        'vCodDist': new FormControl({ value: data.vCodDist, disabled: !this.edit}),
+        'vDireccion': new FormControl({ value: data.vDireccion, disabled: !this.edit})
         });
-        debugger;
+      
         if(data.vCodDepa!=null && data.vCodProv!=null && data.vCodDist!=null){
           let departamento: Ubigeo[] = jsonDepartamento;
           let provincia: Ubigeo[] = jsonProvincia;
@@ -226,31 +227,55 @@ export class CusuarioComponent implements OnInit {
           this.codDepartamento = data.vCodDepa!;
           this.codProvincia = data.vCodProv!;
           this.codDistrito = data.vCodDist!;
+
+          this.cambiaPaisDistrito(data.vCodPais, data.vCodDist);
         }      
 
-      if(data.nIdPerfil!="" && data.nIdPerfil!=null){
-        var listaIdPerfil = data.nIdPerfil!.split("|");
+        if(data.nIdPerfil!="" && data.nIdPerfil!=null){
+          var listaIdPerfil = data.nIdPerfil!.split("|");
 
-        data.listaPerfil?.forEach(y=>{
-          var select = listaIdPerfil.filter(x=>x == y.nIdPerfil?.toString())[0];
-  
-          if(select!=null || select!=undefined){
-            y.seleccionado = true
-          }else{
-            y.seleccionado = false
-          }
-        });
-      }
+          data.listaPerfil?.forEach(y=>{
+            var select = listaIdPerfil.filter(x=>x == y.nIdPerfil?.toString())[0];
     
-      this.listaPerfil = data.listaPerfil!;
-      this.nombres = data.vNombreCompleto!;
-      this.documento = data.vDocumento!;
-      this.codEstado = (data.swt!=null)? data.swt!.toString()! : "1";
-      this.fotoUrl =(data.vFoto !== undefined && data.vFoto !== null)? data.vFoto! : this.foto!;
+            if(select!=null || select!=undefined){
+              y.seleccionado = true
+            }else{
+              y.seleccionado = false
+            }
+          });
+        }
+    
+        this.fotoUrl =(data.vFoto !== undefined && data.vFoto !== null)? data.vFoto! : this.foto!;
+
+        this.listaPerfil = data.listaPerfil!;
+        this.nombres = data.vNombreCompleto!;
+        this.documento = data.vDocumento!;
+        this.codEstado = (data.swt!=null)? data.swt!.toString()! : "1";
+
       
       this.spinner.hideLoading();
     });
   }
+
+  cambiaPaisDistrito(codPais: string = '', codDistrito: string = ''){
+
+    this.changePais(codPais?codPais:'');
+
+    this.codDistrito = codDistrito?codDistrito:'';
+    if(this.codDistrito !== ''){
+      var distFind = this.distritos.find(e => e.dist?.id === this.codDistrito);
+      if(distFind !== undefined){
+        var distrito: Distrito = distFind;
+        this.distritoColor = 'primary';
+        this.controlDistritos.setValue(distrito);
+      }
+      else{
+        this.distritoColor = 'accent';
+        this.controlDistritos.setValue(new Distrito());
+      }
+    }
+  }
+
 
   subirFoto(fileInput: any) {
     this.webcamImage = null;
@@ -447,7 +472,6 @@ export class CusuarioComponent implements OnInit {
   }
 
   changeDistrito(event: any){
-    debugger;
     var distrito = event.option.value;
     if(distrito !== undefined){
       this.codDepartamento = distrito.dpto.id;

@@ -96,7 +96,8 @@
                                         <mat-form-field appearance="outline">
                                             <mat-label>Tipo de documento</mat-label>
                                             <mat-select
-                                            [disabled]="!edit"
+                                            [disabled]="id>0"
+                                            placeholder="Tipo de documento"
                                             formControlName="vTipDocu">
                                               <mat-option *ngFor="let c of listaTipoDocumento" [value]="c.vValor">
                                                {{c.vDescripcion}}
