@@ -37,9 +37,11 @@ export class PerfilExamen{
     constructor() {
         this.nIdPerfilExamen = 0
         this.vDescripcion = '',
-        this.listaExamenes = [];
+        this.listaExamenesA = [];
+        this.listaExamenesD = [];
     }
     nIdPerfilExamen?: number;
     vDescripcion?: string;
-    listaExamenes: Examen[];
+    listaExamenesA: Examen[];
+    listaExamenesD: Examen[];
 }

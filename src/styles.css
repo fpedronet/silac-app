@@ -236,7 +236,8 @@ form{
 
 /* loading page */
 .example-loading-shade {
-  position: absolute;
+  position: relative;
+  height: 50px;
   top: 0;
   left: 0;
   bottom: 56px;
