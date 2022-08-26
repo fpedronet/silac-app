@@ -1,0 +1,33 @@
+import { ViewChild } from '@angular/core';
+export class Poclab{
+    dteNacimiento?: Date;
+    dteRegEdad?: Date;
+    iFoto?: string;
+    nEdad?: number;
+    nEdadManual?: number;
+    nEdadMeses?: number;
+    nIdUserRegistro?: number;
+    nIdeEntidad?: number;
+    nIdePersona?: string;
+    vApeMaterno?: string;
+    vApePaterno?: string;
+    vCodDistrito?: string;
+    vCodEstadoCivil?: string;
+    vCodPais?: string;
+    vCodProvincia?: string;
+    vCodRegion?: string;
+    vDireccion?: string;
+    vDireccionActual?: string;
+    vDocumento?: string;
+    vEmail?: string;
+    vGeoLocalizacion?: string;
+    vNombreFoto?: string;
+    vNombres?: string;
+    vPrimerNombre?: string;
+    vSegundoNombre?: string;
+    vSexo?: string;
+    vTelefono1?: string;
+    vTelefono2?: string;
+    vTipDoc?: string;
+    vUbigeo?: string;
+}

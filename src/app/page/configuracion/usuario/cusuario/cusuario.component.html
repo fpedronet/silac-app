@@ -38,9 +38,11 @@
 
         <form onkeydown="return event.key != 'Enter';" class="forms" id="ngForm" [formGroup]="form" #frmGrupo="ngForm" (ngSubmit)="guardar()">
 
-            <mat-stepper labelPosition="bottom" #stepper id="stepper" [selectedIndex]="currentTab" (click)="changestepper(stepper)" [linear]="false">
+            <mat-stepper #stepper id="stepper" [selectedIndex]="currentTab" (click)="changestepper(stepper)" [linear]="true">
                 <mat-step>
-                    <ng-template matStepLabel>Datos principales </ng-template>
+                    <ng-template matStepperIcon="edit">
+                    </ng-template>
+                    <ng-template matStepLabel>Principal</ng-template>
 
                     <div class="content">
                         <div fxLayout="row-reverse wrap" fxLayoutGap="16px grid">
@@ -182,9 +184,15 @@
         
                                 <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
                                     <mat-grid-tile  [colspan]="6">
-                                        <mat-form-field appearance="outline">
+                                        <!-- <mat-form-field appearance="outline">
                                             <mat-label>Fecha de nacimiento</mat-label>
                                             <input #inputFecNac matInput [matDatepicker]="FecNacimiento" placeholder="dd/mm/aaaa" formControlName="dFechaNac" required (dateChange)="cambiaFechaNac(inputFecNac.value)">
+                                            <mat-datepicker-toggle matSuffix [for]="FecNacimiento"></mat-datepicker-toggle>
+                                            <mat-datepicker #FecNacimiento></mat-datepicker>
+                                          </mat-form-field> -->
+                                          <mat-form-field appearance="outline">
+                                            <mat-label>Fecha de nacimiento</mat-label>
+                                            <input #inputFecNac matInput [matDatepicker]="FecNacimiento" [min]="minDate" [max]="maxDate" placeholder="dd/mm/aaaa" formControlName="dFechaNac" required (dateChange)="cambiaFechaNac(inputFecNac.value)">
                                             <mat-datepicker-toggle matSuffix [for]="FecNacimiento"></mat-datepicker-toggle>
                                             <mat-datepicker #FecNacimiento></mat-datepicker>
                                           </mat-form-field>
@@ -208,8 +216,8 @@
 
                 </mat-step>
 
-                <mat-step>
-                    <ng-template matStepLabel>Datos secundarios </ng-template>
+                <mat-step style="padding: 0 0 24px 0;">
+                    <ng-template matStepLabel>Secundarios </ng-template>
 
                     <div class="content">
                         <div fxLayout="row wrap" fxLayoutGap="16px grid">
@@ -320,8 +328,8 @@
                     </div> 
                 </mat-step>
                 
-                <mat-step>
-                    <ng-template matStepLabel>Cuenta usuario </ng-template>
+                <mat-step style="padding: 0 0 24px 0;">
+                    <ng-template matStepLabel>Usuario </ng-template>
 
                     <div class="content">
                         <div fxLayout="row wrap" fxLayoutGap="16px grid">

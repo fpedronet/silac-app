@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable, startWith, map, Subject } from 'rxjs';
@@ -24,6 +24,7 @@ import { Perfil } from 'src/app/_model/configuracion/perfil';
 import { Usuario } from 'src/app/_model/configuracion/usuario';
 import { Distrito, Ubigeo } from 'src/app/_model/distrito';
 import { PoclabService } from 'src/app/_service/apiexterno/poclab.service';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-cusuario',
@@ -67,6 +68,9 @@ export class CusuarioComponent implements OnInit {
   distritoColor: string = 'accent'
   selectedPais: string = '';
 
+  @ViewChild(MatStepper)
+  stepper!: MatStepper;
+  
   //Webcam
   public foto?: string =environment.UrlImage + "people.png";
   public fotoUrl: string = '';
@@ -115,6 +119,12 @@ export class CusuarioComponent implements OnInit {
     this.listarDistritos(null!, null!, null!);
 
     this.listarCombo();
+
+    this.minDate.setMonth(this.maxDate.getMonth() - 12*120);  
+  }
+
+  ngAfterViewInit() {
+    this.stepper._getIndicatorType = () => 'number';
   }
 
   inicializar(){
@@ -383,10 +393,10 @@ export class CusuarioComponent implements OnInit {
 
   updateFechaNac(d: Date){
     this.fechaNac = d;
-    if(this.form.get('Edad') !== undefined){
+    if(this.form.get('nEdad') !== undefined){
       var edad = this.calcularEdad(d);
       this.form.patchValue({
-        Edad: edad.toString()
+        nEdad: edad.toString()
       });
     }
   }
@@ -462,6 +472,7 @@ export class CusuarioComponent implements OnInit {
   }
 
   obtenerPersona(e?: any){
+    
     var tipoDocu =this.form.value['vTipDocu']
     var documento =this.form.value['vDocumento']
 
@@ -469,6 +480,7 @@ export class CusuarioComponent implements OnInit {
 
     if(validacion === ''){
       this.usuarioService.obtenerPersona(tipoDocu, documento).subscribe(data=>{
+
         data.vTipDocu = (data.vTipDocu==null)?  this.idTipoDocumento: data.vTipDocu;
         data.nPeso = (data.nPeso==0)?  null!: data.nPeso!;
         data.nTalla = (data.nTalla==0)?  null!: data.nTalla!;
@@ -502,7 +514,7 @@ export class CusuarioComponent implements OnInit {
           this.codDepartamento = data.vCodDepa!;
           this.codProvincia = data.vCodProv!;
           this.codDistrito = data.vCodDist!;
-
+      
           this.cambiaPaisDistrito(data.vCodPais, data.vCodDist);
 
           this.nombres = data.vNombreCompleto!;
@@ -510,8 +522,40 @@ export class CusuarioComponent implements OnInit {
           this.codEstado = (data.swt!=null)? data.swt!.toString()! : "1";
 
         }else{
-          // this.poclabService.obtenerPersona(tipoDocu, documento).subscribe(data=>{
-          // });
+          this.poclabService.obtenerPersona("1", documento).subscribe(data=>{
+           
+            let pais = (data.vCodPais='PER')? this.peru : data.vCodPais;
+            this.selectedPais = this.peru;
+            this.muestraDistrito = true;
+
+            if(data.vDocumento!="" && data.vDocumento!=null){
+              this.form.patchValue({
+                vApPaterno: data.vApePaterno,
+                vApMaterno: data.vApeMaterno,
+                vPrimerNombre: data.vPrimerNombre,
+                vSegundoNombre: data.vSegundoNombre,
+                vSexo: data.vSexo,
+                nEdad: data.nEdad,
+                dFechaNac: data.dteNacimiento,
+                // vEstCivil: data.vCodEstadoCivil,
+                vCodPais: pais,
+                vCodDepa: data.vCodRegion,
+                vCodProv: data.vCodProvincia,
+                vCodDist: data.vCodDistrito,
+                vDireccion: data.vDireccion,
+              });
+              debugger;
+              this.codDepartamento = data.vCodRegion!;
+              this.codProvincia = data.vCodProvincia!;
+              this.codDistrito = data.vCodDistrito!;
+    
+              this.cambiaPaisDistrito(pais, data.vCodDistrito);
+    
+              this.nombres = data.vApePaterno + " "+ data.vApeMaterno + " "+ data.vPrimerNombre + " "+data.vSegundoNombre
+              this.documento = data.vDocumento!;
+              this.codEstado = "1"; 
+            }             
+          });
         }
       });
     }else{
