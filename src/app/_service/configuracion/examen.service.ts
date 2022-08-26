@@ -23,7 +23,6 @@ export class ExamenService {
 
   obtener(id: number){
     let urls = `${this.url}/GetFirstRendicion?id=${id}`;
-
     return this.http.get<Examen>(urls);
   }
 
@@ -41,4 +40,10 @@ export class ExamenService {
     let urls = `${this.url}/PostSavePerfilExamen`;
     return this.http.post<Response>(urls, model);
   }
+
+  obtenerPerfil(id: number){
+    let urls = `${this.url}/GetFirstPerfilExamen?id=${id}`;
+    return this.http.get<PerfilExamen>(urls);
+  }
+
 }

@@ -13,6 +13,7 @@ import { ExamenService } from 'src/app/_service/configuracion/examen.service';
 import { PermisoService } from 'src/app/_service/configuracion/permiso.service';
 import { environment } from 'src/environments/environment';
 import { catchError, map, startWith, switchMap} from 'rxjs/operators';
+import { ThisReceiver } from '@angular/compiler';
 
 @Component({
   selector: 'app-lperfilexamen',
@@ -25,19 +26,24 @@ export class LperfilexamenComponent implements OnInit {
   edit: boolean = true;
 
   listaPerfil: PerfilExamen[] = [];
-  curPerfil: PerfilExamen = new PerfilExamen();
-  listaExamen: Examen[] = [];
+  curPerfil?: PerfilExamen = undefined;
+  curListaExamenA: Examen[] = [];
+  curListaExamenD: Examen[] = [];
 
   displayedColumnsP: string[] = ['vDescripcion', 'accion'];
-  displayedColumnsE: string[] = ['vCodExamen','vDescripcion', 'vUndMed', 'vCodTipoMuestra', 'vCodAreaExamen', 'accion'];
-  loading = true;
-  existRegistro = false;
+  displayedColumnsA: string[] = ['vCodExamen','vDescripcion', 'vUndMed', 'vCodTipoMuestra', 'vCodAreaExamen', 'accion'];
+  displayedColumnsD: string[] = ['vCodExamen','vDescripcion', 'vUndMed', 'vCodTipoMuestra', 'vCodAreaExamen', 'accion'];
+  loadingP = true;
+  existRegistroP = false;
+  loadingE = true;
   countRegistroP = 0;
 
   @ViewChild(MatPaginator) paginatorP!: MatPaginator;
-  //@ViewChild(MatPaginator) paginatorE1!: MatPaginator;
-  //@ViewChild(MatPaginator) paginatorE2!: MatPaginator;
-  @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginatorE!: MatPaginator;
+  @ViewChild(MatPaginator) paginatorD!: MatPaginator;
+
+  @ViewChild(MatSort) sortP!: MatSort;
+  @ViewChild(MatSort) sortD!: MatSort;
 
   @ViewChild('searchBarP') searchBarP!: ElementRef;
 
@@ -53,7 +59,6 @@ export class LperfilexamenComponent implements OnInit {
 
   ngOnInit(): void {
     this.inicializar();
-    this.listarP();
   }
 
   ngAfterViewInit(){
@@ -62,21 +67,21 @@ export class LperfilexamenComponent implements OnInit {
 
   inicializar(){
     this.form = new FormGroup({
-      'nIdPerfilExamen': new FormControl({ value: this.curPerfil.nIdPerfilExamen, disabled: false}),
-      'vDescripcion': new FormControl({ value: this.curPerfil.vDescripcion, disabled: !this.edit})
+      'nIdPerfilExamen': new FormControl({ value: 0, disabled: false}),
+      'vDescripcion': new FormControl({ value: '', disabled: !this.edit})
     });
   }
 
-  listarP(search:string = ''){ 
+  listarP(search: string = ''){ 
     this.examenService = new ExamenService(this.http);
-    this.sort.sortChange.subscribe(() => (this.paginatorP.pageIndex = 0));
+    this.sortP.sortChange.subscribe(() => (this.paginatorP.pageIndex = 0));
  
     var page = this.paginatorP.pageIndex;
     var pages =  this.paginatorP.pageSize;
-    var column = (this.sort.active == undefined)? '' : this.sort.active
-    var order = this.sort.direction
+    var column = (this.sortP.active == undefined)? '' : this.sortP.active
+    var order = this.sortP.direction
 
-    merge(this.sort.sortChange, this.paginatorP.page)
+    merge(this.sortP.sortChange, this.paginatorP.page)
       .pipe(
         startWith({}),
         switchMap(() => {
@@ -85,13 +90,15 @@ export class LperfilexamenComponent implements OnInit {
           ).pipe(catchError(() => observableOf(null)));
         }),
         map(res => {
+           this.loadingP = false;
+           this.loadingE = false;
 
-           this.loading = false;
-           this.existRegistro = res === null;
-
-          if (res === null) {
+          if (res === null || res.items.length === 0) {
+            this.existRegistroP = false;
             return [];
           }
+          
+          this.existRegistroP = true;
 
           this.countRegistroP = res.pagination.total;
           return res.items;
@@ -100,28 +107,25 @@ export class LperfilexamenComponent implements OnInit {
       
   }
 
-  listarMenu(id: number){    
+  listarE(search:string = ''){
+      var subString = search.toLowerCase();
+      var filtroE = this.curPerfil?.listaExamenesA.filter(e =>
+        e.vCodExamen?.toLowerCase().includes(subString) ||
+        e.vDescripcion?.toLowerCase().includes(subString) ||
+        e.vUndMed?.toLowerCase().includes(subString) ||
+        e.vCodTipoMuestra?.toLowerCase().includes(subString) ||
+        e.vCodAreaExamen?.toLowerCase().includes(subString)
+      );
 
-    // $(this).addClass("selected").siblings().removeClass("selected");
-
-    this.spinner.showLoading();
-    this.examenService.listar(id.toString()).subscribe(data=>{
-      //this.listaMenu = data.listaMenu!;
-
-      this.spinner.hideLoading();
-    });  
-  }
-
-  seleccionarMenu(id: string, seleccionado: boolean){
-    
-    //var result  = this.listaMenu.filter(y=>y.vCodPantalla == id)[0];
-    //result!.seleccionado= (seleccionado==false)? true : false;
+      this.curListaExamenA = filtroE === undefined ? [] : filtroE;
   }
 
   guardar(){
     let model = new PerfilExamen();
-    model.nIdPerfilExamen = this.form.value['nIdExamen'];
+    model.nIdPerfilExamen = this.form.value['nIdPerfilExamen'];
     model.vDescripcion = this.form.value['vDescripcion'];
+    model.listaExamenesA = this.curListaExamenA;
+    model.listaExamenesD = this.curListaExamenD;
 
     this.spinner.showLoading();
     this.examenService.guardarPerfil(model).subscribe(data=>{
@@ -130,9 +134,10 @@ export class LperfilexamenComponent implements OnInit {
 
       if(data.typeResponse==environment.EXITO){
         if(data.ide !== undefined){
+          this.curPerfil = new PerfilExamen();
           this.curPerfil.nIdPerfilExamen = data.ide;
           this.form.patchValue({
-            nIdExamen: data.ide
+            nIdPerfilExamen: data.ide
           });
         }
         
@@ -147,30 +152,68 @@ export class LperfilexamenComponent implements OnInit {
   }
 
   limpiar(){
-    this.curPerfil = new PerfilExamen();
+    this.curPerfil = undefined;
+    this.curListaExamenA = [];
+    this.curListaExamenD = [];
+
     this.form.patchValue({
-      nIdPerfilExamen: this.curPerfil.nIdPerfilExamen,
-      vDescripcion: this.curPerfil.vDescripcion,
+      nIdPerfilExamen: 0,
+      vDescripcion: ''
     });
   }
 
-  step = 1;
-
-  setStep(index: number) {
-    this.step = index;
-  }
-
-  buscaTextoP(event: Event) {
-  
+  buscaTextoP(event: Event) {  
     let data = (event.target as HTMLInputElement).value;
     this.listarP(data);
   }
 
-  mostrarExamenes(perfil: PerfilExamen){
+  buscaTextoE(event: Event) {  
+    let data = (event.target as HTMLInputElement).value;
+    this.listarE(data);
+  }
+
+  buscaTextoD(event: Event) {  
+    let data = (event.target as HTMLInputElement).value;
+    //this.listarD(data);
+  }
+
+  seleccionaPerfil(perfil: PerfilExamen){
     this.curPerfil = perfil;
+    
     this.form.patchValue({
       nIdPerfilExamen: perfil.nIdPerfilExamen,
       vDescripcion: perfil.vDescripcion,
     });
+
+    this.obtenerExamenes(perfil.nIdPerfilExamen);
+  }
+
+  obtenerExamenes(id: number = 0){
+    if(id > 0){
+      this.spinner.showLoading();
+      this.examenService.obtenerPerfil(id).subscribe(data=>{
+        if(data!== undefined){
+          this.curListaExamenA = data.listaExamenesA;          
+          this.curListaExamenD = data.listaExamenesD;
+
+          this.spinner.hideLoading();
+        }
+      });
+    }
+  }
+
+  moverListaExamen(exa: Examen, haciaListaActuales: boolean){
+    if(haciaListaActuales){
+      var lstA = this.curListaExamenA.slice();
+      lstA.push(exa);
+      this.curListaExamenA = lstA;
+      this.curListaExamenD = this.curListaExamenD.filter(e => e.nIdExamen !== exa.nIdExamen);
+    }
+    else{
+      var lstD = this.curListaExamenD.slice();
+      lstD.push(exa);
+      this.curListaExamenD = lstD;
+      this.curListaExamenA = this.curListaExamenA.filter(e => e.nIdExamen !== exa.nIdExamen);
+    }
   }
 }

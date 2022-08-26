@@ -13,8 +13,8 @@
 <mat-card class="cardborde">   
   <mat-toolbar class="cardtitle"></mat-toolbar>
 
-  <h2 *ngIf="curPerfil.nIdPerfilExamen === 0" class="title-label">CREAR PERFIL</h2>
-  <h2 *ngIf="curPerfil.nIdPerfilExamen !== 0" class="title-label">EDITAR PERFIL</h2>
+  <h2 *ngIf="curPerfil === undefined" class="title-label">CREAR PERFIL</h2>
+  <h2 *ngIf="curPerfil !== undefined" class="title-label">EDITAR PERFIL</h2>
 
   <mat-divider></mat-divider>
 
@@ -55,18 +55,13 @@
                 </form>
                 </mat-dialog-content>
 
-              <mat-accordion class="example-headers-align">
-
-                <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                     PERFILES
-                    </mat-panel-title>
-                    <mat-panel-description>
-                      <span></span>
-                      <mat-icon>group_work</mat-icon>
-                    </mat-panel-description>
-                  </mat-expansion-panel-header>
+              <mat-card class="example-headers-align">
+                  <mat-card-title-group>
+                    <mat-card-title>
+                      PERFILES
+                    </mat-card-title>
+                    <mat-icon>group_work</mat-icon>
+                  </mat-card-title-group>
               
                   <div class="content contentTable">          
 
@@ -77,15 +72,15 @@
                         <mat-icon matSuffix>search</mat-icon>
                       </mat-form-field>
                       
-                      <div class="example-loading-shade" *ngIf="loading || existRegistro">
-                        <mat-spinner *ngIf="loading"></mat-spinner>
-                        <div class="example-rate-limit-reached" *ngIf="existRegistro">
+                      <div class="example-loading-shade" *ngIf="loadingP || !existRegistroP">
+                        <mat-spinner *ngIf="loadingP"></mat-spinner>
+                        <div class="example-rate-limit-reached" *ngIf="!existRegistroP">
                           No se encontraron registros.
                         </div>
                       </div>
                 
                       <div class="example-container mat-elevation-z0">
-                        <mat-table [dataSource]="listaPerfil" matSort>
+                        <mat-table [dataSource]="listaPerfil" matSort componentName="sortP">
                         
                           <ng-container matColumnDef="vDescripcion">
                             <mat-header-cell *matHeaderCellDef> Perfil </mat-header-cell>
@@ -95,7 +90,7 @@
                           <ng-container matColumnDef="accion">
                             <mat-header-cell *matHeaderCellDef> </mat-header-cell>
                             <mat-cell *matCellDef="let element" data-label="Acción">            
-                              <a class="pointer edit" matTooltip="Editar" (click)="mostrarExamenes(element)">
+                              <a class="pointer edit" matTooltip="Editar" (click)="seleccionaPerfil(element)">
                                 <mat-icon>visibility</mat-icon>
                               </a>
                             </mat-cell>
@@ -105,11 +100,11 @@
                           <mat-row *matRowDef="let row; columns: displayedColumnsP;"></mat-row>
                         
                         </mat-table>
-                        <mat-paginator 
+                        <mat-paginator componentName="paginatorP"
                           [length]="countRegistroP" 
                           [pageSizeOptions]="[5, 10, 20]" 
                           showFirstLastButtons 
-                          aria-label="Select page of users">
+                          aria-label="Seleccione página de perfiles">
                         </mat-paginator>
                       </div>
                 
@@ -117,40 +112,34 @@
           
                   </div>
 
-                </mat-expansion-panel>
-              </mat-accordion>
+              </mat-card>
 
             </mat-grid-list>  
           </div>
 
           <div fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="50%">
-            <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
-             
-              <mat-accordion class="example-headers-align">
 
-                <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                     EXÁMANES ACTUALES
-                    </mat-panel-title>
-                    <mat-panel-description>
-                      <span></span>
-                      <mat-icon>assignment</mat-icon>
-                    </mat-panel-description>
-                  </mat-expansion-panel-header>
-                  
+            <mat-grid-list cols="12" gutterSize="15px">
+             <mat-card>
+              <mat-card-title-group>
+                <mat-card-title>
+                  EXÁMENES ACTUALES
+                </mat-card-title>
+                <mat-icon>assignment</mat-icon>
+              </mat-card-title-group>
+
                   <div class="content contentTable">          
 
                     <form style="padding: 0;">
-                      <!--mat-form-field appearance="outline">
+                      <mat-form-field appearance="outline">
                         <mat-label>Búsqueda</mat-label>
-                        <input matInput (keyup)="buscaTextoP($event)" placeholder="Búsqueda" #input>
+                        <input matInput (keyup)="buscaTextoE($event)" placeholder="Búsqueda" #input>
                         <mat-icon matSuffix>search</mat-icon>
-                      </mat-form-field-->
+                      </mat-form-field>
                       
-                      <div class="example-loading-shade" *ngIf="curPerfil.nIdPerfilExamen === 0 || curPerfil.listaExamenes.length > 0">
-                        <mat-spinner *ngIf="loading"></mat-spinner>
-                        <div class="example-rate-limit-reached" *ngIf="curPerfil.listaExamenes.length === 0">
+                      <div class="example-loading-shade" *ngIf="curPerfil === undefined || curListaExamenA.length === 0">
+                        <mat-spinner *ngIf="loadingE"></mat-spinner>
+                        <div class="example-rate-limit-reached" *ngIf="curPerfil !== undefined && curListaExamenA.length === 0">
                           No se han seleccionado exámenes.
                         </div>
                         <div class="example-rate-limit-reached" *ngIf="curPerfil === undefined">
@@ -159,9 +148,9 @@
                       </div>
                 
                       <div class="example-container mat-elevation-z0">
-                        <!--mat-table [dataSource]="curPerfil.listaExamenes">
+                        <mat-table [dataSource]="curPerfil !== undefined ? curListaExamenA : []" matSort>
 
-                          <ng-container matColumnDef="vDescripcion">
+                          <ng-container matColumnDef="vCodExamen">
                             <mat-header-cell *matHeaderCellDef> Código </mat-header-cell>
                             <mat-cell *matCellDef="let element" data-label="Código"> {{element.vCodExamen}} </mat-cell>
                           </ng-container>
@@ -189,33 +178,104 @@
                           <ng-container matColumnDef="accion">
                             <mat-header-cell *matHeaderCellDef [ngClass]="'widthTable web'"> </mat-header-cell>
                             <mat-cell *matCellDef="let element" [ngClass]="'widthTable web'" data-label="Accion">            
-                              <a class="pointer edit" matTooltip="Editar" (click)="mostrarExamenes(element)">
+                              <a class="pointer edit" matTooltip="Descartar" (click)="moverListaExamen(element, false)">
                                 <mat-icon>arrow_downward</mat-icon>
                               </a>
                             </mat-cell>
                           </ng-container>
                                       
-                          <mat-header-row *matHeaderRowDef="displayedColumnsE"></mat-header-row>
-                          <mat-row *matRowDef="let row; columns: displayedColumnsE;"></mat-row>
+                          <mat-header-row *matHeaderRowDef="displayedColumnsA"></mat-header-row>
+                          <mat-row *matRowDef="let row; columns: displayedColumnsA;"></mat-row>
                         
-                        </mat-table-->
-                        <mat-paginator 
-                          [length]="curPerfil.listaExamenes.length" 
-                          [pageSizeOptions]="[5, 10, 20]" 
-                          showFirstLastButtons 
-                          aria-label="Select page of users">
-                        </mat-paginator>
+                        </mat-table>
+                      </div>
+                
+                    </form>
+          
+                  </div>
+                </mat-card>
+            </mat-grid-list>
+            
+            <mat-grid-list cols="12" gutterSize="15px">
+             
+              <mat-card>
+                <mat-card-title-group>
+                  <mat-card-title>
+                    EXÁMENES DISPONIBLES
+                  </mat-card-title>
+                  <mat-icon>assignment</mat-icon>
+                </mat-card-title-group>
+                  
+                  <div class="content contentTable">          
+
+                    <form style="padding: 0;">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Búsqueda</mat-label>
+                        <input matInput (keyup)="buscaTextoD($event)" placeholder="Búsqueda" #input>
+                        <mat-icon matSuffix>search</mat-icon>
+                      </mat-form-field>
+                      
+                      <div class="example-loading-shade" *ngIf="curPerfil === undefined || curListaExamenD.length=== 0">
+                        <mat-spinner *ngIf="loadingE"></mat-spinner>
+                        <div class="example-rate-limit-reached" *ngIf="curPerfil !== undefined && curListaExamenD.length === 0">
+                          No hay exámenes disponibles.
+                        </div>
+                        <div class="example-rate-limit-reached" *ngIf="curPerfil === undefined">
+                          Seleccione un perfil.
+                        </div>
+                      </div>
+                
+                      <div class="example-container mat-elevation-z0">
+                        <mat-table [dataSource]="curPerfil !== undefined ? curListaExamenD : []" matSort  componentName="sortD">
+
+                          <ng-container matColumnDef="vCodExamen">
+                            <mat-header-cell *matHeaderCellDef> Código </mat-header-cell>
+                            <mat-cell *matCellDef="let element" data-label="Código"> {{element.vCodExamen}} </mat-cell>
+                          </ng-container>
+                        
+                          <ng-container matColumnDef="vDescripcion">
+                            <mat-header-cell *matHeaderCellDef> Examen </mat-header-cell>
+                            <mat-cell *matCellDef="let element" data-label="Examen"> {{element.vDescripcion}} </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="vUndMed">
+                            <mat-header-cell *matHeaderCellDef> Ud. de medida </mat-header-cell>
+                            <mat-cell *matCellDef="let element" data-label="Ud. de medida"> {{element.vUndMed}} </mat-cell>
+                          </ng-container>
+
+                          <ng-container matColumnDef="vCodTipoMuestra">
+                            <mat-header-cell *matHeaderCellDef> Muestra </mat-header-cell>
+                            <mat-cell *matCellDef="let element" data-label="Muestra"> {{element.vCodTipoMuestra}} </mat-cell>
+                          </ng-container>
+              
+                          <ng-container matColumnDef="vCodAreaExamen">
+                            <mat-header-cell *matHeaderCellDef> Área </mat-header-cell>
+                            <mat-cell *matCellDef="let element" data-label="Área"> {{element.vCodAreaExamen}} </mat-cell>
+                          </ng-container> 
+
+                          <ng-container matColumnDef="accion">
+                            <mat-header-cell *matHeaderCellDef [ngClass]="'widthTable web'"> </mat-header-cell>
+                            <mat-cell *matCellDef="let element" [ngClass]="'widthTable web'" data-label="Accion">            
+                              <a class="pointer edit" matTooltip="Descartar" (click)="moverListaExamen(element, true)">
+                                <mat-icon>arrow_upward</mat-icon>
+                              </a>
+                            </mat-cell>
+                          </ng-container>
+                                      
+                          <mat-header-row *matHeaderRowDef="displayedColumnsD"></mat-header-row>
+                          <mat-row *matRowDef="let row; columns: displayedColumnsD;"></mat-row>
+                        
+                        </mat-table>
                       </div>
                 
                     </form>
           
                   </div>
 
-                </mat-expansion-panel>
+                </mat-card>
 
-              </mat-accordion>
-
-            </mat-grid-list>  
+            </mat-grid-list>
+            
           </div>
 
       </div>
