@@ -184,12 +184,6 @@
         
                                 <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
                                     <mat-grid-tile  [colspan]="6">
-                                        <!-- <mat-form-field appearance="outline">
-                                            <mat-label>Fecha de nacimiento</mat-label>
-                                            <input #inputFecNac matInput [matDatepicker]="FecNacimiento" placeholder="dd/mm/aaaa" formControlName="dFechaNac" required (dateChange)="cambiaFechaNac(inputFecNac.value)">
-                                            <mat-datepicker-toggle matSuffix [for]="FecNacimiento"></mat-datepicker-toggle>
-                                            <mat-datepicker #FecNacimiento></mat-datepicker>
-                                          </mat-form-field> -->
                                           <mat-form-field appearance="outline">
                                             <mat-label>Fecha de nacimiento</mat-label>
                                             <input #inputFecNac matInput [matDatepicker]="FecNacimiento" [min]="minDate" [max]="maxDate" placeholder="dd/mm/aaaa" formControlName="dFechaNac" required (dateChange)="cambiaFechaNac(inputFecNac.value)">
