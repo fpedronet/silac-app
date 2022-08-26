@@ -3,18 +3,19 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { Router } from '@angular/router';
 import { merge, of as observableOf } from 'rxjs';
 import { catchError, map, startWith, switchMap} from 'rxjs/operators';
 import forms from 'src/assets/json/formulario.json';
 
-import { Usuario, UsuarioRequest } from 'src/app/_model/configuracion/usuario';
+import { Usuario } from 'src/app/_model/configuracion/usuario';
 
-import { NotifierService } from 'src/app/page/component/notifier/notifier.service';
 import { SpinnerService } from 'src/app/page/component/spinner/spinner.service';
 import { UsuarioService } from 'src/app/_service/configuracion/usuario.service';
 import { Permiso } from 'src/app/_model/permiso';
 import { ConfigPermisoService } from 'src/app/_service/configpermiso.service';
+import { FusuaioComponent } from '../fusuaio/fusuaio.component';
+import { LogeoService } from 'src/app/_service/configuracion/logeo.service';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
@@ -25,7 +26,7 @@ import { ConfigPermisoService } from 'src/app/_service/configpermiso.service';
 export class LusuarioComponent implements OnInit {
 
   dataSource: Usuario[] = [];
-  displayedColumns: string[] = ['nIdUsuario', 'vDocumento', 'vApPaterno', 'vApMaterno', 'vPrimerNombre', 'vSexo', 'vFechaNac','vUsuario','accion'];
+  displayedColumns: string[] = ['nIdUsuario', 'vDocumento', 'vNombreCompleto', 'vSexo', 'vFechaNac','vUsuario','accion'];
   loading = true;
   existRegistro = false;
   countRegistro = 0;
@@ -37,11 +38,10 @@ export class LusuarioComponent implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private router: Router,
     private dialog: MatDialog,
     private spinner: SpinnerService,    
-    private notifierService : NotifierService,
     private usuarioService: UsuarioService,
+    private logeoService: LogeoService,
     private configPermisoService: ConfigPermisoService
   ) { }
 
@@ -57,8 +57,17 @@ export class LusuarioComponent implements OnInit {
     });   
   }
 
+  cargarFiltro(){
+    let filtro = this.logeoService.sessionFiltro();
+    if(filtro!=null){ 
+      localStorage.setItem(environment.CODIGO_FILTRO, filtro![0]+"|"+filtro![1]+"|"+filtro![2]);
+    }else{
+      localStorage.setItem(environment.CODIGO_FILTRO, ""+"|"+""+"|"+"2");
+    }
+  }
 
   ngAfterViewInit() {  
+    this.cargarFiltro();
     this.usuarioService = new UsuarioService(this.http);
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
     
@@ -66,8 +75,13 @@ export class LusuarioComponent implements OnInit {
       .pipe(
         startWith({}),
         switchMap(() => {
+          this.loading = true;
+          let filtro = this.logeoService.sessionFiltro();
+
           return this.usuarioService!.listar(
-            "",
+            filtro![0],
+            filtro![1],
+            filtro![2],
             this.paginator.pageIndex,
             this.paginator.pageSize,
             this.sort.active,
@@ -75,7 +89,6 @@ export class LusuarioComponent implements OnInit {
           ).pipe(catchError(() => observableOf(null)));
         }),
         map(res => {
-          console.log(res);
            this.loading = false;
            this.existRegistro = res === null;
 
@@ -90,5 +103,25 @@ export class LusuarioComponent implements OnInit {
   
   }
 
+  actualizar(){
+    this.ngAfterViewInit();
+  }
+
+  abrirBusqueda(){
+    const dialogRef =this.dialog.open(FusuaioComponent, {
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      width: '850px',
+      panelClass: 'full-screen-modal',
+    });
+
+    dialogRef.afterClosed().subscribe(res => {
+      if(res!=""){
+        this.paginator.pageIndex = 0,
+        this.paginator.pageSize = 5
+        this.ngAfterViewInit();
+        }
+    })
+  }
 
 }

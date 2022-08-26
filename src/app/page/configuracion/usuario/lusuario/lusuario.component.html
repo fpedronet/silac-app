@@ -1,10 +1,10 @@
 <mat-toolbar color="primary" class="example-toolbar submenu example-button">
     <div class="example-button-row">
-      <button mat-stroked-button class="btnHeader" routerLink="/page/configuracion/usuario">
+      <button mat-stroked-button class="btnHeader" (click)="actualizar()">
         <mat-icon class="maticonmenu">syncalt</mat-icon>
         <span class="maticontitle">Actualizar</span>
       </button>
-      <button mat-stroked-button class="btnHeader">
+      <button mat-stroked-button class="btnHeader" (click)="abrirBusqueda()">
         <mat-icon class="maticonmenu">filter_alt</mat-icon>
         <span class="maticontitle">Filtrar</span>
       </button>
@@ -43,20 +43,10 @@
               <mat-header-cell *matHeaderCellDef mat-sort-header> Documento </mat-header-cell>
               <mat-cell *matCellDef="let element" data-label="Documento"> {{element.vDocumento}} </mat-cell>
             </ng-container>
-
-            <ng-container matColumnDef="vApPaterno">
-              <mat-header-cell *matHeaderCellDef mat-sort-header> Ap. Paterno </mat-header-cell>
-              <mat-cell *matCellDef="let element" data-label="appaterno"> {{element.vApPaterno}} </mat-cell>
-            </ng-container>
-            
-            <ng-container matColumnDef="vApMaterno">
-                <mat-header-cell *matHeaderCellDef mat-sort-header> Ap. Materno </mat-header-cell>
-                <mat-cell *matCellDef="let element" data-label="apmaterno"> {{element.vApMaterno}} </mat-cell>
-              </ng-container>
               
-            <ng-container matColumnDef="vPrimerNombre">
-                <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
-                <mat-cell *matCellDef="let element" data-label="nombre"> {{element.vPrimerNombre}} </mat-cell>
+            <ng-container matColumnDef="vNombreCompleto">
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Nombres </mat-header-cell>
+                <mat-cell *matCellDef="let element" data-label="nombre"> {{element.vNombreCompleto}} </mat-cell>
               </ng-container>
 
             <ng-container matColumnDef="vSexo">

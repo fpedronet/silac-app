@@ -1,0 +1,40 @@
+<h3 mat-dialog-title>BÚSQUEDA USUARIO</h3>
+
+<mat-dialog-content class="modal">
+
+    <mat-form-field appearance="outline">
+        <mat-label>Documento</mat-label>
+        <input #DOCUMENTO [(ngModel)]="documento" matInput placeholder="Búsqueda" #input>
+        <button *ngIf="DOCUMENTO.value" type="button" matSuffix mat-icon-button aria-label="Documento" (click)="DOCUMENTO.value=''; documento = ''">
+          <mat-icon>close</mat-icon>
+        </button>
+    </mat-form-field>
+
+   <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input #NOMBRE [(ngModel)]="nombre" matInput placeholder="Búsqueda" #input>
+      <button *ngIf="NOMBRE.value" type="button" matSuffix mat-icon-button aria-label="Nombre" (click)="NOMBRE.value=''; nombre = ''">
+        <mat-icon>close</mat-icon>
+      </button>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Estado</mat-label>
+    <mat-select 
+    placeholder="Estado"
+    [(ngModel)]="estado"
+    (selectionChange)="selectestado($event.value)"
+    >
+     <mat-option [value]="2">Todos</mat-option>  
+     <mat-option [value]="1">Activo</mat-option>  
+     <mat-option [value]="0">No Activo</mat-option>  
+    </mat-select>
+  </mat-form-field>
+
+</mat-dialog-content>
+
+<div class="btnModal" align="end">
+  <button mat-stroked-button class="btnRed" mat-dialog-close><mat-icon>close</mat-icon>Cerrar</button> 
+  <button mat-stroked-button class="btnYellow"(click)="limpiar()"><mat-icon>cleaning_services</mat-icon>Limpiar</button>
+  <button mat-stroked-button class="btnBlue" (click)="buscar()"><mat-icon>search</mat-icon>Buscar</button>
+</div>

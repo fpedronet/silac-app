@@ -31,5 +31,7 @@ export class TokenUsuario{
 }
 
 export class UsuarioRequest extends pagination {
-    vData? : string;
+    documento? : string;
+    data? : string;
+    estado? : string;
 }

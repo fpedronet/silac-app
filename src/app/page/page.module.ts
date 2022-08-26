@@ -18,6 +18,7 @@ import { LexamenComponent } from './configuracion/lexamen/lexamen.component';
 import { LusuarioComponent } from './configuracion/usuario/lusuario/lusuario.component';
 import { CusuarioComponent } from './configuracion/usuario/cusuario/cusuario.component';
 import { LperfilexamenComponent } from './configuracion/perfil/lperfilexamen/lperfilexamen.component';
+import { FusuaioComponent } from './configuracion/usuario/fusuaio/fusuaio.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { LperfilexamenComponent } from './configuracion/perfil/lperfilexamen/lpe
     LusuarioComponent,
     CusuarioComponent,
     LperfilexamenComponent,
+    FusuaioComponent,
   ],
   imports: [
     MaterialModule,

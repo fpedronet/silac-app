@@ -18,11 +18,13 @@ export class UsuarioService {
     private http: HttpClient
     ) { }
 
-  listar(data: string, page: number,pages: number, column: string, order: SortDirection) {
+  listar(documento: string, data: string, estado: string, page: number,pages: number, column: string, order: SortDirection) {
   
     let urls = `${this.url}/GetAllUsuario`;
     let req = new UsuarioRequest();
-
+    req.documento = documento;
+    req.data = data;
+    req.estado = (estado=="2")? "" : estado;
     req.page = page;
     req.pages =  pages;
     req.column = (column==undefined)?'':column;
