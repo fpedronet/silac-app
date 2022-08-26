@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { Observable, startWith, map, Subject } from 'rxjs';
@@ -23,6 +23,8 @@ import { TbMaestra } from 'src/app/_model/combobox';
 import { Perfil } from 'src/app/_model/configuracion/perfil';
 import { Usuario } from 'src/app/_model/configuracion/usuario';
 import { Distrito, Ubigeo } from 'src/app/_model/distrito';
+import { PoclabService } from 'src/app/_service/apiexterno/poclab.service';
+import { MatStepper } from '@angular/material/stepper';
 
 @Component({
   selector: 'app-cusuario',
@@ -40,7 +42,7 @@ export class CusuarioComponent implements OnInit {
   nombres: string = "";
   documento: string = "";
   currentTab: number = 0;
-
+  peru: string = '01';
   fechaNac: Date | null = null;
   maxDate: Date = new Date();
   minDate: Date = new Date();
@@ -53,7 +55,6 @@ export class CusuarioComponent implements OnInit {
   listaPais: Ubigeo[] = jsonPais;
 
   idTipoDocumento: string = '';
-
   codDepartamento: string = '';
   codProvincia: string = '';
   codDistrito: string = '';
@@ -67,6 +68,9 @@ export class CusuarioComponent implements OnInit {
   distritoColor: string = 'accent'
   selectedPais: string = '';
 
+  @ViewChild(MatStepper)
+  stepper!: MatStepper;
+  
   //Webcam
   public foto?: string =environment.UrlImage + "people.png";
   public fotoUrl: string = '';
@@ -92,7 +96,8 @@ export class CusuarioComponent implements OnInit {
     private notifierService : NotifierService,
     private usuarioService: UsuarioService,
     private configPermisoService : ConfigPermisoService,
-    private tbmaestraService : TbmaestraService
+    private tbmaestraService : TbmaestraService,
+    private poclabService: PoclabService
   ) { }
 
   ngOnInit(): void {
@@ -114,36 +119,43 @@ export class CusuarioComponent implements OnInit {
     this.listarDistritos(null!, null!, null!);
 
     this.listarCombo();
+
+    this.minDate.setMonth(this.maxDate.getMonth() - 12*120);  
+  }
+
+  ngAfterViewInit() {
+    this.stepper._getIndicatorType = () => 'number';
   }
 
   inicializar(){
+
     this.form = new FormGroup({
-      'nIdUsuario': new FormControl({ value: 0, disabled: false}),
-      'nIdPersona': new FormControl({ value: 0, disabled: false}),
-      'vDocumento': new FormControl({ value: '', disabled: false}),
-      'vTipDocu': new FormControl({ value: '', disabled: false}),
-      'vApPaterno': new FormControl({ value: '', disabled: false}),
-      'vApMaterno': new FormControl({ value: '', disabled: false}),
-      'vPrimerNombre': new FormControl({ value: '', disabled: false}),
-      'vSegundoNombre': new FormControl({ value: '', disabled: false}),
-      'vSexo': new FormControl({ value: '', disabled: false}),
-      'nEdad': new FormControl({ value: '', disabled: false}),
-      'dFechaNac': new FormControl({ value: '', disabled: false}),
-      'vEstCivil': new FormControl({ value: '', disabled: false}),
-      'vUsuario': new FormControl({ value: '', disabled: false}),
-      'vContrasena': new FormControl({ value: '', disabled: false}),
-      'vColegiatura': new FormControl({ value: '', disabled: false}),
-      'vCelular': new FormControl({ value: '', disabled: false}),
-      'vTelefono': new FormControl({ value: '', disabled: false}),
-      'vCorreo1': new FormControl({ value: '', disabled: false}),
-      'vCorreo2': new FormControl({ value: '', disabled: false}),
-      'nPeso': new FormControl({ value: '', disabled: false}),
-      'nTalla': new FormControl({ value: '', disabled: false}),
-      'vCodPais': new FormControl({ value: '', disabled: false}),
-      'vCodDepa': new FormControl({ value: '', disabled: false}),
-      'vCodProv': new FormControl({ value: '', disabled: false}),
-      'vCodDist': new FormControl({ value: '', disabled: false}),
-      'vDireccion': new FormControl({ value: '', disabled: false})
+      'nIdUsuario': new FormControl({ value: 0, disabled: !this.edit}),
+      'nIdPersona': new FormControl({ value: 0, disabled: !this.edit}),
+      'vDocumento': new FormControl({ value: '', disabled: !this.edit}),
+      'vTipDocu': new FormControl({ value: '', disabled: !this.edit}),
+      'vApPaterno': new FormControl({ value: '', disabled: !this.edit}),
+      'vApMaterno': new FormControl({ value: '', disabled: !this.edit}),
+      'vPrimerNombre': new FormControl({ value: '', disabled: !this.edit}),
+      'vSegundoNombre': new FormControl({ value: '', disabled: !this.edit}),
+      'vSexo': new FormControl({ value: '', disabled: !this.edit}),
+      'nEdad': new FormControl({ value: '', disabled: !this.edit}),
+      'dFechaNac': new FormControl({ value: '', disabled: !this.edit}),
+      'vEstCivil': new FormControl({ value: '', disabled: !this.edit}),
+      'vUsuario': new FormControl({ value: '', disabled: !this.edit}),
+      'vContrasena': new FormControl({ value: '', disabled: !this.edit}),
+      'vColegiatura': new FormControl({ value: '', disabled: !this.edit}),
+      'vCelular': new FormControl({ value: '', disabled: !this.edit}),
+      'vTelefono': new FormControl({ value: '', disabled: !this.edit}),
+      'vCorreo1': new FormControl({ value: '', disabled: !this.edit}),
+      'vCorreo2': new FormControl({ value: '', disabled: !this.edit}),
+      'nPeso': new FormControl({ value: '', disabled: !this.edit}),
+      'nTalla': new FormControl({ value: '', disabled: !this.edit}),
+      'vCodPais': new FormControl({ value: '', disabled: !this.edit}),
+      'vCodDepa': new FormControl({ value: '', disabled: !this.edit}),
+      'vCodProv': new FormControl({ value: '', disabled: !this.edit}),
+      'vCodDist': new FormControl({ value: '', disabled: !this.edit}),
+      'vDireccion': new FormControl({ value: '', disabled: !this.edit})
     });
   }
 
@@ -168,49 +180,50 @@ export class CusuarioComponent implements OnInit {
 
   obtener(){
     this.usuarioService.obtener(this.id).subscribe(data=>{
-   
+
       data.vTipDocu = (data.vTipDocu==null)?  this.idTipoDocumento: data.vTipDocu;
       data.nPeso = (data.nPeso==0)?  null!: data.nPeso!;
       data.nTalla = (data.nTalla==0)?  null!: data.nTalla!;
-      data.vCodPais = (data.vCodPais=='' || data.vCodPais==null)?  '01'!: data.vCodPais!;
+      data.vCodPais = (data.vCodPais=='' || data.vCodPais==null)?  this.peru!: data.vCodPais!;
 
       this.selectedPais = data.vCodPais;
       this.muestraDistrito = true;
-      if(this.selectedPais !== '01'){
+      if(this.selectedPais !== this.peru){
         this.codDistrito = '';
         this.distritoColor = 'accent';
         this.muestraDistrito = false;
       }
 
-      this.form = new FormGroup({
-        'nIdUsuario': new FormControl({ value: data.nIdUsuario, disabled: false}),
-        'nIdPersona': new FormControl({ value: data.nIdPersona, disabled: false}),
-        'vDocumento': new FormControl({ value: data.vDocumento, disabled: false}),
-        'vTipDocu': new FormControl({ value: data.vTipDocu, disabled: false}),
-        'vApPaterno': new FormControl({ value: data.vApPaterno, disabled: false}),
-        'vApMaterno': new FormControl({ value: data.vApMaterno, disabled: false}),
-        'vPrimerNombre': new FormControl({ value: data.vPrimerNombre, disabled: false}),
-        'vSegundoNombre': new FormControl({ value: data.vSegundoNombre, disabled: false}),
-        'vSexo': new FormControl({ value: data.vSexo, disabled: false}),
-        'nEdad': new FormControl({ value: data.nEdad, disabled: false}),
-        'dFechaNac': new FormControl({ value: data.dFechaNac, disabled: false}),
-        'vEstCivil': new FormControl({ value: data.vEstCivil, disabled: false}),
-        'vUsuario': new FormControl({ value: data.vUsuario, disabled: false}),
-        'vContrasena': new FormControl({ value: data.vContrasena, disabled: false}),
-        'vColegiatura': new FormControl({ value: data.vColegiatura, disabled: false}),
-        'vCelular': new FormControl({ value: data.vCelular, disabled: false}),
-        'vTelefono': new FormControl({ value: data.vTelefono, disabled: false}),
-        'vCorreo1': new FormControl({ value: data.vCorreo1, disabled: false}),
-        'vCorreo2': new FormControl({ value: data.vCorreo2, disabled: false}),
-        'nPeso': new FormControl({ value: data.nPeso, disabled: false}),
-        'nTalla': new FormControl({ value: data.nTalla, disabled: false}),
-        'vCodPais': new FormControl({ value: data.vCodPais, disabled: false}),
-        'vCodDepa': new FormControl({ value: data.vCodDepa, disabled: false}),
-        'vCodProv': new FormControl({ value: data.vCodProv, disabled: false}),
-        'vCodDist': new FormControl({ value: data.vCodDist, disabled: false}),
-        'vDireccion': new FormControl({ value: data.vDireccion, disabled: false})
-        });
-        debugger;
+      this.form.patchValue({
+        nIdUsuario: data.nIdUsuario,
+        nIdPersona: data.nIdPersona,
+        vDocumento: data.vDocumento,
+        vTipDocu: data.vTipDocu,
+        vApPaterno: data.vApPaterno,
+        vApMaterno: data.vApMaterno,
+        vPrimerNombre: data.vPrimerNombre,
+        vSegundoNombre: data.vSegundoNombre,
+        vSexo: data.vSexo,
+        nEdad: data.nEdad,
+        dFechaNac: data.dFechaNac,
+        vEstCivil: data.vEstCivil,
+        vUsuario: data.vUsuario,
+        vContrasena: data.vContrasena,
+        vColegiatura: data.vColegiatura,
+        vCelular: data.vCelular,
+        vTelefono: data.vTelefono,
+        vCorreo1: data.vCorreo1,
+        vCorreo2: data.vCorreo2,
+        nPeso: data.nPeso,
+        nTalla: data.nTalla,
+        vCodPais: data.vCodPais,
+        vCodDepa: data.vCodDepa,
+        vCodProv: data.vCodProv,
+        vCodDist: data.vCodDist,
+        vDireccion: data.vDireccion
+       
+      });
+
         if(data.vCodDepa!=null && data.vCodProv!=null && data.vCodDist!=null){
           let departamento: Ubigeo[] = jsonDepartamento;
           let provincia: Ubigeo[] = jsonProvincia;
@@ -226,31 +239,59 @@ export class CusuarioComponent implements OnInit {
           this.codDepartamento = data.vCodDepa!;
           this.codProvincia = data.vCodProv!;
           this.codDistrito = data.vCodDist!;
-        }      
 
-      if(data.nIdPerfil!="" && data.nIdPerfil!=null){
-        var listaIdPerfil = data.nIdPerfil!.split("|");
+        }  
 
-        data.listaPerfil?.forEach(y=>{
-          var select = listaIdPerfil.filter(x=>x == y.nIdPerfil?.toString())[0];
-  
-          if(select!=null || select!=undefined){
-            y.seleccionado = true
-          }else{
-            y.seleccionado = false
-          }
-        });
-      }
+        this.cambiaPaisDistrito(data.vCodPais, data.vCodDist);
+
+        if(data.nIdPerfil!="" && data.nIdPerfil!=null){
+          var listaIdPerfil = data.nIdPerfil!.split("|");
+
+          data.listaPerfil?.forEach(y=>{
+            var select = listaIdPerfil.filter(x=>x == y.nIdPerfil?.toString())[0];
     
-      this.listaPerfil = data.listaPerfil!;
-      this.nombres = data.vNombreCompleto!;
-      this.documento = data.vDocumento!;
-      this.codEstado = (data.swt!=null)? data.swt!.toString()! : "1";
-      this.fotoUrl =(data.vFoto !== undefined && data.vFoto !== null)? data.vFoto! : this.foto!;
+            if(select!=null || select!=undefined){
+              y.seleccionado = true
+            }else{
+              y.seleccionado = false
+            }
+          });
+        }
+    
+        this.fotoUrl =(data.vFoto !== undefined && data.vFoto !== null)? data.vFoto! : this.foto!;
+
+        this.listaPerfil = data.listaPerfil!;
+        this.nombres = data.vNombreCompleto!;
+        this.documento = data.vDocumento!;
+        this.codEstado = (data.swt!=null)? data.swt!.toString()! : "1";
+
       
       this.spinner.hideLoading();
     });
   }
+
+  cambiaPaisDistrito(codPais: string = '', codDistrito: string = ''){
+   
+    this.changePais(codPais?codPais:'');
+
+    this.codDistrito = codDistrito?codDistrito:'';
+    if(this.codDistrito !== ''){
+      var distFind = this.distritos.find(e => e.dist?.id === this.codDistrito);
+      if(distFind !== undefined){
+        var distrito: Distrito = distFind;
+        this.distritoColor = 'primary';
+        this.controlDistritos.setValue(distrito);
+      }
+      else{
+        this.distritoColor = 'accent';
+        this.controlDistritos.setValue(new Distrito());
+      }
+    }else{
+      this.distritoColor = 'accent';
+      this.controlDistritos.setValue(new Distrito());
+    }
+  }
+
 
   subirFoto(fileInput: any) {
     this.webcamImage = null;
@@ -352,10 +393,10 @@ export class CusuarioComponent implements OnInit {
 
   updateFechaNac(d: Date){
     this.fechaNac = d;
-    if(this.form.get('Edad') !== undefined){
+    if(this.form.get('nEdad') !== undefined){
       var edad = this.calcularEdad(d);
       this.form.patchValue({
-        Edad: edad.toString()
+        nEdad: edad.toString()
       });
     }
   }
@@ -430,6 +471,160 @@ export class CusuarioComponent implements OnInit {
     return results.slice(0,this.nroDistritosMuestra);
   }
 
+  obtenerPersona(e?: any){
+    
+    var tipoDocu =this.form.value['vTipDocu']
+    var documento =this.form.value['vDocumento']
+
+    var validacion = this.validaDocumento(tipoDocu, documento);
+
+    if(validacion === ''){
+      this.usuarioService.obtenerPersona(tipoDocu, documento).subscribe(data=>{
+
+        data.vTipDocu = (data.vTipDocu==null)?  this.idTipoDocumento: data.vTipDocu;
+        data.nPeso = (data.nPeso==0)?  null!: data.nPeso!;
+        data.nTalla = (data.nTalla==0)?  null!: data.nTalla!;
+        data.vCodPais = (data.vCodPais=='' || data.vCodPais==null)?  this.peru!: data.vCodPais!;
+
+        this.selectedPais = data.vCodPais;
+        this.muestraDistrito = true;
+        if(this.selectedPais !== this.peru){
+          this.codDistrito = '';
+          this.distritoColor = 'accent';
+          this.muestraDistrito = false;
+        }
+
+        if(data.vDocumento!="" && data.vDocumento!=null){
+          this.form.patchValue({
+            vApPaterno: data.vApPaterno,
+            vApMaterno: data.vApMaterno,
+            vPrimerNombre: data.vPrimerNombre,
+            vSegundoNombre: data.vSegundoNombre,
+            vSexo: data.vSexo,
+            nEdad: data.nEdad,
+            dFechaNac: data.dFechaNac,
+            vEstCivil: data.vEstCivil,
+            vCodPais: data.vCodPais,
+            vCodDepa: data.vCodDepa,
+            vCodProv: data.vCodProv,
+            vCodDist: data.vCodDist,
+            vDireccion: data.vDireccion,
+          });
+
+          this.codDepartamento = data.vCodDepa!;
+          this.codProvincia = data.vCodProv!;
+          this.codDistrito = data.vCodDist!;
+      
+          this.cambiaPaisDistrito(data.vCodPais, data.vCodDist);
+
+          this.nombres = data.vNombreCompleto!;
+          this.documento = data.vDocumento!;
+          this.codEstado = (data.swt!=null)? data.swt!.toString()! : "1";
+
+        }else{
+          this.poclabService.obtenerPersona("1", documento).subscribe(data=>{
+           
+            let pais = (data.vCodPais='PER')? this.peru : data.vCodPais;
+            this.selectedPais = this.peru;
+            this.muestraDistrito = true;
+
+            if(data.vDocumento!="" && data.vDocumento!=null){
+              this.form.patchValue({
+                vApPaterno: data.vApePaterno,
+                vApMaterno: data.vApeMaterno,
+                vPrimerNombre: data.vPrimerNombre,
+                vSegundoNombre: data.vSegundoNombre,
+                vSexo: data.vSexo,
+                nEdad: data.nEdad,
+                dFechaNac: data.dteNacimiento,
+                // vEstCivil: data.vCodEstadoCivil,
+                vCodPais: pais,
+                vCodDepa: data.vCodRegion,
+                vCodProv: data.vCodProvincia,
+                vCodDist: data.vCodDistrito,
+                vDireccion: data.vDireccion,
+              });
+              debugger;
+              this.codDepartamento = data.vCodRegion!;
+              this.codProvincia = data.vCodProvincia!;
+              this.codDistrito = data.vCodDistrito!;
+    
+              this.cambiaPaisDistrito(pais, data.vCodDistrito);
+    
+              this.nombres = data.vApePaterno + " "+ data.vApeMaterno + " "+ data.vPrimerNombre + " "+data.vSegundoNombre
+              this.documento = data.vDocumento!;
+              this.codEstado = "1"; 
+            }             
+          });
+        }
+      });
+    }else{
+      if(validacion !== 'El tipo de documento y el documento no pueden estar vacíos')
+        this.notifierService.showNotification(2,'Mensaje',validacion);
+        this.borrarDato();
+    } 
+  }
+
+  borrarDato(){
+    this.form.patchValue({
+      vApPaterno: null,
+      vApMaterno: null,
+      vPrimerNombre: null,
+      vSegundoNombre: null,
+      vSexo: null,
+      nEdad: null,
+      dFechaNac: null,
+      vEstCivil: null,
+    });
+   
+    this.cambiaPaisDistrito(this.peru, null!);
+  }
+  
+  validaDocumento(tipoDocu: string, numDocu: string){
+    if(tipoDocu == '' && numDocu == '')
+        return 'El tipo de documento y el documento no pueden estar vacíos';
+
+    var noEsNro = !this.esEntero(numDocu);
+    
+    //DNI
+    if(tipoDocu == '00001'){
+      if(numDocu==null  || numDocu=="")
+        return 'Ingrese el Nro Documento';
+      if(numDocu.length !== 8)
+        return 'El DNI debe tener 8 dígitos';
+      if(noEsNro)
+        return 'El DNI debe debe contener solo números';
+    }
+
+    //PASS
+    if(tipoDocu == '00002'){
+      if(numDocu==null || numDocu=="")
+        return 'Ingrese el Nro Documento';
+      if(numDocu.length > 12)
+        return 'El PASS no puede exceder 12 dígitos';
+    }
+
+    //CEXT
+    if(tipoDocu == '00004'){
+      if(numDocu==null || numDocu=="")
+        return 'Ingrese el Nro Documento';
+      if(numDocu.length > 12)
+        return 'El CEXT no puede exceder 12 dígitos';
+    }
+
+    //HC, DIN, PARTNAC, NEO, OTROS
+    if(numDocu==null || numDocu=="")
+        return 'Ingrese el Nro Documento';
+
+    return '';
+  }
+
+  esEntero(cadena: string){
+    const regex = /^[0-9]+$/;
+    return regex.test(cadena);
+  }
+
+
   mostrarDistrito(d: Distrito): string{
     var result = '';
     if(d !== undefined && d !== null && d !== '' && d.dist?.name !== '')
@@ -447,7 +642,6 @@ export class CusuarioComponent implements OnInit {
   }
 
   changeDistrito(event: any){
-    debugger;
     var distrito = event.option.value;
     if(distrito !== undefined){
       this.codDepartamento = distrito.dpto.id;
@@ -457,7 +651,6 @@ export class CusuarioComponent implements OnInit {
   }
 
   guardar(){
-    debugger;
     let model = new Usuario();
 
     model.nIdUsuario= this.form.value['nIdUsuario'];
@@ -471,23 +664,23 @@ export class CusuarioComponent implements OnInit {
     model.vSexo= this.form.value['vSexo'];
     model.vEstCivil= this.form.value['vEstCivil'];
     model.dFechaNac= this.form.value['dFechaNac'];
-    model.nEdad= this.form.value['nEdad'];
-    model.vCelular= this.form.value['vCelular'];
-    model.vTelefono= this.form.value['vTelefono'];
+    model.nEdad= (this.form.value['nEdad']==null || this.form.value['nEdad']=="")? null : this.form.value['nEdad'].toString();
+    model.vCelular=  (this.form.value['vCelular']==null || this.form.value['vCelular']=="")? null : this.form.value['vCelular'].toString();
+    model.vTelefono=  (this.form.value['vCelular']==null || this.form.value['vCelular']=="")? null : this.form.value['vTelefono'].toString();
     model.vCorreo1= this.form.value['vCorreo1'];
     model.vCorreo2= this.form.value['vCorreo2'];
-    model.nPeso= this.form.value['nPeso'];
-    model.nTalla= this.form.value['nTalla'];
-    model.vCodPais = (this.selectedPais=='')?undefined:this.selectedPais;
+    model.nPeso= (this.form.value['nPeso']==null || this.form.value['nPeso']=="")? null :  this.form.value['nPeso'].toString();
+    model.nTalla=(this.form.value['nTalla']==null || this.form.value['nTalla']=="")? null :  this.form.value['nTalla'].toString();
+    model.vCodPais = (this.selectedPais=='')?null!:this.selectedPais;
     
-    if(this.selectedPais=='01'){
-      model.vCodDepa = (this.codDepartamento=='')?undefined:this.codDepartamento;
-      model.vCodProv = (this.codProvincia=='')?undefined:this.codProvincia;
-      model.vCodDist = (this.codDistrito=='')?undefined:this.codDistrito;
+    if(this.selectedPais==this.peru){
+      model.vCodDepa = (this.codDepartamento=='')?null!:this.codDepartamento;
+      model.vCodProv = (this.codProvincia=='')?null!:this.codProvincia;
+      model.vCodDist = (this.codDistrito=='')?null!:this.codDistrito;
     }else{
-      model.vCodDepa = undefined;
-      model.vCodProv = undefined;
-      model.vCodDist = undefined;
+      model.vCodDepa = null!;
+      model.vCodProv = null!;
+      model.vCodDist = null!;
     }
 
     model.vDireccion= this.form.value['vDireccion'];
@@ -519,45 +712,9 @@ export class CusuarioComponent implements OnInit {
   }
 
   limpiar(){
-    // this.id = 0;
-    // this.codigo = '';
+    this.inicializar();
 
-    // this.resetImage();
-    // this.reiniciaPersona();
-    
-    // //Limpia paciente
-    // this.reiniciaPersona(true);
-    // this.muestraPaciente = false;
-
-    // //Busca origen y campaña de caché
-    // var ideOri = localStorage.getItem('IdeOrigen');
-    // ideOri = ideOri?ideOri:this.curBanco.toString();
-    // var ideCam = localStorage.getItem('IdeCampania');
-    // ideCam = ideCam?ideCam:'1';
-
-    // //Valores por defecto de tipo proc. y extracción
-    // this.form.patchValue({
-    //   CodTipoProcedimiento: this.tbTipoProced[0].codigo
-    // });
-    // this.changeTipoProced(this.tbTipoProced[0].codigo)
-
-    // this.form.patchValue({
-    //   Codigo: '#######',
-    //   TipDocu: '1',
-    //   ViajeSN: 'No',
-    //   Lugar: '',
-    //   Permanencia: '',
-    //   FechaViaje: null,
-    //   Otros: '',
-    //   CodTipoDonacion: '',
-    //   IdeOrigen: ideOri,
-    //   IdeCampania: ideCam,
-    //   Fecha: new Date(),
-    //   CodEstado: 0,
-    //   CodEje: '',
-    //   CodParentesco: '',
-    //   TipRecep: ''
-    // })
+    this.listarCombo();
   }
 
 }
