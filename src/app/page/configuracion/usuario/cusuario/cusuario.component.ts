@@ -23,6 +23,7 @@ import { TbMaestra } from 'src/app/_model/combobox';
 import { Perfil } from 'src/app/_model/configuracion/perfil';
 import { Usuario } from 'src/app/_model/configuracion/usuario';
 import { Distrito, Ubigeo } from 'src/app/_model/distrito';
+import { PoclabService } from 'src/app/_service/apiexterno/poclab.service';
 
 @Component({
   selector: 'app-cusuario',
@@ -40,7 +41,7 @@ export class CusuarioComponent implements OnInit {
   nombres: string = "";
   documento: string = "";
   currentTab: number = 0;
-
+  peru: string = '01';
   fechaNac: Date | null = null;
   maxDate: Date = new Date();
   minDate: Date = new Date();
@@ -53,7 +54,6 @@ export class CusuarioComponent implements OnInit {
   listaPais: Ubigeo[] = jsonPais;
 
   idTipoDocumento: string = '';
-
   codDepartamento: string = '';
   codProvincia: string = '';
   codDistrito: string = '';
@@ -92,7 +92,8 @@ export class CusuarioComponent implements OnInit {
     private notifierService : NotifierService,
     private usuarioService: UsuarioService,
     private configPermisoService : ConfigPermisoService,
-    private tbmaestraService : TbmaestraService
+    private tbmaestraService : TbmaestraService,
+    private poclabService: PoclabService
   ) { }
 
   ngOnInit(): void {
@@ -168,16 +169,16 @@ export class CusuarioComponent implements OnInit {
 
   obtener(){
     this.usuarioService.obtener(this.id).subscribe(data=>{
-   
+
       let edit2 = (this.id>0)? true : false;
       data.vTipDocu = (data.vTipDocu==null)?  this.idTipoDocumento: data.vTipDocu;
       data.nPeso = (data.nPeso==0)?  null!: data.nPeso!;
       data.nTalla = (data.nTalla==0)?  null!: data.nTalla!;
-      data.vCodPais = (data.vCodPais=='' || data.vCodPais==null)?  '01'!: data.vCodPais!;
+      data.vCodPais = (data.vCodPais=='' || data.vCodPais==null)?  this.peru!: data.vCodPais!;
 
       this.selectedPais = data.vCodPais;
       this.muestraDistrito = true;
-      if(this.selectedPais !== '01'){
+      if(this.selectedPais !== this.peru){
         this.codDistrito = '';
         this.distritoColor = 'accent';
         this.muestraDistrito = false;
@@ -228,8 +229,9 @@ export class CusuarioComponent implements OnInit {
           this.codProvincia = data.vCodProv!;
           this.codDistrito = data.vCodDist!;
 
-          this.cambiaPaisDistrito(data.vCodPais, data.vCodDist);
-        }      
+        }  
+
+        this.cambiaPaisDistrito(data.vCodPais, data.vCodDist);
 
         if(data.nIdPerfil!="" && data.nIdPerfil!=null){
           var listaIdPerfil = data.nIdPerfil!.split("|");
@@ -258,7 +260,7 @@ export class CusuarioComponent implements OnInit {
   }
 
   cambiaPaisDistrito(codPais: string = '', codDistrito: string = ''){
-
+   
     this.changePais(codPais?codPais:'');
 
     this.codDistrito = codDistrito?codDistrito:'';
@@ -273,6 +275,9 @@ export class CusuarioComponent implements OnInit {
         this.distritoColor = 'accent';
         this.controlDistritos.setValue(new Distrito());
       }
+    }else{
+      this.distritoColor = 'accent';
+      this.controlDistritos.setValue(new Distrito());
     }
   }
 
@@ -455,6 +460,99 @@ export class CusuarioComponent implements OnInit {
     return results.slice(0,this.nroDistritosMuestra);
   }
 
+  obtenerPersona(e?: any){
+    var tipoDocu =this.form.value['vTipDocu']
+    var documento =this.form.value['vDocumento']
+
+    var validacion = this.validaDocumento(tipoDocu, documento);
+
+    if(validacion === ''){
+      this.usuarioService.obtenerPersona(tipoDocu, documento).subscribe(data=>{
+        debugger;
+        console.log(data);
+        if(data.vDocumento!="" && data.vDocumento!=null){
+          this.form.patchValue({
+            vApPaterno: data.vApPaterno,
+            vApMaterno: data.vApMaterno,
+            vPrimerNombre: data.vPrimerNombre,
+            vSegundoNombre: data.vSegundoNombre,
+            vSexo: data.vSexo,
+            nEdad: data.nEdad,
+            dFechaNac: data.dFechaNac,
+            vEstCivil: data.vEstCivil,
+          });
+        }else{
+          this.poclabService.obtenerPersona(tipoDocu, documento).subscribe(data=>{
+          });
+        }
+      });
+    }else{
+      if(validacion !== 'El tipo de documento y el documento no pueden estar vacíos')
+        this.notifierService.showNotification(2,'Mensaje',validacion);
+        this.borrarDato();
+    } 
+  }
+
+  borrarDato(){
+    this.form.patchValue({
+      vApPaterno: null,
+      vApMaterno: null,
+      vPrimerNombre: null,
+      vSegundoNombre: null,
+      vSexo: null,
+      nEdad: null,
+      dFechaNac: null,
+      vEstCivil: null,
+    });
+   
+    this.cambiaPaisDistrito(this.peru, null!);
+  }
+  
+  validaDocumento(tipoDocu: string, numDocu: string){
+    if(tipoDocu == '' && numDocu == '')
+        return 'El tipo de documento y el documento no pueden estar vacíos';
+
+    var noEsNro = !this.esEntero(numDocu);
+    
+    //DNI
+    if(tipoDocu == '00001'){
+      if(numDocu==null  || numDocu=="")
+        return 'Ingrese el Nro Documento';
+      if(numDocu.length !== 8)
+        return 'El DNI debe tener 8 dígitos';
+      if(noEsNro)
+        return 'El DNI debe debe contener solo números';
+    }
+
+    //PASS
+    if(tipoDocu == '00002'){
+      if(numDocu==null || numDocu=="")
+        return 'Ingrese el Nro Documento';
+      if(numDocu.length > 12)
+        return 'El PASS no puede exceder 12 dígitos';
+    }
+
+    //CEXT
+    if(tipoDocu == '00004'){
+      if(numDocu==null || numDocu=="")
+        return 'Ingrese el Nro Documento';
+      if(numDocu.length > 12)
+        return 'El CEXT no puede exceder 12 dígitos';
+    }
+
+    //HC, DIN, PARTNAC, NEO, OTROS
+    if(numDocu==null || numDocu=="")
+        return 'Ingrese el Nro Documento';
+
+    return '';
+  }
+
+  esEntero(cadena: string){
+    const regex = /^[0-9]+$/;
+    return regex.test(cadena);
+  }
+
+
   mostrarDistrito(d: Distrito): string{
     var result = '';
     if(d !== undefined && d !== null && d !== '' && d.dist?.name !== '')
@@ -543,45 +641,9 @@ export class CusuarioComponent implements OnInit {
   }
 
   limpiar(){
-    // this.id = 0;
-    // this.codigo = '';
+    this.inicializar();
 
-    // this.resetImage();
-    // this.reiniciaPersona();
-    
-    // //Limpia paciente
-    // this.reiniciaPersona(true);
-    // this.muestraPaciente = false;
-
-    // //Busca origen y campaña de caché
-    // var ideOri = localStorage.getItem('IdeOrigen');
-    // ideOri = ideOri?ideOri:this.curBanco.toString();
-    // var ideCam = localStorage.getItem('IdeCampania');
-    // ideCam = ideCam?ideCam:'1';
-
-    // //Valores por defecto de tipo proc. y extracción
-    // this.form.patchValue({
-    //   CodTipoProcedimiento: this.tbTipoProced[0].codigo
-    // });
-    // this.changeTipoProced(this.tbTipoProced[0].codigo)
-
-    // this.form.patchValue({
-    //   Codigo: '#######',
-    //   TipDocu: '1',
-    //   ViajeSN: 'No',
-    //   Lugar: '',
-    //   Permanencia: '',
-    //   FechaViaje: null,
-    //   Otros: '',
-    //   CodTipoDonacion: '',
-    //   IdeOrigen: ideOri,
-    //   IdeCampania: ideCam,
-    //   Fecha: new Date(),
-    //   CodEstado: 0,
-    //   CodEje: '',
-    //   CodParentesco: '',
-    //   TipRecep: ''
-    // })
+    this.listarCombo();
   }
 
 }

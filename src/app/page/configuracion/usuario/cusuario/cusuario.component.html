@@ -109,11 +109,11 @@
                                     <mat-grid-tile [colspan]="8">
                                         <mat-form-field appearance="outline">
                                             <mat-label>Documento</mat-label>
-                                            <input #DOCUMENTO type="text" [readonly]="id>0" matInput placeholder="Documento" formControlName="vDocumento" minlength="1" maxlength="15" required >
-                                            <button *ngIf="DOCUMENTO.value && id===0" type="button" matSuffix mat-icon-button aria-label="Limpiar">
+                                            <input #DOCUMENTO type="text" [readonly]="id>0" matInput placeholder="Documento" formControlName="vDocumento" minlength="1" maxlength="15" required (keyup.enter)="obtenerPersona($event)">
+                                            <button *ngIf="DOCUMENTO.value && id===0" type="button" matSuffix mat-icon-button aria-label="Limpiar" (click)="borrarDato()">
                                                 <mat-icon>close</mat-icon>
                                             </button>
-                                            <button *ngIf="DOCUMENTO.value && id===0" type="button" matSuffix mat-icon-button aria-label="Buscar">
+                                            <button *ngIf="DOCUMENTO.value && id===0" type="button" matSuffix mat-icon-button aria-label="Buscar" (click)="obtenerPersona($event)">
                                                 <mat-icon>search</mat-icon>
                                             </button>
                                         </mat-form-field>
