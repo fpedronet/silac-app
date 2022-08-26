@@ -226,7 +226,7 @@
                                     <mat-grid-tile [colspan]="6">
                                         <mat-form-field appearance="outline">
                                             <mat-label>Teléfono</mat-label>
-                                            <input matInput placeholder="Telefóno" formControlName="vTelefono" oninput="if(this.value.length>=8) { this.value = this.value.slice(0,8); }">
+                                            <input matInput type="number" placeholder="Telefóno" formControlName="vTelefono" oninput="if(this.value.length>=8) { this.value = this.value.slice(0,8); }">
                                         </mat-form-field>
                                     </mat-grid-tile>
                                 </mat-grid-list>
