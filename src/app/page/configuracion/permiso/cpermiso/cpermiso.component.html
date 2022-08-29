@@ -1,137 +1,127 @@
 <mat-toolbar color="primary" class="example-toolbar submenu example-button">
-    <div class="example-button-row">
-      <button mat-stroked-button class="btnHeader" #tooltip="matTooltip" matTooltip="Guardar" type="submit" [disabled]="frmGrupo.invalid" form="ngForm">
-        <mat-icon class="maticonmenu">save</mat-icon>
-        <span class="maticontitle">Guardar</span>
-      </button>
-    </div>
+  <div class="example-button-row">
+    <button mat-stroked-button class="btnHeader" #tooltip="matTooltip" matTooltip="Guardar" type="submit" [disabled]="frmGrupo.invalid" form="ngForm">
+      <mat-icon class="maticonmenu">save</mat-icon>
+      <span class="maticontitle">Guardar</span>
+    </button>
+  </div>
 </mat-toolbar>
 
 <div class="container">  
 <mat-card class="cardborde">   
-  <mat-toolbar class="cardtitle"></mat-toolbar>
+<mat-toolbar class="cardtitle"></mat-toolbar>
 
-  <h2 class="title-label">CREAR PERMISO</h2>  
+<h2 class="title-label">CREAR PERMISO</h2>  
 
-  <mat-divider></mat-divider>
+<mat-divider></mat-divider>
 
-  <div id="content"> 
-    <div style="width: 100%; float:left;margin-bottom: -17px;"> 
-      <div style="text-align: center; color: #1a0da4; font-weight: 500;padding-top: 11px;">PERFIL SELECCIONADO: <span style="font-weight: 600; color: #be3900;text-transform: uppercase;">{{nombreperfil}}</span></div> 
-    </div> 
-  </div>
+<div id="content"> 
+  <div style="width: 100%; float:left;margin-bottom: -17px;"> 
+    <div style="text-align: center; color: #1a0da4; font-weight: 500;padding-top: 11px;">PERFIL SELECCIONADO: <span style="font-weight: 600; color: #be3900;text-transform: uppercase;">{{nombreperfil}}</span></div> 
+  </div> 
+</div>
 
-  <br style="clear:both;"/>
-  <br>
+<br style="clear:both;"/>
+<br>
 
-  <form onkeydown="return event.key != 'Enter';" class="forms" id="ngForm" [formGroup]="form" #frmGrupo="ngForm" (ngSubmit)="guardar()"> 
-    <div class="content" style="height: 75vh;">
+<form onkeydown="return event.key != 'Enter';" class="forms" id="ngForm" [formGroup]="form" #frmGrupo="ngForm" (ngSubmit)="guardar()"> 
+  <div class="content" style="height: 120vh;">
 
-      <div fxLayout="row wrap" fxLayoutGap="16px grid">
-
-          <div fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="50%">
-            <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
-
-              <mat-accordion class="example-headers-align">
-
-                <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                     PERFIL
-                    </mat-panel-title>
-                    <mat-panel-description>
-                      <span></span>
-                      <mat-icon>account_circle</mat-icon>
-                    </mat-panel-description>
-                  </mat-expansion-panel-header>
-              
-                  <div class="content contentTable">          
-
-                    <table class="styled-table">
-                      <thead>
-                        <tr>
-                          <th>PERFIL</th>  
-                          <th>SELECIONAR</th>              
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor="let c of listaPerfil" class="selected">
-                          <td>
-                            {{c.vDescripcion}}
-                          </td>
-                          <td>      
-                            <a class="pointer ver" (click)="listarMenu(c.nIdPerfil!)">
-                              <mat-icon>visibility</mat-icon>
-                           </a>
-                        
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
+    <div class="left"> 
+      <label class="labelSubtittle">PERFIL</label>
+      <mat-divider></mat-divider>
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>PERFIL</th>  
+            <th>SELECIONAR</th>              
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of listaPerfil" class="selected">
+            <td>
+              {{c.vDescripcion}}
+            </td>
+            <td>      
+              <a class="pointer ver" (click)="listarMenu(c.nIdPerfil!)">
+                <mat-icon>visibility</mat-icon>
+             </a>
           
-                  </div>
-
-                </mat-expansion-panel>
-
-              </mat-accordion>
-
-            </mat-grid-list>  
-          </div>
-
-          <div fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="50%">
-            <mat-grid-list cols="12" rowHeight="80px" gutterSize="15px">
-             
-              <mat-accordion class="example-headers-align">
-
-                <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
-                  <mat-expansion-panel-header>
-                    <mat-panel-title>
-                     OPCIÓN MENU
-                    </mat-panel-title>
-                    <mat-panel-description>
-                      <span></span>
-                      <mat-icon>account_circle</mat-icon>
-                    </mat-panel-description>
-                  </mat-expansion-panel-header>
-                  
-                  <div class="content contentTable">          
-
-                    <table class="styled-table">
-                      <thead>
-                        <tr>
-                          <th>MODULO</th>  
-                          <th>PANTALLA</th>  
-                          <th>SELECIONAR</th>              
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr *ngFor="let c of listaMenu">
-                          <td>
-                            {{c.vModulo}}
-                          </td>
-                          <td>
-                            {{c.vPantalla}}
-                          </td>
-                          <td style="text-align: center;">
-                            <label class="checkbox">
-                              <input  type="checkbox" [checked]="c.seleccionado" name="btn{{c.vCodPantalla}}" (click)="seleccionarMenu(c.vCodPantalla!, c.seleccionado!)">
-                            </label>
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-          
-                  </div>
-
-                </mat-expansion-panel>
-
-              </mat-accordion>
-
-            </mat-grid-list>  
-          </div>
-
-      </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
-  </form> 
+    <div class="right">
+      <label class="labelSubtittle">OPCIÓN MENU</label>
+      <mat-divider></mat-divider>
+      <table class="styled-table">
+        <thead>
+          <tr>
+            <th>MODULO</th>  
+            <th>PANTALLA</th>  
+            <th>SELECIONAR</th>              
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let c of listaMenu">
+            <td>
+              {{c.vModulo}}
+            </td>
+            <td>
+              {{c.vPantalla}}
+            </td>
+            <td style="text-align: center;">
+              <label class="checkbox">
+                <input  type="checkbox" [checked]="c.seleccionado" name="btn{{c.vCodPantalla}}" (click)="seleccionarMenu(c.vCodPantalla!, c.seleccionado!)">
+              </label>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+
+    <!-- <div fxLayout="row wrap" fxLayoutGap="230px grid">
+
+        <div fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="50%">
+          <label class="labelSubtittle">PERFIL</label>
+          <mat-divider></mat-divider>
+          <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+
+            <mat-accordion class="example-headers-align">
+
+              <div class="content contentTable">          
+
+              
+      
+              </div>
+
+            </mat-accordion>
+
+          </mat-grid-list>  
+        </div>
+
+        <div fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="50%">
+          
+          <mat-grid-list cols="12" rowHeight="80px" gutterSize="15px">
+           
+            <mat-accordion class="example-headers-align">
+
+              <div class="content contentTable">          
+
+               
+      
+              </div>
+
+            </mat-accordion>
+
+          </mat-grid-list>  
+        </div>
+
+    </div> -->
+
+  </div>
+</form> 
 </mat-card>
 </div>

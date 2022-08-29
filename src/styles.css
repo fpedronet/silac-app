@@ -18,9 +18,9 @@ div, body, span, a, h1, h2, h3, h4, h5, h6, input, textarea { margin: 0; font-fa
 }
 
 :root {
-  --btn-bg-color1: #2d4b63;
-  --btn-bg-color2: #FC7000;
-  --btn-bg-color3: #2d4b63 no-repeat 0 0;
+  --btn-bg-color1: #274359;
+  --btn-bg-color2: #d14c13;
+  --btn-bg-color3: #274359 no-repeat 0 0;
   --btn-bg-color4: #CE1515;
   --btn-bg-color5: #06CCCC;
   --btn-bg-color6: #4D4D51;
@@ -28,21 +28,21 @@ div, body, span, a, h1, h2, h3, h4, h5, h6, input, textarea { margin: 0; font-fa
   --btn-bg-color8: #202121;
   --btn-bg-color9: #038387;
 
-  --text-bg-color1: #2d4b63;
-  --text-bg-color2: #FC7000;
+  --text-bg-color1: #274359;
+  --text-bg-color2: #d14c13;
   --text-bg-color3: #4D4D51;
   --text-bg-color4: #1367FF;
 
   --bor-bg-color1: #fff;
   --bor-bg-color2: #002c8b7a;
 
-  --header-bg-color1: #2d4b63;
+  --header-bg-color1: #274359;
   --header-bg-color2: #012641;
 
   --line-bg-color1: #28445b;
   --line-bg-color2: #28445bab;
 
-  --footer-bg-color1: #2d4b63;
+  --footer-bg-color1: #274359;
 
 /* REVISADO: #1367FF  */
 }
@@ -127,7 +127,7 @@ div, body, span, a, h1, h2, h3, h4, h5, h6, input, textarea { margin: 0; font-fa
 }
 
 .labelSubtittle{
-  color: #e77d07;
+  color: var(--text-bg-color2);
   font-weight: 500;
   font-size: larger;
 }

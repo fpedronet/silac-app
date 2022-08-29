@@ -84,9 +84,4 @@ export class CpermisoComponent implements OnInit {
     });
   }
 
-  step = 1;
-
-  setStep(index: number) {
-    this.step = index;
-  }
 }

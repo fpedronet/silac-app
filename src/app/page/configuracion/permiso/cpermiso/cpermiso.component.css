@@ -77,11 +77,12 @@ table {
      width: fit-content;
      max-width: 100%;
      box-shadow: 0 0 1px 1px rgba(0, 0, 0, .1);
+     margin-top: 10px;
    }
    
    td, th {
      border: solid rgb(233, 233, 233) 1px;
-     padding: .5rem;
+     padding: .4rem;
    }
    
    th {
@@ -106,3 +107,28 @@ table {
    td:last-of-type, th:last-of-type {
      border-right: none;
    }
+
+
+   .left{
+    width: 50%; 
+    float:left;
+    text-align: center;;
+   }
+   .right{
+    width: 50%; 
+    float:right;
+    text-align: center;;
+   }
+
+   @media(max-width:610px){
+    .left{
+      width: 100%; 
+      float: none;
+      text-align: center;;
+    }
+    .right{
+      width: 100%; 
+      float: none;
+      text-align: center;;
+    }
+  }
