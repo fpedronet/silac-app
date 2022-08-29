@@ -39,7 +39,6 @@ export class LusuarioComponent implements OnInit {
   constructor(
     private http: HttpClient,
     private dialog: MatDialog,
-    private spinnerService: SpinnerService,    
     private usuarioService: UsuarioService,
     private logeoService: LogeoService,
     private configPermisoService: ConfigPermisoService
@@ -129,4 +128,5 @@ export class LusuarioComponent implements OnInit {
     }
     return clase;
   }
+
 }

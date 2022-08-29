@@ -1,83 +1,133 @@
 <mat-toolbar color="primary" class="example-toolbar submenu example-button">
-    <div class="example-button-row">
-      <button mat-stroked-button class="btnHeader" routerLink="/page/laboratorio/ordenes">
-        <mat-icon class="maticon">syncalt</mat-icon>
-      </button>
-      <button mat-stroked-button class="btnHeader">
-        <mat-icon class="maticon">filter_alt</mat-icon>
-      </button>
-      <button mat-stroked-button class="btnHeader" routerLink="/page/laboratorio/ordenes/create">
-        <mat-icon class="maticon">add</mat-icon>
-      </button>
-    </div>
-  </mat-toolbar>
-  
-  <div class="container">  
-    <mat-card class="cardborde">   
-      <mat-toolbar class="cardtitle"></mat-toolbar>
-      <h2 class="title-label"> LISTADO DE ORDENES</h2>
-      <mat-divider></mat-divider>
-      <form style="padding: 0;">     
-        
-        <div class="example-loading-shade" *ngIf="loading || existRegistro">
-          <mat-spinner *ngIf="loading"></mat-spinner>
-          <div class="example-rate-limit-reached" *ngIf="existRegistro">
-            No se encontraron registros.
-          </div>
-        </div>
-  
-        <div class="example-container mat-elevation-z0">
-          <mat-table [dataSource]="dataSource" matSort>
-           
-            <ng-container matColumnDef="codigo">
-              <mat-header-cell *matHeaderCellDef>Código</mat-header-cell>
-              <mat-cell *matCellDef="let element" data-label="Código"> 
-                <div style="font-weight:600;color: #7f388a;">{{element.codigo}}</div>     
-              </mat-cell>
-            </ng-container>
-          
-            <ng-container matColumnDef="natencion">
-              <mat-header-cell *matHeaderCellDef> N° Atención </mat-header-cell>
-              <mat-cell *matCellDef="let element" data-label="N° Atención"> {{element.nombres}} </mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="fecha">
-              <mat-header-cell *matHeaderCellDef> Fecha </mat-header-cell>
-              <mat-cell *matCellDef="let element" data-label="Fecha"> {{element.nombres}} </mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="documento">
-              <mat-header-cell *matHeaderCellDef> Documento </mat-header-cell>
-              <mat-cell *matCellDef="let element" data-label="Documento"> {{element.nombres}} </mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="nombre">
-              <mat-header-cell *matHeaderCellDef> Nombre </mat-header-cell>
-              <mat-cell *matCellDef="let element" data-label="Nombre"> {{element.nombres}} </mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="sexo">
-              <mat-header-cell *matHeaderCellDef> Sexo </mat-header-cell>
-              <mat-cell *matCellDef="let element" data-label="Sexo"> {{element.nombres}} </mat-cell>
-            </ng-container>
-
-            <ng-container matColumnDef="edad">
-              <mat-header-cell *matHeaderCellDef> Edad </mat-header-cell>
-              <mat-cell *matCellDef="let element" data-label="Edad"> {{element.nombres}} </mat-cell>
-            </ng-container>                       
-                        
-            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
-          
-          </mat-table>
-          <mat-paginator 
-            [length]="countRegistro" 
-            [pageSizeOptions]="[5, 10, 20]" 
-            showFirstLastButtons 
-            aria-label="Select page of users">
-          </mat-paginator>
-        </div>
-  
-      </form>    
-    </mat-card>
+  <div class="example-button-row">
+    <button mat-stroked-button class="btnHeader" (click)="actualizar()">
+      <mat-icon class="maticonmenu">syncalt</mat-icon>
+      <span class="maticontitle">Actualizar</span>
+    </button>
+    <button mat-stroked-button class="btnHeader" (click)="abrirBusqueda()">
+      <mat-icon class="maticonmenu">filter_alt</mat-icon>
+      <span class="maticontitle">Filtrar</span>
+    </button>
+    <button mat-stroked-button class="btnHeader" routerLink="/page/configuracion/usuario/create">
+      <mat-icon class="maticonmenu">add</mat-icon>
+      <span class="maticontitle">Nuevo</span>
+    </button>
   </div>
+</mat-toolbar>
+
+<div class="container">  
+  <mat-card class="cardborde">   
+    <mat-toolbar class="cardtitle"></mat-toolbar>
+    <h2 class="title-label"> LISTADO DE ORDENES</h2>
+    <mat-divider></mat-divider>
+    <form style="padding: 0;">     
+      
+      <div class="example-loading-shade" *ngIf="loading || existRegistro">
+        <mat-spinner *ngIf="loading"></mat-spinner>
+        <div class="example-rate-limit-reached" *ngIf="existRegistro">
+          No se encontraron registros.
+        </div>
+      </div>
+
+      <div class="example-container mat-elevation-z0">
+        <mat-table [dataSource]="dataSource" matSort>
+         
+          <ng-container matColumnDef="codigo">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>
+            <mat-cell *matCellDef="let element" data-label="Código"> 
+              <div style="font-weight:600;color: #7f388a;">{{element.codigo}}</div>     
+            </mat-cell>
+          </ng-container>
+            
+          <ng-container matColumnDef="natencion">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> N° Atención </mat-header-cell>
+              <mat-cell *matCellDef="let element" data-label="nombre"> {{element.nombres}} </mat-cell>
+            </ng-container>
+
+          <ng-container matColumnDef="fecha">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha </mat-header-cell>
+            <mat-cell *matCellDef="let element" data-label="Fecha"> {{element.nombres}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="vFechaNac">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> F. Nacimiento </mat-header-cell>
+            <mat-cell *matCellDef="let element" data-label="Fecha"> {{element.nombres}} </mat-cell>
+          </ng-container> 
+          
+          <ng-container matColumnDef="documento">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Documento </mat-header-cell>
+              <mat-cell *matCellDef="let element" data-label="Documento"> {{element.nombres}} </mat-cell>
+          </ng-container> 
+
+          <ng-container matColumnDef="nombre">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+            <mat-cell *matCellDef="let element" data-label="Nombre"> {{element.nombres}} </mat-cell>
+          </ng-container> 
+
+          <ng-container matColumnDef="sexo">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Sexo </mat-header-cell>
+            <mat-cell *matCellDef="let element" data-label="Sexo"> {{element.nombres}} </mat-cell>
+          </ng-container> 
+
+          <ng-container matColumnDef="edad">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Edad </mat-header-cell>
+            <mat-cell *matCellDef="let element" data-label="Edad"> {{element.nombres}} </mat-cell>
+          </ng-container> 
+
+          <ng-container matColumnDef="swt">
+            <mat-header-cell *matHeaderCellDef [ngClass]="'widthTable web'"> Estado </mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="'widthTable web'" data-label="estado">
+              <div class="circulo {{getClassEstado(element.swt)}}" style="margin-left: 0px;"></div>
+              <span style="padding-left: 12px" *ngIf="element.swt==1">ACTIVO</span>
+              <span style="padding-left: 12px" *ngIf="element.swt==0">NO ACTIVO</span>
+            </mat-cell>
+          </ng-container>
+                  
+          <ng-container matColumnDef="accion">
+            <mat-header-cell *matHeaderCellDef [ngClass]="'widthTable web'"></mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="'widthTable web'">
+              <a *ngIf="permiso.guardar" class="pointer edit" matTooltip="Editar" [routerLink]="['edit', element.nIdUsuario,true]">
+                <mat-icon>edit</mat-icon>
+              </a>
+              <a *ngIf="!permiso.guardar" class="pointer edit" matTooltip="Ver" [routerLink]="['edit', element.nIdUsuario,false]">
+                <mat-icon>visibility</mat-icon>
+              </a>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="mo">
+            <mat-header-cell *matHeaderCellDef [ngClass]="'widthTable mobil'"></mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="'widthTable mobil'">
+              <a class="pointer edit">
+                <div class="circulo {{getClassEstado(element.swt)}}" style="margin-left: 0px;"></div>
+              </a>
+              <div class="responsive-estado" style="font-weight:600;color: midnightblue; padding-left: 5px" *ngIf="element.swt==1">ACTIVO</div>   
+              <div class="responsive-estado" style="font-weight:600;color: midnightblue; padding-left: 5px" *ngIf="element.swt==0">NO ACTIVO</div>   
+
+
+              <div style="margin-left:auto;" class="tbcodigo">
+                <a *ngIf="permiso.guardar" class="pointer edit" matTooltip="Editar" [routerLink]="['edit', element.nIdUsuario,true]">
+                  <mat-icon>edit</mat-icon>
+                </a>
+                <a *ngIf="!permiso.guardar" class="pointer edit" matTooltip="Ver" [routerLink]="['edit', element.nIdUsuario,false]">
+                  <mat-icon>visibility</mat-icon>
+                </a>
+              </div>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+        
+        </mat-table>
+        <mat-paginator 
+          [length]="countRegistro" 
+          [pageSizeOptions]="[5, 10, 20]" 
+          showFirstLastButtons 
+          aria-label="Select page of users">
+        </mat-paginator>
+      </div>
+
+    </form>    
+  </mat-card>
+</div>

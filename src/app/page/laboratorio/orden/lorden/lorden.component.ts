@@ -3,15 +3,20 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
-import { Router } from '@angular/router';
 import { merge, of as observableOf } from 'rxjs';
 import { catchError, map, startWith, switchMap} from 'rxjs/operators';
 
-import { Orden, OrdenRequest } from 'src/app/_model/laboratorio/orden';
+import forms from 'src/assets/json/formulario.json';
+import jsonEstado from 'src/assets/json/usuario/usuarioestado.json';
 
-import { SpinnerService } from 'src/app/page/component/spinner/spinner.service';
+import { Orden } from 'src/app/_model/laboratorio/orden';
+import { Permiso } from 'src/app/_model/permiso';
+
 import { OrdenService } from 'src/app/_service/laboratorio/orden.service';
-import { NotifierService } from 'src/app/page/component/notifier/notifier.service';
+import { ConfigPermisoService } from 'src/app/_service/configpermiso.service';
+import { LogeoService } from 'src/app/_service/configuracion/logeo.service';
+import { environment } from 'src/environments/environment';
+import { FordenComponent } from '../forden/forden.component';
 
 
 @Component({
@@ -20,51 +25,67 @@ import { NotifierService } from 'src/app/page/component/notifier/notifier.servic
   styleUrls: ['./lorden.component.css']
 })
 export class LordenComponent implements OnInit {
-
+  
   dataSource: Orden[] = [];
-  displayedColumns: string[] = ['codigo','natencion', 'fecha', 'documento', 'nombre', 'sexo', 'edad'];
+  displayedColumns: string[] = ['vDocumento', 'vNombreCompleto', 'vSexo', 'vFechaNac','vUsuario','swt','accion','mo'];
   loading = true;
   existRegistro = false;
   countRegistro = 0;
 
+  permiso: Permiso = {};
   
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
   constructor(
     private http: HttpClient,
-    private router: Router,
     private dialog: MatDialog,
-    private spinnerService: SpinnerService,    
-    private notifierService : NotifierService,
     private ordenService: OrdenService,
+    private logeoService: LogeoService,
+    private configPermisoService: ConfigPermisoService
   ) { }
 
   ngOnInit(): void {
+    this.obtenerpermiso();
   }
 
-  
-  ngAfterViewInit() {
-    let req = new OrdenRequest();
+  obtenerpermiso(){
+    this.configPermisoService.obtenerpermiso(forms.usuario.codigo).subscribe(data=>{
+      this.permiso = data;
+    });   
+  }
 
+  cargarFiltro(){
+    let filtro = this.logeoService.sessionFiltro();
+    if(filtro!=null){ 
+      localStorage.setItem(environment.CODIGO_FILTRO, filtro![0]+"|"+filtro![1]+"|"+filtro![2]);
+    }else{
+      localStorage.setItem(environment.CODIGO_FILTRO, ""+"|"+""+"|"+"2");
+    }
+  }
+
+  ngAfterViewInit() {  
+    this.cargarFiltro();
     this.ordenService = new OrdenService(this.http);
     this.sort.sortChange.subscribe(() => (this.paginator.pageIndex = 0));
- 
-    req.page = this.paginator.pageIndex;
-    req.pages =  this.paginator.pageSize;
-    req.column = (this.sort.active == undefined)? '' : this.sort.active
-    req.order = this.sort.direction
-
+    
     merge(this.sort.sortChange, this.paginator.page)
       .pipe(
         startWith({}),
         switchMap(() => {
+          let filtro = this.logeoService.sessionFiltro();
+
           return this.ordenService!.listar(
-            req
+            filtro![0],
+            filtro![1],
+            filtro![2],
+            this.paginator.pageIndex,
+            this.paginator.pageSize,
+            this.sort.active,
+            this.sort.direction,
           ).pipe(catchError(() => observableOf(null)));
         }),
         map(res => {
-
            this.loading = false;
            this.existRegistro = res === null;
 
@@ -76,7 +97,37 @@ export class LordenComponent implements OnInit {
           return res.items;
         }),
       ).subscribe(data => (this.dataSource = data));
-      
+  
+  }
+
+  actualizar(){
+    this.ngAfterViewInit();
+  }
+
+  abrirBusqueda(){
+    const dialogRef =this.dialog.open(FordenComponent, {
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      width: '850px',
+      panelClass: 'full-screen-modal',
+    });
+
+    dialogRef.afterClosed().subscribe(res => {
+      if(res!=""){
+        this.paginator.pageIndex = 0,
+        this.paginator.pageSize = 5
+        this.ngAfterViewInit();
+        }
+    })
+  }
+
+  getClassEstado(idEstado: number){
+    var clase: string = '';
+    var objEstado = jsonEstado.find((e: any) => e.nIdEstado === idEstado);
+    if(objEstado !== undefined){
+      clase = objEstado.class;
+    }
+    return clase;
   }
 
 }
