@@ -21,6 +21,7 @@ import { LperfilexamenComponent } from './configuracion/perfil/lperfilexamen/lpe
 import { FusuaioComponent } from './configuracion/usuario/fusuaio/fusuaio.component';
 import { CinterfaceComponent } from './configuracion/interface/cinterface/cinterface.component';
 import { LinterfaceComponent } from './configuracion/interface/linterface/linterface.component';
+import { FinterfaceComponent } from './configuracion/interface/finterface/finterface.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { LinterfaceComponent } from './configuracion/interface/linterface/linter
     FusuaioComponent,
     CinterfaceComponent,
     LinterfaceComponent,
+    FinterfaceComponent,
   ],
   imports: [
     MaterialModule,

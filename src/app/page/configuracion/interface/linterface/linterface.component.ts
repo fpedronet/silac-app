@@ -12,10 +12,10 @@ import { Permiso } from 'src/app/_model/permiso';
 import { Interface } from 'src/app/_model/configuracion/interface';
 import { environment } from 'src/environments/environment';
 
-import { SpinnerService } from 'src/app/page/component/spinner/spinner.service';
 import { InterfaceService } from 'src/app/_service/configuracion/interface.service';
 import { ConfigPermisoService } from 'src/app/_service/configpermiso.service';
 import { LogeoService } from 'src/app/_service/configuracion/logeo.service';
+import { FinterfaceComponent } from '../finterface/finterface.component';
 
 
 @Component({
@@ -105,20 +105,20 @@ export class LinterfaceComponent implements OnInit {
   }
 
   abrirBusqueda(){
-    // const dialogRef =this.dialog.open(FusuaioComponent, {
-    //   maxWidth: '100vw',
-    //   maxHeight: '100vh',
-    //   width: '850px',
-    //   panelClass: 'full-screen-modal',
-    // });
+    const dialogRef =this.dialog.open(FinterfaceComponent, {
+      maxWidth: '100vw',
+      maxHeight: '100vh',
+      width: '850px',
+      panelClass: 'full-screen-modal',
+    });
 
-    // dialogRef.afterClosed().subscribe(res => {
-    //   if(res!=""){
-    //     this.paginator.pageIndex = 0,
-    //     this.paginator.pageSize = 5
-    //     this.ngAfterViewInit();
-    //     }
-    // })
+    dialogRef.afterClosed().subscribe(res => {
+      if(res!=""){
+        this.paginator.pageIndex = 0,
+        this.paginator.pageSize = 5
+        this.ngAfterViewInit();
+        }
+    })
   }
 
   getClassEstado(idEstado: number){
