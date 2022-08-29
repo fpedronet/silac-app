@@ -1,0 +1,11 @@
+.mat-divider{
+    margin-top: -8px;
+  }
+
+  table{
+    width: 100%;
+   }
+   .responsive-estado{
+    color: rgba(0,0,0,.87);
+    text-align: initial;
+  }

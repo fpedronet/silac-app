@@ -1,8 +1,5 @@
-import { ThisReceiver } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute, Router } from '@angular/router';
 import { NotifierService } from 'src/app/page/component/notifier/notifier.service';
 import { SpinnerService } from 'src/app/page/component/spinner/spinner.service';
 import { MenuDto } from 'src/app/_model/configuracion/menu';
@@ -25,12 +22,9 @@ export class CpermisoComponent implements OnInit {
   listaMenu: MenuDto[] = [];
 
   constructor(
-    private route: ActivatedRoute,
-    private router: Router,
     private notifierService : NotifierService,
-    private dialog: MatDialog,
-    private spinner : SpinnerService,
     private permisoService : PermisoService,
+    private spinnerService : SpinnerService,
   ) { }
 
   ngOnInit(): void {
@@ -38,28 +32,19 @@ export class CpermisoComponent implements OnInit {
   }
 
   listar(){ 
-    this.spinner.showLoading();
     this.permisoService.listar(0).subscribe(data=>{
       this.idperfil = data.nIdPerfil;
       this.nombreperfil = data.vDescripcion;
       this.listaPerfil = data.listaPerfil!;
       this.listaMenu = data.listaMenu!;
-
-      this.spinner.hideLoading();
     });  
   }
 
   listarMenu(id: number){    
-
-    // $(this).addClass("selected").siblings().removeClass("selected");
-
     this.idperfil = id;
-    this.spinner.showLoading();
     this.permisoService.listar(id).subscribe(data=>{
       this.nombreperfil = data.vDescripcion;
       this.listaMenu = data.listaMenu!;
-
-      this.spinner.hideLoading();
     });  
   }
 
@@ -73,10 +58,10 @@ export class CpermisoComponent implements OnInit {
     model.nIdPerfil = this.idperfil;
     model.listaMenu = this.listaMenu;
 
-    this.spinner.showLoading();
+    this.spinnerService.showLoading();
     this.permisoService.guardar(model).subscribe(data=>{
       this.notifierService.showNotification(data.typeResponse!,'Mensaje',data.message!);
-      this.spinner.hideLoading();
+      this.spinnerService.hideLoading();
 
       if(data.typeResponse==environment.EXITO){
         this.listarMenu(this.idperfil!);        

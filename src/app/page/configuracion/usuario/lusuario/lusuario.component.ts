@@ -18,7 +18,6 @@ import { FusuaioComponent } from '../fusuaio/fusuaio.component';
 import { LogeoService } from 'src/app/_service/configuracion/logeo.service';
 import { environment } from 'src/environments/environment';
 
-
 @Component({
   selector: 'app-lusuario',
   templateUrl: './lusuario.component.html',
@@ -34,13 +33,13 @@ export class LusuarioComponent implements OnInit {
 
   permiso: Permiso = {};
   
-  @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
 
   constructor(
     private http: HttpClient,
     private dialog: MatDialog,
-    private spinner: SpinnerService,    
+    private spinnerService: SpinnerService,    
     private usuarioService: UsuarioService,
     private logeoService: LogeoService,
     private configPermisoService: ConfigPermisoService
@@ -51,10 +50,8 @@ export class LusuarioComponent implements OnInit {
   }
 
   obtenerpermiso(){
-    this.spinner.showLoading();
     this.configPermisoService.obtenerpermiso(forms.usuario.codigo).subscribe(data=>{
       this.permiso = data;
-       this.spinner.hideLoading();
     });   
   }
 
@@ -76,7 +73,6 @@ export class LusuarioComponent implements OnInit {
       .pipe(
         startWith({}),
         switchMap(() => {
-          this.loading = true;
           let filtro = this.logeoService.sessionFiltro();
 
           return this.usuarioService!.listar(
@@ -133,5 +129,4 @@ export class LusuarioComponent implements OnInit {
     }
     return clase;
   }
-
 }
