@@ -23,10 +23,10 @@ export class OrdenService {
     // req.documento = documento;
     // req.data = data;
     // req.estado = (estado=="2")? "" : estado;
-    // req.page = page;
-    // req.pages =  pages;
-    // req.column = (column==undefined)?'':column;
-    // req.order = order;
+    req.page = page;
+    req.pages =  pages;
+    req.column = (column==undefined)?'':column;
+    req.order = order;
 
     return this.http.post<dataCollection>(urls,req);
   }

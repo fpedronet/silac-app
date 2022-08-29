@@ -1,1 +1,119 @@
-<p>forden works!</p>
+<h3 mat-dialog-title>BÚSQUEDA ORDEN</h3>
+
+<mat-dialog-content class="modal">
+    <div class="content">
+        <div fxLayout="row wrap" fxLayoutGap="16px grid">
+            <div div fxFlex="100%" fxFlex.xs="100%" fxFlex.sm="100%" style="padding: 0px 16px 0px 0px;">
+    
+                <div class="content contentTable">
+                    <div fxLayout="row wrap" fxLayoutGap="16px grid">
+                      <div div fxFlex="100%" fxFlex.xs="100%" fxFlex.sm="100%">
+                        <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+    
+                          <mat-grid-tile [colspan]="12">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Nombre</mat-label>
+                                <input #NOMBRE [(ngModel)]="nombre" matInput placeholder="Búsqueda" #input>
+                                <button *ngIf="NOMBRE.value" type="button" matSuffix mat-icon-button aria-label="NOMBRE" (click)="NOMBRE.value=''; nombre = ''">
+                                  <mat-icon>close</mat-icon>
+                                </button>
+                            </mat-form-field>
+                          </mat-grid-tile>
+    
+                          <mat-grid-tile [colspan]="6" style="margin-top:-20px;">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Tipo</mat-label>
+                                <mat-select 
+                                placeholder="Tipo"
+                                [(ngModel)]="tipo"                              
+                                >
+                                <mat-option [value]="2">Por Orden</mat-option>  
+                                <mat-option [value]="1">Por Examen</mat-option> 
+                                </mat-select>
+                            </mat-form-field>
+                          </mat-grid-tile>
+
+                          <mat-grid-tile [colspan]="6" style="margin-top:-20px;">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Estado</mat-label>
+                                <mat-select 
+                                placeholder="Estado"
+                                [(ngModel)]="estado"                              
+                                >
+                                <mat-option [value]="1">Todos</mat-option>  
+                                <mat-option [value]="2">Pendiente</mat-option> 
+                                <mat-option [value]="3">Por Validar</mat-option> 
+                                <mat-option [value]="4">Validado</mat-option> 
+                                <mat-option [value]="5">Error de Muestra</mat-option> 
+                                </mat-select>
+                            </mat-form-field>
+                          </mat-grid-tile>
+
+                          <mat-grid-tile [colspan]="6" style="margin-top:-35px;">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Área</mat-label>
+                                <mat-select 
+                                placeholder="Área"
+                                [(ngModel)]="area"                              
+                                >
+                                <mat-option [value]="1">Todos</mat-option>  
+                                <mat-option [value]="2">Pendiente</mat-option> 
+                                <mat-option [value]="3">Por Validar</mat-option> 
+                                <mat-option [value]="4">Validado</mat-option> 
+                                <mat-option [value]="5">Error de Muestra</mat-option> 
+                                </mat-select>
+                            </mat-form-field>
+                          </mat-grid-tile>
+
+                          <mat-grid-tile [colspan]="6" style="margin-top:-35px;">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Origen</mat-label>
+                                <mat-select 
+                                placeholder="Origen"
+                                [(ngModel)]="origen"                              
+                                >
+                                <mat-option [value]="1">Todos</mat-option>  
+                                <mat-option [value]="2">Pendiente</mat-option> 
+                                <mat-option [value]="3">Por Validar</mat-option> 
+                                <mat-option [value]="4">Validado</mat-option> 
+                                <mat-option [value]="5">Error de Muestra</mat-option> 
+                                </mat-select>
+                            </mat-form-field>
+                          </mat-grid-tile>
+
+                          <mat-grid-tile [colspan]="6" style="margin-top:-60px;">
+                            <mat-form-field appearance="outline" style="margin-top: 15px;">
+                                <mat-label>Fecha Inicio</mat-label>
+                                <input matInput [matDatepicker]="fechaInicio" placeholder="dd/mm/aaaa" [max]="fechaInicio" 
+                                [(ngModel)]="fechaSelectIni"  (dateChange)="onDateChange()" [max]="fechaMax">
+                                <mat-datepicker-toggle matSuffix [for]="fechaInicio"></mat-datepicker-toggle>
+                                <mat-datepicker #fechaInicio></mat-datepicker>
+                              </mat-form-field>
+                          </mat-grid-tile>
+
+                          <mat-grid-tile [colspan]="6" style="margin-top:-60px;">
+                            <mat-form-field appearance="outline" style="margin-top: 15px;">
+                                <mat-label>Fecha Fin</mat-label>
+                                <input matInput [matDatepicker]="fechaFin" placeholder="dd/mm/aaaa" [max]="fechaFin" 
+                                [(ngModel)]="fechaSelectFin" (dateChange)="onDateChange()" [max]="fechaMax">
+                                <mat-datepicker-toggle matSuffix [for]="fechaFin"></mat-datepicker-toggle>
+                                <mat-datepicker #fechaFin></mat-datepicker>
+                              </mat-form-field>
+                          </mat-grid-tile>                          
+    
+                        </mat-grid-list>
+                      </div>
+                      
+                    </div>
+                  </div>
+                  
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<div class="btnModal" align="end">
+  <button mat-stroked-button class="btnRed" mat-dialog-close><mat-icon>close</mat-icon>Cerrar</button> 
+  <button mat-stroked-button class="btnYellow"(click)="limpiar()"><mat-icon>cleaning_services</mat-icon>Limpiar</button>
+  <button mat-stroked-button class="btnBlue" (click)="buscar()"><mat-icon>search</mat-icon>Buscar</button>
+</div>

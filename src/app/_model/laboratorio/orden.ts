@@ -10,6 +10,7 @@ export class Orden  extends Persona {
     vCodBarras2?: string;
     vObservaciones?: string;
     dFecOrden?: Date;
+    vFecOrden?: string;
     nCodMedico?:number;
     vCodTipoMuestra?: string;
     vObsHistorial?: string;
