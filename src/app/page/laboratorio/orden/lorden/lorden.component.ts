@@ -10,8 +10,8 @@ import { catchError, map, startWith, switchMap} from 'rxjs/operators';
 import { Orden, OrdenRequest } from 'src/app/_model/laboratorio/orden';
 
 import { SpinnerService } from 'src/app/page/component/spinner/spinner.service';
-import { NotifierService } from '../../component/notifier/notifier.service';
 import { OrdenService } from 'src/app/_service/laboratorio/orden.service';
+import { NotifierService } from 'src/app/page/component/notifier/notifier.service';
 
 
 @Component({
@@ -35,7 +35,7 @@ export class LordenComponent implements OnInit {
     private http: HttpClient,
     private router: Router,
     private dialog: MatDialog,
-    private spinner: SpinnerService,    
+    private spinnerService: SpinnerService,    
     private notifierService : NotifierService,
     private ordenService: OrdenService,
   ) { }

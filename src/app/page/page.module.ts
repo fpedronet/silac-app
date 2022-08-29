@@ -10,8 +10,6 @@ import { PageRoutingModule } from './page-routing.module';
 import { InterceptorService } from '../_interceptors/interceptor.service';
 import { Not404Component } from './configuracion/not404/not404.component';
 import { Not403Component } from './configuracion/not403/not403.component';
-import { CordenComponent } from './orden/corden/corden.component';
-import { LordenComponent } from './orden/lorden/lorden.component';
 import { CpermisoComponent } from './configuracion/permiso/cpermiso/cpermiso.component';
 import { CexamenComponent } from './configuracion/examen/cexamen/cexamen.component';
 import { LexamenComponent } from './configuracion/examen/lexamen/lexamen.component';
@@ -22,6 +20,8 @@ import { FusuaioComponent } from './configuracion/usuario/fusuaio/fusuaio.compon
 import { CinterfaceComponent } from './configuracion/interface/cinterface/cinterface.component';
 import { LinterfaceComponent } from './configuracion/interface/linterface/linterface.component';
 import { FinterfaceComponent } from './configuracion/interface/finterface/finterface.component';
+import { CordenComponent } from './laboratorio/orden/corden/corden.component';
+import { LordenComponent } from './laboratorio/orden/lorden/lorden.component';
 
 @NgModule({
   declarations: [

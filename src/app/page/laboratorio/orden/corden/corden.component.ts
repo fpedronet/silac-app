@@ -3,14 +3,14 @@ import { FormGroup, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ConfimService } from 'src/app/page/component/confirm/confim.service';
+import { NotifierService } from 'src/app/page/component/notifier/notifier.service';
+import { SpinnerService } from 'src/app/page/component/spinner/spinner.service';
 import { TbMaestra } from 'src/app/_model/combobox';
 import { Orden } from 'src/app/_model/laboratorio/orden';
 import { Permiso } from 'src/app/_model/permiso';
 import { ConfigPermisoService } from 'src/app/_service/configpermiso.service';
 import { TbmaestraService } from 'src/app/_service/tbmaestra.service';
-import { ConfimService } from '../../component/confirm/confim.service';
-import { NotifierService } from '../../component/notifier/notifier.service';
-import { SpinnerService } from '../../component/spinner/spinner.service';
 
 import forms from 'src/assets/json/formulario.json';
 
