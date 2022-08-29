@@ -1,1 +1,44 @@
-<p>cinterface works!</p>
+<mat-toolbar color="primary" class="example-toolbar submenu example-button">
+    <div class="example-button-rowR">
+      <button mat-stroked-button class="btnHeader" routerLink="/page/configuracion/interface">
+        <mat-icon class="maticonmenu">arrow_back</mat-icon>
+        <span class="maticontitle">Atrás</span>
+      </button>
+    </div>
+    <div class="example-button-row">
+      <button *ngIf="edit && permiso.guardar" mat-stroked-button class="btnHeader" type="submit" [disabled]="frmGrupo.invalid" form="ngForm">
+        <mat-icon class="maticonmenu">save</mat-icon>
+        <span class="maticontitle">Guardar</span>
+      </button>
+      <button *ngIf="edit && permiso.guardar && id===0" mat-stroked-button class="btnHeader" type="button" (click)="limpiar()">
+        <mat-icon class="maticonmenu">cleaning_services</mat-icon>
+        <span class="maticontitle">Limpiar</span>
+      </button>
+    </div>
+</mat-toolbar>
+
+<div class="container">  
+    <mat-card class="cardborde">   
+    <mat-toolbar class="cardtitle"></mat-toolbar>
+
+    <h2 *ngIf="id==0" class="title-label">CREAR INTERFACE</h2>
+    <h2 *ngIf="id!==0 && !edit" class="title-label">VER INTERFACE</h2>
+    <h2 *ngIf="id!==0 && edit" class="title-label">EDITAR INTERFACE</h2>
+
+    <mat-divider></mat-divider>
+    
+    <div id="content"> 
+        <div style="width: 100%; float:left;margin-bottom: -17px;"> 
+        <!-- <div style="text-align: center; color: #1a0da4; font-weight: 500;padding-top: 11px;">{{nombres}}</div> 
+        <div style="text-align: center; color: #1a0da4; font-weight:600">{{documento}}</div>  -->
+        </div> 
+    </div>
+
+    <br style="clear:both;"/>
+
+        <form onkeydown="return event.key != 'Enter';" class="forms" id="ngForm" [formGroup]="form" #frmGrupo="ngForm" (ngSubmit)="guardar()">
+
+
+        </form>
+    </mat-card>
+</div>
