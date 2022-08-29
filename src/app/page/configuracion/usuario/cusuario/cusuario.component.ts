@@ -92,7 +92,7 @@ export class CusuarioComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
-    private spinner: SpinnerService,
+    private spinnerService: SpinnerService,
     private notifierService : NotifierService,
     private usuarioService: UsuarioService,
     private configPermisoService : ConfigPermisoService,
@@ -166,7 +166,7 @@ export class CusuarioComponent implements OnInit {
   }
 
   listarCombo(){
-    this.spinner.showLoading();
+    this.spinnerService.showLoading();
     this.tbmaestraService.cargarDatos(this.tablasMaestras).subscribe(data=>{
       this.listaTipoDocumento = this.obtenerSubtabla(data.items,'TDOC');
       this.listaTipoGenero = this.obtenerSubtabla(data.items,'SEXO');
@@ -266,7 +266,7 @@ export class CusuarioComponent implements OnInit {
         this.codEstado = (data.swt!=null)? data.swt!.toString()! : "1";
 
       
-      this.spinner.hideLoading();
+      this.spinnerService.hideLoading();
     });
   }
 
@@ -479,6 +479,8 @@ export class CusuarioComponent implements OnInit {
     var validacion = this.validaDocumento(tipoDocu, documento);
 
     if(validacion === ''){
+
+      this.spinnerService.showLoading();
       this.usuarioService.obtenerPersona(tipoDocu, documento).subscribe(data=>{
 
         data.vTipDocu = (data.vTipDocu==null)?  this.idTipoDocumento: data.vTipDocu;
@@ -521,6 +523,7 @@ export class CusuarioComponent implements OnInit {
           this.documento = data.vDocumento!;
           this.codEstado = (data.swt!=null)? data.swt!.toString()! : "1";
 
+          this.spinnerService.hideLoading();
         }else{
           this.poclabService.obtenerPersona("1", documento).subscribe(data=>{
            
@@ -554,7 +557,9 @@ export class CusuarioComponent implements OnInit {
               this.nombres = data.vApePaterno + " "+ data.vApeMaterno + " "+ data.vPrimerNombre + " "+data.vSegundoNombre
               this.documento = data.vDocumento!;
               this.codEstado = "1"; 
-            }             
+            }  
+            
+            this.spinnerService.hideLoading();
           });
         }
       });
@@ -696,16 +701,16 @@ export class CusuarioComponent implements OnInit {
     }
 
 
-    this.spinner.showLoading();
+    this.spinnerService.showLoading();
     this.usuarioService.guardar(model).subscribe(data=>{
 
     this.notifierService.showNotification(data.typeResponse!,'Mensaje',data.message!);
 
       if(data.typeResponse==environment.EXITO){
         this.router.navigate(['/page/configuracion/usuario']);
-        this.spinner.hideLoading();
+        this.spinnerService.hideLoading();
       }else{
-        this.spinner.hideLoading();
+        this.spinnerService.hideLoading();
       }
     });
 
