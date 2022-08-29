@@ -10,7 +10,7 @@ import { LordenComponent } from './orden/lorden/lorden.component';
 import { CordenComponent } from './orden/corden/corden.component';
 
 import { CpermisoComponent } from './configuracion/permiso/cpermiso/cpermiso.component';
-import { LexamenComponent } from './configuracion/lexamen/lexamen.component';
+import { LexamenComponent } from './configuracion/examen/lexamen/lexamen.component';
 
 import { LusuarioComponent } from './configuracion/usuario/lusuario/lusuario.component';
 import { CusuarioComponent } from './configuracion/usuario/cusuario/cusuario.component';

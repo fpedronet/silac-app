@@ -1,14 +1,15 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ConfimService } from 'src/app/page/component/confirm/confim.service';
+import { NotifierService } from 'src/app/page/component/notifier/notifier.service';
+import { SpinnerService } from 'src/app/page/component/spinner/spinner.service';
 import { TbMaestra } from 'src/app/_model/combobox';
 import { Examen } from 'src/app/_model/configuracion/examen';
 import { ExamenService } from 'src/app/_service/configuracion/examen.service';
 import { TbmaestraService } from 'src/app/_service/tbmaestra.service';
 import { environment } from 'src/environments/environment';
-import { ConfimService } from '../../component/confirm/confim.service';
-import { NotifierService } from '../../component/notifier/notifier.service';
-import { SpinnerService } from '../../component/spinner/spinner.service';
+
 
 @Component({
   selector: 'app-cexamen',

@@ -3,9 +3,6 @@ import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Examen } from 'src/app/_model/configuracion/examen';
 import { ConfigPermisoService } from 'src/app/_service/configpermiso.service';
-import { ConfimService } from '../../component/confirm/confim.service';
-import { SpinnerService } from '../../component/spinner/spinner.service';
-import { CexamenComponent } from '../cexamen/cexamen.component';
 import forms from 'src/assets/json/formulario.json';
 import { Permiso } from 'src/app/_model/permiso';
 import { Router } from '@angular/router';
@@ -16,6 +13,9 @@ import { merge, of as observableOf } from 'rxjs';
 import { catchError, map, startWith, switchMap} from 'rxjs/operators';
 import { ExamenService } from 'src/app/_service/configuracion/examen.service';
 import { MatInput } from '@angular/material/input';
+import { SpinnerService } from 'src/app/page/component/spinner/spinner.service';
+import { ConfimService } from 'src/app/page/component/confirm/confim.service';
+import { CexamenComponent } from '../cexamen/cexamen.component';
 
 @Component({
   selector: 'app-lexamen',
