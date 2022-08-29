@@ -6,6 +6,7 @@ import { MatSort } from '@angular/material/sort';
 import { merge, of as observableOf } from 'rxjs';
 import { catchError, map, startWith, switchMap} from 'rxjs/operators';
 import forms from 'src/assets/json/formulario.json';
+import jsonEstado from 'src/assets/json/usuario/usuarioestado.json';
 
 import { Usuario } from 'src/app/_model/configuracion/usuario';
 
@@ -26,7 +27,7 @@ import { environment } from 'src/environments/environment';
 export class LusuarioComponent implements OnInit {
 
   dataSource: Usuario[] = [];
-  displayedColumns: string[] = ['nIdUsuario', 'vDocumento', 'vNombreCompleto', 'vSexo', 'vFechaNac','vUsuario','accion'];
+  displayedColumns: string[] = ['vDocumento', 'vNombreCompleto', 'vSexo', 'vFechaNac','vUsuario','swt','accion','mo'];
   loading = true;
   existRegistro = false;
   countRegistro = 0;
@@ -122,6 +123,15 @@ export class LusuarioComponent implements OnInit {
         this.ngAfterViewInit();
         }
     })
+  }
+
+  getClassEstado(idEstado: number){
+    var clase: string = '';
+    var objEstado = jsonEstado.find((e: any) => e.nIdEstado === idEstado);
+    if(objEstado !== undefined){
+      clase = objEstado.class;
+    }
+    return clase;
   }
 
 }

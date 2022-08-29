@@ -1,0 +1,33 @@
+[
+    {
+        "nIdEstado":1,
+        "vDescripcion":"ACTIVO",
+        "visual":false,
+        "txtCambiarEstado":{"txt1":"Activo","txt2":"Activo"},
+        "sgteEstado":{"num1":6,"num2":5},
+        "sgteIcono":{"icon1":"check_circle","icon2":"settings"},
+        "mostrarPdf":false,
+        "reenviarPdf":false,
+        "eliminar":false,
+        "edicion":false,
+        "rechazar":false,
+        "class":"verde",
+        "pantallas":[1,1,1,1]
+    },
+    {
+        "nIdEstado":0,
+        "vDescripcion":"NO ACTIVO",
+        "visual":false,
+        "txtCambiarEstado":{"txt1":"No Activo","txt2":"No Activo"},
+        "sgteEstado":{"num1":0,"num2":0},
+        "sgteIcono":{"icon1":"check_circle","icon2":"settings"},
+        "mostrarPdf":false,
+        "reenviarPdf":false,
+        "eliminar":false,
+        "edicion":false,
+        "rechazar":false,
+        "class":"rojo",
+        "pantallas":[1,0,0,0]
+    }
+   
+]

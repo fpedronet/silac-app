@@ -32,16 +32,11 @@
         <div class="example-container mat-elevation-z0">
           <mat-table [dataSource]="dataSource" matSort>
            
-            <ng-container matColumnDef="nIdUsuario">
-              <mat-header-cell *matHeaderCellDef mat-sort-header>Código</mat-header-cell>
-              <mat-cell *matCellDef="let element" data-label="Código"> 
-                <div style="font-weight:600;color: #7f388a;">{{element.nIdUsuario}}</div>     
-              </mat-cell>
-            </ng-container>
-          
             <ng-container matColumnDef="vDocumento">
-              <mat-header-cell *matHeaderCellDef mat-sort-header> Documento </mat-header-cell>
-              <mat-cell *matCellDef="let element" data-label="Documento"> {{element.vDocumento}} </mat-cell>
+              <mat-header-cell *matHeaderCellDef mat-sort-header>Documento</mat-header-cell>
+              <mat-cell *matCellDef="let element" data-label="Documento"> 
+                <div style="font-weight:600;color: #7f388a;">{{element.vDocumento}}</div>     
+              </mat-cell>
             </ng-container>
               
             <ng-container matColumnDef="vNombreCompleto">
@@ -63,16 +58,46 @@
                 <mat-header-cell *matHeaderCellDef mat-sort-header> Usuario </mat-header-cell>
                 <mat-cell *matCellDef="let element" data-label="usuario"> {{element.vUsuario}} </mat-cell>
             </ng-container> 
+
+            <ng-container matColumnDef="swt">
+              <mat-header-cell *matHeaderCellDef [ngClass]="'widthTable web'"> Estado </mat-header-cell>
+              <mat-cell *matCellDef="let element" [ngClass]="'widthTable web'" data-label="estado">
+                <div class="circulo {{getClassEstado(element.swt)}}" style="margin-left: 0px;"></div>
+                <span style="padding-left: 12px" *ngIf="element.swt==1">ACTIVO</span>
+                <span style="padding-left: 12px" *ngIf="element.swt==0">NO ACTIVO</span>
+              </mat-cell>
+            </ng-container>
                     
             <ng-container matColumnDef="accion">
-              <mat-header-cell *matHeaderCellDef></mat-header-cell>
-              <mat-cell *matCellDef="let element" style="text-align: right;">
+              <mat-header-cell *matHeaderCellDef [ngClass]="'widthTable web'"></mat-header-cell>
+              <mat-cell *matCellDef="let element" [ngClass]="'widthTable web'">
                 <a *ngIf="permiso.guardar" class="pointer edit" matTooltip="Editar" [routerLink]="['edit', element.nIdUsuario,true]">
                   <mat-icon>edit</mat-icon>
                 </a>
                 <a *ngIf="!permiso.guardar" class="pointer edit" matTooltip="Ver" [routerLink]="['edit', element.nIdUsuario,false]">
                   <mat-icon>visibility</mat-icon>
                 </a>
+              </mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="mo">
+              <mat-header-cell *matHeaderCellDef [ngClass]="'widthTable mobil'"></mat-header-cell>
+              <mat-cell *matCellDef="let element" [ngClass]="'widthTable mobil'">
+                <a class="pointer edit">
+                  <div class="circulo {{getClassEstado(element.swt)}}" style="margin-left: 0px;"></div>
+                </a>
+                <div class="responsive-estado" style="font-weight:600;color: midnightblue; padding-left: 5px" *ngIf="element.swt==1">ACTIVO</div>   
+                <div class="responsive-estado" style="font-weight:600;color: midnightblue; padding-left: 5px" *ngIf="element.swt==0">NO ACTIVO</div>   
+
+
+                <div style="margin-left:auto;" class="tbcodigo">
+                  <a *ngIf="permiso.guardar" class="pointer edit" matTooltip="Editar" [routerLink]="['edit', element.nIdUsuario,true]">
+                    <mat-icon>edit</mat-icon>
+                  </a>
+                  <a *ngIf="!permiso.guardar" class="pointer edit" matTooltip="Ver" [routerLink]="['edit', element.nIdUsuario,false]">
+                    <mat-icon>visibility</mat-icon>
+                  </a>
+                </div>
               </mat-cell>
             </ng-container>
 

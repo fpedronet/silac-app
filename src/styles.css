@@ -775,9 +775,9 @@ mat-header-row {
   height:33px;
 }
 
-mat-row, mat-footer-row{
+/* mat-row, mat-footer-row{
   min-height: 44px !important;
-}
+} */
 
 @media (max-width:450px){
   .container {
