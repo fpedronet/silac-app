@@ -19,5 +19,10 @@ export class Orden  extends Persona {
 }
 
 export class OrdenRequest extends pagination {
-    nNumero?: number;
+    nombre?: string;
+    tipo?: string;
+    area?: string;
+    origen?: string;
+    fechaIni?: string;
+    fechaFin?: string;
 }
