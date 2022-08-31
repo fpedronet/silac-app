@@ -12,7 +12,8 @@ export class Examen{
         this.vRangoRef = '',
         this.vCodSubGrupo = '',
         this.vTipoRespuesta = '',
-        this.vRespuesta = ''        
+        this.vRespuesta = '',
+        this.selected = false;
     }
     nIdExamen?: number;
     vCodExamen?: string;
@@ -31,6 +32,7 @@ export class Examen{
     vRespuesta?: string;
     vDetalles?: string;
     nIncDetalle?: number;
+    selected?: boolean;
 }
 
 export class PerfilExamen{

@@ -200,9 +200,20 @@
 
       <mat-step>
         <ng-template matStepLabel>Exámenes</ng-template>
-
+        <mat-form-field appearance="outline">
+            <mat-label>Búsqueda</mat-label>
+            <input matInput (keyup)="buscaTexto($event)" placeholder="Búsqueda" #searchBar>
+            <mat-icon matSuffix>search</mat-icon>
+          </mat-form-field>
         <div class="content contentTable">
-
+            <ul>
+                <li *ngFor="let element of listaExamenes">
+                    <mat-checkbox
+                        >
+                        {{element.vDescripcion}}
+                    </mat-checkbox>
+                </li>
+            </ul>
         </div>
         <div style="padding-top: 10px">          
           <button class="btnprevio" mat-button matStepperPrevious type="button">Atrás</button>
