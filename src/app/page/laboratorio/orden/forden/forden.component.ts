@@ -59,9 +59,9 @@ export class FordenComponent implements OnInit {
       this.listaOrigen = this.obtenerSubtabla(data.items,'ORIG');
 
       let filtro = this.logeoService.sessionFiltro();
-
+      debugger;
       this.nombre= filtro![0];
-      this.tipo= (filtro![1] =="")? "999" : filtro![1];
+      this.tipo= filtro![1];
       this.area= (filtro![2] =="")? "999" : filtro![2];
       this.origen= (filtro![3] =="")? "999" : filtro![3];
       this.estado=  "999"

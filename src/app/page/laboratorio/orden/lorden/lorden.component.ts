@@ -62,7 +62,7 @@ export class LordenComponent implements OnInit {
     if(filtro!=null){ 
       localStorage.setItem(environment.CODIGO_FILTRO, filtro![0]+"|"+filtro![1]+"|"+filtro![2]+"|"+filtro![3]+"|"+filtro![4]+"|"+filtro![5]);
     }else{
-      localStorage.setItem(environment.CODIGO_FILTRO, ""+"|"+""+"|"+""+"|"+""+"|"+fecha+"|"+fecha);
+      localStorage.setItem(environment.CODIGO_FILTRO, ""+"|"+"0001"+"|"+""+"|"+""+"|"+fecha+"|"+fecha);
     }
   }
 
@@ -75,6 +75,7 @@ export class LordenComponent implements OnInit {
       .pipe(
         startWith({}),
         switchMap(() => {
+          debugger;
           let filtro = this.logeoService.sessionFiltro();
 
           return this.ordenService!.listar(

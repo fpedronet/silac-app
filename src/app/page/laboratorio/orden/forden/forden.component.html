@@ -28,7 +28,6 @@
                                 [(ngModel)]="tipo"
                                 (selectionChange)="onSelectChange($event.value, 'Tipo')"                            
                                 >
-                                <mat-option [value]="'999'">TODOS</mat-option>
                                 <mat-option *ngFor="let c of listaTipo" [value]="c.vValor">
                                   {{c.vDescripcion}}
                                  </mat-option>
