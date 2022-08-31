@@ -1,15 +1,20 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Params, Router } from '@angular/router';
+import { merge, of as observableOf } from 'rxjs';
+import { catchError, map, startWith, switchMap} from 'rxjs/operators';
 import { ConfimService } from 'src/app/page/component/confirm/confim.service';
 import { NotifierService } from 'src/app/page/component/notifier/notifier.service';
 import { SpinnerService } from 'src/app/page/component/spinner/spinner.service';
 import { TbMaestra } from 'src/app/_model/combobox';
+import { Examen } from 'src/app/_model/configuracion/examen';
 import { Orden } from 'src/app/_model/laboratorio/orden';
 import { Permiso } from 'src/app/_model/permiso';
 import { ConfigPermisoService } from 'src/app/_service/configpermiso.service';
+import { ExamenService } from 'src/app/_service/configuracion/examen.service';
 import { TbmaestraService } from 'src/app/_service/tbmaestra.service';
 
 import forms from 'src/assets/json/formulario.json';
@@ -46,9 +51,13 @@ export class CordenComponent implements OnInit {
   initDisplayedColumns: string[] = ['concepto', 'vFecha', 'documento', 'vMonto', 'proveedor', 'descripcion', 'comodato', 'adjunto', 'accion', 'mo'];
   displayedColumns: string[] = [];
 
+  listaExamenes: Examen[] = [];
+  listaPerfiles: Examen[] = [];
+
   fechaMax?: Date;
   
   constructor(
+    private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
@@ -56,7 +65,8 @@ export class CordenComponent implements OnInit {
     private notifierService : NotifierService,
     private confirmService : ConfimService,
     private tbmaestraService: TbmaestraService,
-    private configPermisoService : ConfigPermisoService
+    private configPermisoService : ConfigPermisoService,
+    private examenService : ExamenService
   ) {
   }
 
@@ -71,6 +81,8 @@ export class CordenComponent implements OnInit {
     this.route.params.subscribe((data: Params)=>{
       this.id = (data["id"]==undefined)?0:parseInt(data["id"]);
       this.listarComodatos().then(res => {
+        this.listarExamenes();
+        this.listarPerfiles();
         this.obtener(true);
       });
     });
@@ -104,6 +116,58 @@ export class CordenComponent implements OnInit {
         resolve('ok')
       });
     })
+  }
+
+  listarExamenes(search: string = '') {
+
+    this.examenService = new ExamenService(this.http);
+
+    merge()
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          return this.examenService!.listar(
+            search
+          ).pipe(catchError(() => observableOf(null)));
+        }),
+        map(res => {
+
+          if (res === null) {
+            return [];
+          }
+
+          return res.items;
+        }),
+      ).subscribe(data => (this.listaExamenes = data));
+  }
+
+  listarPerfiles(search: string = ''){ 
+    this.examenService = new ExamenService(this.http);
+
+    merge()
+      .pipe(
+        startWith({}),
+        switchMap(() => {
+          return this.examenService!.listarPerfil(
+            search
+          ).pipe(catchError(() => observableOf(null)));
+        }),
+        map(res => {
+
+          if (res === null) {
+            return [];
+          }
+
+          return res.items;
+        }),
+      ).subscribe(data => (this.listaPerfiles = data));
+      
+  }
+
+  buscaTexto(event: Event) {
+  
+    let data = (event.target as HTMLInputElement).value;
+    this.listarExamenes(data);
   }
 
   obtenerSubtabla(tb: TbMaestra[], cod: string){
@@ -242,7 +306,7 @@ export class CordenComponent implements OnInit {
   obtenerpermiso(){
     this.spinner.showLoading();
     this.configPermisoService.obtenerpermiso(forms.orden.codigo).subscribe(data=>{
-      debugger;
+      //debugger;
       this.permiso = data;
       this.spinner.hideLoading();
     });
@@ -332,3 +396,4 @@ export class CordenComponent implements OnInit {
     })
   }*/
 }
+
