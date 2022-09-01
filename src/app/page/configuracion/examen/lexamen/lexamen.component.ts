@@ -102,7 +102,7 @@ export class LexamenComponent implements OnInit {
         startWith({}),
         switchMap(() => {
           return this.examenService!.listar(
-            search, page, pages, column, order
+            search, [], '', page, pages, column, order
           ).pipe(catchError(() => observableOf(null)));
         }),
         map(res => {

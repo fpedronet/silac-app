@@ -36,6 +36,7 @@ import {MatTabsModule} from '@angular/material/tabs';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {MatTreeModule} from '@angular/material/tree';
 import {WebcamModule} from 'ngx-webcam';
+import {MatChipsModule} from '@angular/material/chips';
 
 @NgModule({
   declarations: [],
@@ -76,7 +77,8 @@ import {WebcamModule} from 'ngx-webcam';
     MatTabsModule,
     MatExpansionModule,
     MatTreeModule,
-    WebcamModule
+    WebcamModule,
+    MatChipsModule
     ],
   providers: [
     { provide: MAT_DATE_LOCALE, useValue: 'es-ES' },

@@ -13,7 +13,7 @@ export class Examen{
         this.vCodSubGrupo = '',
         this.vTipoRespuesta = '',
         this.vRespuesta = '',
-        this.selected = false;
+        this.selected = true;
     }
     nIdExamen?: number;
     vCodExamen?: string;
