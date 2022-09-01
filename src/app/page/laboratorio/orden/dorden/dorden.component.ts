@@ -28,6 +28,7 @@ export class DordenComponent implements OnInit {
   edit: boolean = true;
   nombres: string = "FRANCISCO PEDRO CONDOR MARTIEZ";
   estado: string = "VALIDACION PARCIAL";
+  claseEstado: string = "verde";
 
   constructor(
     private route: ActivatedRoute,
