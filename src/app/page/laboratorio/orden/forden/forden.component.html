@@ -25,10 +25,12 @@
                                 <mat-label>Tipo</mat-label>
                                 <mat-select 
                                 placeholder="Tipo"
-                                [(ngModel)]="tipo"                              
+                                [(ngModel)]="tipo"
+                                (selectionChange)="onSelectChange($event.value, 'Tipo')"                            
                                 >
-                                <mat-option [value]="2">Por Orden</mat-option>  
-                                <mat-option [value]="1">Por Examen</mat-option> 
+                                <mat-option *ngFor="let c of listaTipo" [value]="c.vValor">
+                                  {{c.vDescripcion}}
+                                 </mat-option>
                                 </mat-select>
                             </mat-form-field>
                           </mat-grid-tile>
@@ -38,13 +40,13 @@
                                 <mat-label>Estado</mat-label>
                                 <mat-select 
                                 placeholder="Estado"
-                                [(ngModel)]="estado"                              
+                                [(ngModel)]="estado"
+                                (selectionChange)="onSelectChange($event.value, 'Estado')"                            
                                 >
-                                <mat-option [value]="1">Todos</mat-option>  
-                                <mat-option [value]="2">Pendiente</mat-option> 
-                                <mat-option [value]="3">Por Validar</mat-option> 
-                                <mat-option [value]="4">Validado</mat-option> 
-                                <mat-option [value]="5">Error de Muestra</mat-option> 
+                                <mat-option [value]="'999'">TODOS</mat-option>
+                                <mat-option *ngFor="let c of listaEstado" [value]="c.vValor">
+                                  {{c.vDescripcion}}
+                                 </mat-option>
                                 </mat-select>
                             </mat-form-field>
                           </mat-grid-tile>
@@ -54,13 +56,13 @@
                                 <mat-label>Área</mat-label>
                                 <mat-select 
                                 placeholder="Área"
-                                [(ngModel)]="area"                              
+                                [(ngModel)]="area"
+                                (selectionChange)="onSelectChange($event.value, 'Area')"                            
                                 >
-                                <mat-option [value]="1">Todos</mat-option>  
-                                <mat-option [value]="2">Pendiente</mat-option> 
-                                <mat-option [value]="3">Por Validar</mat-option> 
-                                <mat-option [value]="4">Validado</mat-option> 
-                                <mat-option [value]="5">Error de Muestra</mat-option> 
+                                <mat-option [value]="'999'">TODOS</mat-option>
+                                <mat-option *ngFor="let c of listaArea" [value]="c.vValor">
+                                  {{c.vDescripcion}}
+                                 </mat-option>
                                 </mat-select>
                             </mat-form-field>
                           </mat-grid-tile>
@@ -70,13 +72,13 @@
                                 <mat-label>Origen</mat-label>
                                 <mat-select 
                                 placeholder="Origen"
-                                [(ngModel)]="origen"                              
+                                [(ngModel)]="origen"
+                                (selectionChange)="onSelectChange($event.value, 'Origen')"                            
                                 >
-                                <mat-option [value]="1">Todos</mat-option>  
-                                <mat-option [value]="2">Pendiente</mat-option> 
-                                <mat-option [value]="3">Por Validar</mat-option> 
-                                <mat-option [value]="4">Validado</mat-option> 
-                                <mat-option [value]="5">Error de Muestra</mat-option> 
+                                <mat-option [value]="'999'">TODOS</mat-option>
+                                <mat-option *ngFor="let c of listaOrigen" [value]="c.vValor">
+                                  {{c.vDescripcion}}
+                                 </mat-option>
                                 </mat-select>
                             </mat-form-field>
                           </mat-grid-tile>

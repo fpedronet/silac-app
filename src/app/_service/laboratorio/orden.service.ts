@@ -16,13 +16,15 @@ export class OrdenService {
 
   private url: string = `${environment.UrlApi}/orden`;
 
-  listar(documento: string, data: string, estado: string, page: number,pages: number, column: string, order: SortDirection) {
-  
+  listar(nombre: string, tipo: string, area: string, origen: string, fechaIni: Date, fechaFin: Date, page: number,pages: number, column: string, order: SortDirection) {
     let urls = `${this.url}/GetAllOrden`;
     let req = new OrdenRequest();
-    // req.documento = documento;
-    // req.data = data;
-    // req.estado = (estado=="2")? "" : estado;
+    req.nombre = nombre;
+    req.tipo = tipo;
+    req.area = area;
+    req.origen = origen;
+    req.fechaIni = (fechaIni==undefined)? '' : fechaIni.toISOString().split('T')[0];
+    req.fechaFin = (fechaFin==undefined)? '' : fechaFin.toISOString().split('T')[0];
     req.page = page;
     req.pages =  pages;
     req.column = (column==undefined)?'':column;

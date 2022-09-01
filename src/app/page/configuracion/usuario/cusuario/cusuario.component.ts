@@ -97,7 +97,9 @@ export class CusuarioComponent implements OnInit {
     private configPermisoService : ConfigPermisoService,
     private tbmaestraService : TbmaestraService,
     private poclabService: PoclabService
-  ) { }
+  ) {
+    
+   }
 
   ngOnInit(): void {
 

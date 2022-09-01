@@ -57,10 +57,12 @@ export class LordenComponent implements OnInit {
 
   cargarFiltro(){
     let filtro = this.logeoService.sessionFiltro();
+    let fecha = new Date();
+
     if(filtro!=null){ 
-      localStorage.setItem(environment.CODIGO_FILTRO, filtro![0]+"|"+filtro![1]+"|"+filtro![2]);
+      localStorage.setItem(environment.CODIGO_FILTRO, filtro![0]+"|"+filtro![1]+"|"+filtro![2]+"|"+filtro![3]+"|"+filtro![4]+"|"+filtro![5]);
     }else{
-      localStorage.setItem(environment.CODIGO_FILTRO, ""+"|"+""+"|"+"2");
+      localStorage.setItem(environment.CODIGO_FILTRO, ""+"|"+"0001"+"|"+""+"|"+""+"|"+fecha+"|"+fecha);
     }
   }
 
@@ -73,12 +75,16 @@ export class LordenComponent implements OnInit {
       .pipe(
         startWith({}),
         switchMap(() => {
+          debugger;
           let filtro = this.logeoService.sessionFiltro();
 
           return this.ordenService!.listar(
             filtro![0],
             filtro![1],
             filtro![2],
+            filtro![3],
+            new Date(filtro![4]),
+            new Date(filtro![5]),
             this.paginator.pageIndex,
             this.paginator.pageSize,
             this.sort.active,
