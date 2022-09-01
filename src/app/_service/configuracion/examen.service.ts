@@ -16,8 +16,8 @@ export class ExamenService {
 
   private url: string = `${environment.UrlApi}/examen`;
 
-  listar(search?: string, page: number = 1,pages: number = 500, column?: string, order?: string) {
-    let urls = `${this.url}/GetAllExamen?search=${search}&page=${page}&pages=${pages}&column=${column}&order=${order}`;
+  listar(search?: string, perfil: number[] = [], area: string = '', page: number = 1,pages: number = 500, column: string = '', order: string = '') {
+    let urls = `${this.url}/GetAllExamen?search=${search}&perfil=${perfil.join('|')}&area=${area}&page=${page}&pages=${pages}&column=${column}&order=${order}`;
     return this.http.get<dataCollection>(urls);
   }
 
@@ -31,7 +31,7 @@ export class ExamenService {
     return this.http.post<Response>(urls, model);
   }
 
-  listarPerfil(search?: string, page: number = 1, pages: number = 50, column?: string, order?: string) {   
+  listarPerfil(search?: string, page: number = 1, pages: number = 50, column: string = '', order: string = '') {   
     let urls = `${this.url}/GetAllPerfilExamen?search=${search}&page=${page}&pages=${pages}&column=${column}&order=${order}`;
     return this.http.get<dataCollection>(urls);
   }

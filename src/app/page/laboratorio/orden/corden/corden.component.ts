@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
+import { MatCheckboxChange } from '@angular/material/checkbox';
 import { MatDialog } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Params, Router } from '@angular/router';
@@ -10,7 +11,7 @@ import { ConfimService } from 'src/app/page/component/confirm/confim.service';
 import { NotifierService } from 'src/app/page/component/notifier/notifier.service';
 import { SpinnerService } from 'src/app/page/component/spinner/spinner.service';
 import { TbMaestra } from 'src/app/_model/combobox';
-import { Examen } from 'src/app/_model/configuracion/examen';
+import { Examen, PerfilExamen } from 'src/app/_model/configuracion/examen';
 import { Orden } from 'src/app/_model/laboratorio/orden';
 import { Permiso } from 'src/app/_model/permiso';
 import { ConfigPermisoService } from 'src/app/_service/configpermiso.service';
@@ -32,13 +33,18 @@ export class CordenComponent implements OnInit {
   form: FormGroup = new FormGroup({});
   permiso: Permiso = {};
 
-  tablasMaestras = ['TDOC', 'SEXO', 'ORIPA', 'SERV'];
+  tablasMaestras = ['AREXA', 'TDOC', 'SEXO', 'ORIPA', 'SERV'];
+  tbArea: TbMaestra[] = [];
   tbDocu: TbMaestra[] = [];
   tbSexo: TbMaestra[] = [];
   tbOrig: TbMaestra[] = [];
   tbServ: TbMaestra[] = [];
   tbProcedencia: TbMaestra[] = [];
   nombresUsuario?: string = '';
+
+  findText: string = '';
+  selectedArea: string = '';
+  selectedPerfil: number[] = [];
 
   codigo?: number;
   id: number = 0;
@@ -52,7 +58,7 @@ export class CordenComponent implements OnInit {
   displayedColumns: string[] = [];
 
   listaExamenes: Examen[] = [];
-  listaPerfiles: Examen[] = [];
+  listaPerfiles: PerfilExamen[] = [];
 
   fechaMax?: Date;
   
@@ -80,9 +86,9 @@ export class CordenComponent implements OnInit {
 
     this.route.params.subscribe((data: Params)=>{
       this.id = (data["id"]==undefined)?0:parseInt(data["id"]);
-      this.listarComodatos().then(res => {
+      this.listarMaestros().then(res => {
         this.listarExamenes();
-        this.listarPerfiles();
+        this.listarPerfiles();        
         this.obtener(true);
       });
     });
@@ -92,7 +98,7 @@ export class CordenComponent implements OnInit {
     this.stepper._getIndicatorType = () => 'number';
   }
 
-  async listarComodatos(){
+  async listarMaestros(){
     return new Promise(async (resolve) => {
     
       this.tbmaestraService.cargarDatos(this.tablasMaestras).subscribe(data=>{
@@ -106,10 +112,15 @@ export class CordenComponent implements OnInit {
           else{
             var tbCombobox: TbMaestra[] = data.items;
           
+            this.tbArea = this.obtenerSubtabla(tbCombobox,'AREXA');
             this.tbDocu = this.obtenerSubtabla(tbCombobox,'TDOC');
             this.tbSexo = this.obtenerSubtabla(tbCombobox,'SEXO');
             this.tbOrig = this.obtenerSubtabla(tbCombobox,'ORIPA');
             this.tbServ = this.obtenerSubtabla(tbCombobox,'SERV');
+
+            //Área por defecto
+            if(this.tbArea.length > 0)
+              this.selectedArea = this.tbArea[0].vValor!;
           }          
         }
 
@@ -118,7 +129,7 @@ export class CordenComponent implements OnInit {
     })
   }
 
-  listarExamenes(search: string = '') {
+  listarExamenes() {
 
     this.examenService = new ExamenService(this.http);
 
@@ -127,14 +138,14 @@ export class CordenComponent implements OnInit {
         startWith({}),
         switchMap(() => {
           return this.examenService!.listar(
-            search
+            this.findText, [], this.selectedArea
           ).pipe(catchError(() => observableOf(null)));
         }),
         map(res => {
 
           if (res === null) {
             return [];
-          }
+          }         
 
           return res.items;
         }),
@@ -164,11 +175,34 @@ export class CordenComponent implements OnInit {
       
   }
 
-  buscaTexto(event: Event) {
-  
-    let data = (event.target as HTMLInputElement).value;
-    this.listarExamenes(data);
+  buscaTexto(event: Event) {  
+    this.findText = (event.target as HTMLInputElement).value;
+    this.listarExamenes();
   }
+
+  cambiaArea(area: string) {  
+    this.selectedArea = area;
+    this.listarExamenes();
+  }
+
+  cambiaPerfil(ob: MatCheckboxChange, id: number = 0) {
+    //Obteniene exámenes
+    if(id > 0){
+      //this.spinner.showLoading();
+      this.examenService.obtenerPerfil(id).subscribe(data=>{
+        if(data!== undefined){
+          var examenes = data.listaExamenesA;
+          //Marca exámenes
+          var filterExamenes = this.listaExamenes.filter(e => examenes.some(f => f.nIdExamen === e.nIdExamen))
+          filterExamenes.forEach(e => {
+            e.selected = ob.checked;
+          });
+
+          //this.spinner.hideLoading();
+        }
+      });
+    }
+  }  
 
   obtenerSubtabla(tb: TbMaestra[], cod: string){
     return tb.filter(e => e.vEtiqueta?.toString()?.trim() === cod);
