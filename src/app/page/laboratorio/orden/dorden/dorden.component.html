@@ -1,0 +1,165 @@
+<mat-toolbar color="primary" class="example-toolbar submenu example-button">
+    <div class="example-button-rowR">
+      <button mat-stroked-button class="btnHeader" routerLink="/page/laboratorio/ordenes">
+        <mat-icon class="maticonmenu">arrow_back</mat-icon>
+        <span class="maticontitle">Atrás</span>
+      </button>
+    </div>
+    <div class="example-button-row">
+      <button *ngIf="edit && permiso.guardar" mat-stroked-button class="btnHeader" type="submit" [disabled]="frmGrupo.invalid" form="ngForm">
+        <mat-icon class="maticonmenu">save</mat-icon>
+        <span class="maticontitle">Guardar</span>
+      </button>
+    </div>
+</mat-toolbar>
+
+<div class="container">  
+    <mat-card class="cardborde">   
+    <mat-toolbar class="cardtitle"></mat-toolbar>
+
+    <h2 *ngIf="id==0" class="title-label">DETALLE DE ORDEN</h2>
+    <h2 *ngIf="id!==0 && !edit" class="title-label">DETALLE DE ORDEN</h2>
+    <h2 *ngIf="id!==0 && edit" class="title-label">DETALLE DE ORDEN</h2>
+
+    <mat-divider></mat-divider>
+    
+    <div id="content"> 
+        <div style="width: 100%; float:left;margin-bottom: -17px;"> 
+            <div style="text-align: center; color: #1a0da4; font-weight: 500;padding-top: 11px;">{{nombres}}</div> 
+            <div style="text-align: center; color: #1a0da4; font-weight:600">{{estado}}</div> 
+        </div> 
+    </div>
+
+    <br style="clear:both;"/>
+    <br style="clear:both;"/>
+    <mat-divider></mat-divider>
+
+        <form onkeydown="return event.key != 'Enter';" class="forms" id="ngForm" [formGroup]="form" #frmGrupo="ngForm" (ngSubmit)="guardar()">
+
+            <div class="content">
+                <div fxLayout="row wrap" fxLayoutGap="16px grid">
+                    
+                    <div fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="60%">
+
+                        <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                            <mat-grid-tile [colspan]="6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Orden</mat-label>
+                                    <input matInput placeholder="Orden" formControlName="vApPaterno" >
+                                </mat-form-field>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>DNI</mat-label>
+                                    <input matInput placeholder="DNI" formControlName="vApMaterno">
+                                </mat-form-field>
+                            </mat-grid-tile>
+                        </mat-grid-list>
+            
+                        <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                            <mat-grid-tile [colspan]="6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Fecha</mat-label>
+                                    <input matInput placeholder="Fecha" formControlName="vApPaterno">
+                                </mat-form-field>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Procedencia</mat-label>
+                                    <input matInput placeholder="Procedencia" formControlName="vApMaterno">
+                                </mat-form-field>
+                            </mat-grid-tile>
+                        </mat-grid-list>
+
+                    </div>
+
+                    <div fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="60%">
+
+                        <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                            <mat-grid-tile [colspan]="6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Detalle</mat-label>
+                                    <input matInput placeholder="Detalle" formControlName="vSegundoNombre">
+                                </mat-form-field>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="6">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Servicio</mat-label>
+                                    <input matInput placeholder="Servicio" formControlName="vSegundoNombre">
+                                </mat-form-field>
+                            </mat-grid-tile>
+                        </mat-grid-list>
+
+                        <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                            <mat-grid-tile [colspan]="12">
+                                <mat-form-field appearance="outline">
+                                    <mat-label>Observación</mat-label>
+                                    <input matInput placeholder="Observación" formControlName="vSegundoNombre" minlength="1" maxlength="200" style="text-transform: uppercase;">
+                                </mat-form-field>
+                            </mat-grid-tile>
+                        </mat-grid-list>
+
+                    </div>
+
+                    <div class="contents contentTable">           
+                        <label class="labelSubtittle">RESULTADOS</label>
+                        <mat-divider></mat-divider>
+                        
+                        <div class="spacetable">
+                            <table class="table2">
+                                <thead>
+                                <tr>
+                                    <th>CÓDIGO</th>      
+                                    <th>EXÁMEN</th>     
+                                    <th>RESULTADO</th>     
+                                    <th>FLG</th>     
+                                    <th>U.M.</th>     
+                                    <th>DETALLE</th>     
+                                    <th>REFERENCIA</th>    
+                                    <th>RESULTADO ANT.</th>     
+                                    <th>RANGO MIN.</th>      
+                                    <th>RANGO MAX.</th>    
+                                    <th></th>                  
+                                </tr>
+                                </thead>                                    
+                                <tbody>
+                                <tr>
+                                    <td class="width-min">TACRO</td>
+                                    <td class="width-med">TACROLIMUS</td>
+                                    <td style="overflow-wrap: break-word; max-width: 800px;"><input type="text"/></td>
+                                    <td class="width-med">-</td>
+                                    <td class="width-min">ng/ml</td>
+                                    <td style="overflow-wrap: break-word; max-width: 800px;"><input type="text"/></td>
+                                    <td class="width-med">esto es una prueba</td>
+                                    <td class="width-med">-</td>
+                                    <td class="width-med">0.0000</td>
+                                    <td class="width-med">30.0000</td>
+
+                                    <td>
+                                        <div style="margin-left:auto;height: 25px;">
+                                            <a class="pointer ver" matTooltip="Adjunto" target="_blank">
+                                            <mat-icon>attach_file</mat-icon>
+                                            </a>
+                                            <a class="pointer ver" matTooltip="Ver">
+                                            <mat-icon>visibility</mat-icon>
+                                            </a>
+                                            <a class="pointer edit" matTooltip="Editar">
+                                            <mat-icon>edit</mat-icon>
+                                            </a>
+                                            <a class="pointer delete" matTooltip="Eliminar">
+                                            <mat-icon>delete</mat-icon>
+                                            </a>
+                                        </div>
+                                    </td>
+                                </tr>                          
+                                </tbody>                                   
+                            </table>
+                        </div>
+                    </div>                  
+                    
+                </div>
+            </div>
+
+        </form>
+    </mat-card>
+</div>

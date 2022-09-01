@@ -1,0 +1,54 @@
+.content {
+    overflow: hidden;
+    padding: 0 24px 24px 24px;
+}
+
+.contentTable{
+  padding: 0 0 24px 0; 
+  width: 100%;
+}
+
+.spacetable{
+  margin-left:-14px;
+  margin-top:11px;
+}
+
+  .table2 {
+    background: white;
+    margin-bottom: 1.25em;
+    border-collapse: collapse;
+    border-spacing: 0;
+    margin: 2px 0px 0 21px;
+  }
+  
+  table tr th,
+  table tr td {
+    padding: 0.2625em 0.325em;
+    font-size: 0.875em;
+    color: #c13c04;
+  }
+
+  .table2 tr th,
+  .table2 tr td {
+    font-size: 0.875em;
+    color: #043995;
+    border: 0.05px solid #dddddd;
+  }
+  
+  table tr.even,
+  table tr.alt,
+  table tr:nth-of-type(even) {
+    background: #f9f9f9;
+  }
+
+  .width-min{
+    width: 1%; white-space: nowrap;
+  }
+
+  .width-med{
+    width: 10%; white-space: nowrap;
+  }
+
+  .width-max{
+    width: 20%;
+  }

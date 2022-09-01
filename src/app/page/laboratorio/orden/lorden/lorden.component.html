@@ -82,6 +82,9 @@
               <a *ngIf="!permiso.guardar" class="pointer edit" matTooltip="Ver" [routerLink]="['edit', element.nIdOrden,false]">
                 <mat-icon>visibility</mat-icon>
               </a>
+              <a class="pointer detail" matTooltip="Detalle" [routerLink]="['detail', element.nIdOrden,false]">
+                <mat-icon>add_to_queue</mat-icon>
+              </a>
             </mat-cell>
           </ng-container>
 
@@ -101,6 +104,9 @@
                 </a>
                 <a *ngIf="!permiso.guardar" class="pointer edit" matTooltip="Ver" [routerLink]="['edit', element.nIdOrden,false]">
                   <mat-icon>visibility</mat-icon>
+                </a>
+                <a class="pointer detail" matTooltip="Detalle" [routerLink]="['detail', element.nIdOrden,true]">
+                  <mat-icon>add_to_queue</mat-icon>
                 </a>
               </div>
             </mat-cell>

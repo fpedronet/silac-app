@@ -23,6 +23,7 @@ import { FinterfaceComponent } from './configuracion/interface/finterface/finter
 import { CordenComponent } from './laboratorio/orden/corden/corden.component';
 import { LordenComponent } from './laboratorio/orden/lorden/lorden.component';
 import { FordenComponent } from './laboratorio/orden/forden/forden.component';
+import { DordenComponent } from './laboratorio/orden/dorden/dorden.component';
 
 @NgModule({
   declarations: [
@@ -44,6 +45,7 @@ import { FordenComponent } from './laboratorio/orden/forden/forden.component';
     LinterfaceComponent,
     FinterfaceComponent,
     FordenComponent,
+    DordenComponent,
   ],
   imports: [
     MaterialModule,

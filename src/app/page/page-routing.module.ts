@@ -19,6 +19,7 @@ import { LperfilexamenComponent } from './configuracion/perfil/lperfilexamen/lpe
 
 import { LordenComponent } from './laboratorio/orden/lorden/lorden.component';
 import { CordenComponent } from './laboratorio/orden/corden/corden.component';
+import { DordenComponent } from './laboratorio/orden/dorden/dorden.component';
 
 
 const routes: Routes = [
@@ -31,6 +32,8 @@ const routes: Routes = [
   {path:'laboratorio/ordenes', component: LordenComponent, canActivate: [GuardService]},
   {path:'laboratorio/ordenes/create', component: CordenComponent, canActivate: [GuardService]},
   {path:'laboratorio/ordenes/edit/:id/:edit', component: CordenComponent, canActivate: [GuardService]},
+  {path:'laboratorio/ordenes/detail/:id/:detail', component: DordenComponent, canActivate: [GuardService]},
+
 
   {path:'configuracion/examenes', component: LexamenComponent, canActivate: [GuardService]},
   //{path:'configuracion/examenes', component: CordenComponent, canActivate: [GuardService]},
