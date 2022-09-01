@@ -29,7 +29,7 @@
         </div>
       </div>
 
-      <div class="example-container mat-elevation-z0">
+      <div class="example-container mat-elevation-z0" *ngIf="orden==1">
         <mat-table [dataSource]="dataSource" matSort>
          
           <ng-container matColumnDef="nNumero">
@@ -64,6 +64,86 @@
             <mat-cell *matCellDef="let element" data-label="Edad"> {{element.nEdad}} </mat-cell>
           </ng-container> 
 
+          <ng-container matColumnDef="swt">
+            <mat-header-cell *matHeaderCellDef [ngClass]="'widthTable web'"> Estado </mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="'widthTable web'" data-label="estado">
+              <div class="circulo {{getClassEstado(element.swt)}}" style="margin-left: 0px;"></div>
+              <span style="padding-left: 12px" *ngIf="element.swt==1">ACTIVO</span>
+              <span style="padding-left: 12px" *ngIf="element.swt==0">NO ACTIVO</span>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="accion">
+            <mat-header-cell *matHeaderCellDef [ngClass]="'widthTable web'"></mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="'widthTable web'">
+              <a *ngIf="permiso.guardar" class="pointer edit" matTooltip="Editar" [routerLink]="['edit', element.nIdOrden,true]">
+                <mat-icon>edit</mat-icon>
+              </a>
+              <a *ngIf="!permiso.guardar" class="pointer edit" matTooltip="Ver" [routerLink]="['edit', element.nIdOrden,false]">
+                <mat-icon>visibility</mat-icon>
+              </a>
+            </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="mo">
+            <mat-header-cell *matHeaderCellDef [ngClass]="'widthTable mobil'"></mat-header-cell>
+            <mat-cell *matCellDef="let element" [ngClass]="'widthTable mobil'">
+              <a class="pointer edit">
+                <div class="circulo {{getClassEstado(element.swt)}}" style="margin-left: 0px;"></div>
+              </a>
+              <div class="responsive-estado" style="font-weight:600;color: midnightblue; padding-left: 5px" *ngIf="element.swt==1">ACTIVO</div>   
+              <div class="responsive-estado" style="font-weight:600;color: midnightblue; padding-left: 5px" *ngIf="element.swt==0">NO ACTIVO</div>   
+
+
+              <div style="margin-left:auto;" class="tbcodigo">
+                <a *ngIf="permiso.guardar" class="pointer edit" matTooltip="Editar" [routerLink]="['edit', element.nIdOrden,true]">
+                  <mat-icon>edit</mat-icon>
+                </a>
+                <a *ngIf="!permiso.guardar" class="pointer edit" matTooltip="Ver" [routerLink]="['edit', element.nIdOrden,false]">
+                  <mat-icon>visibility</mat-icon>
+                </a>
+              </div>
+            </mat-cell>
+          </ng-container>
+
+          <mat-header-row *matHeaderRowDef="displayedColumns1"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns1;"></mat-row>
+        
+        </mat-table>
+        <mat-paginator 
+          [length]="countRegistro" 
+          [pageSizeOptions]="[5, 10, 20]" 
+          showFirstLastButtons 
+          aria-label="Select page of users">
+        </mat-paginator>
+      </div>
+
+
+      <div class="example-container mat-elevation-z0" *ngIf="orden==2">
+        <mat-table [dataSource]="dataSource" matSort>
+         
+          <ng-container matColumnDef="nNumero">
+            <mat-header-cell *matHeaderCellDef mat-sort-header>Orden</mat-header-cell>
+            <mat-cell *matCellDef="let element" data-label="Orden"> 
+              <div style="font-weight:600;color: #7f388a;">{{element.nNumero}}</div>     
+            </mat-cell>
+          </ng-container>
+          
+          <ng-container matColumnDef="vFecOrden">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Orden</mat-header-cell>
+            <mat-cell *matCellDef="let element" data-label="Fecha Orden"> {{element.vFecOrden}} </mat-cell>
+          </ng-container>
+
+          <ng-container matColumnDef="vDocumento">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Documento </mat-header-cell>
+              <mat-cell *matCellDef="let element" data-label="Documento"> {{element.vDocumento}} </mat-cell>
+          </ng-container> 
+
+          <ng-container matColumnDef="vNombreCompleto">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </mat-header-cell>
+            <mat-cell *matCellDef="let element" data-label="Nombre"> {{element.vNombreCompleto}} </mat-cell>
+          </ng-container> 
+
           <ng-container matColumnDef="vExamen">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Examen </mat-header-cell>
             <mat-cell *matCellDef="let element" data-label="Examen"> {{element.vExamen}} </mat-cell>
@@ -79,13 +159,13 @@
           </ng-container>
 
           <ng-container matColumnDef="vResultado">
-            <mat-header-cell *matHeaderCellDef mat-sort-header> Resultado </mat-header-cell>
+            <mat-header-cell *matHeaderCellDef mat-sort-header > Resultado </mat-header-cell>
             <mat-cell *matCellDef="let element" data-label="Resultado"> {{element.vResultado}} </mat-cell>
           </ng-container> 
 
-          <ng-container matColumnDef="vUnidMed">
+          <ng-container matColumnDef="vUndMed">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Unid.Med. </mat-header-cell>
-            <mat-cell *matCellDef="let element" data-label="Unid.Med."> {{element.vUnidMed}} </mat-cell>
+            <mat-cell *matCellDef="let element" data-label="Unid.Med."> {{element.vUndMed}} </mat-cell>
           </ng-container> 
                
           <ng-container matColumnDef="Flag">
@@ -126,8 +206,8 @@
             </mat-cell>
           </ng-container>
 
-          <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-          <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+          <mat-header-row *matHeaderRowDef="displayedColumns2"></mat-header-row>
+          <mat-row *matRowDef="let row; columns: displayedColumns2;"></mat-row>
         
         </mat-table>
         <mat-paginator 
@@ -137,6 +217,8 @@
           aria-label="Select page of users">
         </mat-paginator>
       </div>
+
+
 
     </form>    
   </mat-card>

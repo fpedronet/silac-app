@@ -18,7 +18,7 @@ export class Orden  extends Persona {
     vEstado?: string;
     vExamen?: string;
     vResultado?: string;
-    vUnidMed?: string;
+    vUndMed?: string;
     Flag?: string;
 }
 

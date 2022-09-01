@@ -27,11 +27,13 @@ import { FordenComponent } from '../forden/forden.component';
 export class LordenComponent implements OnInit {
   
   dataSource: Orden[] = [];
-  displayedColumns: string[] = ['nNumero', 'vFecOrden', 'vDocumento','vNombreCompleto', 'vSexo','nEdad','vExamen','swt','vResultado','vUnidMed','Flag','accion','mo'];
+  displayedColumns1: string[] = ['nNumero', 'vFecOrden', 'vDocumento','vNombreCompleto', 'vSexo','nEdad','swt','accion','mo'];
+  displayedColumns2: string[] = ['nNumero', 'vFecOrden', 'vDocumento','vNombreCompleto', 'vExamen','swt','vResultado','vUndMed','Flag','accion','mo'];
+
   loading = true;
   existRegistro = false;
   countRegistro = 0;
-
+  orden = 1;
   permiso: Permiso = {};
   
   @ViewChild(MatSort) sort!: MatSort;
@@ -64,6 +66,9 @@ export class LordenComponent implements OnInit {
     }else{
       localStorage.setItem(environment.CODIGO_FILTRO, ""+"|"+"0001"+"|"+""+"|"+""+"|"+fecha+"|"+fecha);
     }
+
+    let filtro2 = this.logeoService.sessionFiltro();
+    this.orden = parseInt(filtro2![1]);
   }
 
   ngAfterViewInit() {  
@@ -75,7 +80,7 @@ export class LordenComponent implements OnInit {
       .pipe(
         startWith({}),
         switchMap(() => {
-          debugger;
+      
           let filtro = this.logeoService.sessionFiltro();
 
           return this.ordenService!.listar(

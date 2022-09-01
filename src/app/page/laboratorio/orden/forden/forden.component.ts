@@ -100,6 +100,19 @@ export class FordenComponent implements OnInit {
 
   limpiar(){
 
+    this.nombre= "";
+    this.tipo= "0001";
+    this.area= "999";
+    this.origen= "999";
+    this.estado= "999"
+
+    this.fechaSelectIni=new Date();
+    this.fechaIni=new Date();
+
+    this.fechaSelectFin=new Date();
+    this.fechaFin=new Date();
+
+    localStorage.setItem(environment.CODIGO_FILTRO, ""+"|"+this.tipo+"|"+""+"|"+""+"|"+this.fechaIni+"|"+this.fechaFin);
   }
 
   buscar(){
