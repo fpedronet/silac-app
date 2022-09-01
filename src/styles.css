@@ -56,7 +56,7 @@ div, body, span, a, h1, h2, h3, h4, h5, h6, input, textarea { margin: 0; font-fa
 
 .btnModal{
   padding-top:13px;
-  width: 101%;
+  width: 102%;
 }
 .pointer{
   cursor: pointer;
@@ -515,7 +515,7 @@ form{
   }
   
   .mat-row, .mat-footer-row{
-    min-height:29px;
+    min-height:22px;
   }
    /* Enable this to hide header */
   .mat-table .mat-header-cell {
@@ -539,7 +539,7 @@ form{
   .mat-table .mat-cell {
     border-bottom: 1px solid #ddddddb0;
     display: block;
-    /* font-size: 1em; */
+    font-size: 0.8em;
     text-align: right;
     /* font-weight: bold; */
     /* height: 30px; */
