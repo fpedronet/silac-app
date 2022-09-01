@@ -38,12 +38,7 @@
               <div style="font-weight:600;color: #7f388a;">{{element.nNumero}}</div>     
             </mat-cell>
           </ng-container>
-            
-          <ng-container matColumnDef="vCodBarras">
-              <mat-header-cell *matHeaderCellDef mat-sort-header> N° Atención </mat-header-cell>
-              <mat-cell *matCellDef="let element" data-label="N° Atención"> {{element.vCodBarras}} </mat-cell>
-            </ng-container>
-
+          
           <ng-container matColumnDef="vFecOrden">
             <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha Orden</mat-header-cell>
             <mat-cell *matCellDef="let element" data-label="Fecha Orden"> {{element.vFecOrden}} </mat-cell>
@@ -69,6 +64,11 @@
             <mat-cell *matCellDef="let element" data-label="Edad"> {{element.nEdad}} </mat-cell>
           </ng-container> 
 
+          <ng-container matColumnDef="vExamen">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Examen </mat-header-cell>
+            <mat-cell *matCellDef="let element" data-label="Examen"> {{element.vExamen}} </mat-cell>
+          </ng-container> 
+
           <ng-container matColumnDef="swt">
             <mat-header-cell *matHeaderCellDef [ngClass]="'widthTable web'"> Estado </mat-header-cell>
             <mat-cell *matCellDef="let element" [ngClass]="'widthTable web'" data-label="estado">
@@ -77,7 +77,22 @@
               <span style="padding-left: 12px" *ngIf="element.swt==0">NO ACTIVO</span>
             </mat-cell>
           </ng-container>
-                  
+
+          <ng-container matColumnDef="vResultado">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Resultado </mat-header-cell>
+            <mat-cell *matCellDef="let element" data-label="Resultado"> {{element.vResultado}} </mat-cell>
+          </ng-container> 
+
+          <ng-container matColumnDef="vUnidMed">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Unid.Med. </mat-header-cell>
+            <mat-cell *matCellDef="let element" data-label="Unid.Med."> {{element.vUnidMed}} </mat-cell>
+          </ng-container> 
+               
+          <ng-container matColumnDef="Flag">
+            <mat-header-cell *matHeaderCellDef mat-sort-header> Flag </mat-header-cell>
+            <mat-cell *matCellDef="let element" data-label="Flag"> {{element.Flag}} </mat-cell>
+          </ng-container>
+
           <ng-container matColumnDef="accion">
             <mat-header-cell *matHeaderCellDef [ngClass]="'widthTable web'"></mat-header-cell>
             <mat-cell *matCellDef="let element" [ngClass]="'widthTable web'">

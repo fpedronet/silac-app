@@ -27,7 +27,7 @@ import { FordenComponent } from '../forden/forden.component';
 export class LordenComponent implements OnInit {
   
   dataSource: Orden[] = [];
-  displayedColumns: string[] = ['nNumero', 'vCodBarras', 'vFecOrden', 'vDocumento','vNombreCompleto', 'vSexo','nEdad','swt','accion','mo'];
+  displayedColumns: string[] = ['nNumero', 'vFecOrden', 'vDocumento','vNombreCompleto', 'vSexo','nEdad','vExamen','swt','vResultado','vUnidMed','Flag','accion','mo'];
   loading = true;
   existRegistro = false;
   countRegistro = 0;

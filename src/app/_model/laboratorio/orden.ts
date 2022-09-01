@@ -15,7 +15,11 @@ export class Orden  extends Persona {
     vCodTipoMuestra?: string;
     vObsHistorial?: string;
     nIdEstado?: number;
-    vEstado?: string
+    vEstado?: string;
+    vExamen?: string;
+    vResultado?: string;
+    vUnidMed?: string;
+    Flag?: string;
 }
 
 export class OrdenRequest extends pagination {
