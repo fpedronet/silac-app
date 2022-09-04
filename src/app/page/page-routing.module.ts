@@ -32,7 +32,7 @@ const routes: Routes = [
   {path:'laboratorio/ordenes', component: LordenComponent, canActivate: [GuardService]},
   {path:'laboratorio/ordenes/create', component: CordenComponent, canActivate: [GuardService]},
   {path:'laboratorio/ordenes/edit/:id/:edit', component: CordenComponent, canActivate: [GuardService]},
-  {path:'laboratorio/ordenes/detail/:id/:detail', component: DordenComponent, canActivate: [GuardService]},
+  {path:'laboratorio/ordenes/detail/:id/:ids/:detail', component: DordenComponent, canActivate: [GuardService]},
 
 
   {path:'configuracion/examenes', component: LexamenComponent, canActivate: [GuardService]},

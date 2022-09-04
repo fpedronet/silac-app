@@ -17,9 +17,9 @@
     <mat-card class="cardborde">   
     <mat-toolbar class="cardtitle"></mat-toolbar>
 
-    <h2 *ngIf="id==0" class="title-label">DETALLE DE ORDEN</h2>
-    <h2 *ngIf="id!==0 && !edit" class="title-label">DETALLE DE ORDEN</h2>
-    <h2 *ngIf="id!==0 && edit" class="title-label">DETALLE DE ORDEN</h2>
+    <h2 *ngIf="idorden==0" class="title-label">DETALLE DE ORDEN</h2>
+    <h2 *ngIf="idorden!==0 && !edit" class="title-label">DETALLE DE ORDEN</h2>
+    <h2 *ngIf="idorden!==0 && edit" class="title-label">DETALLE DE ORDEN</h2>
 
     <mat-divider></mat-divider>
     
@@ -48,13 +48,13 @@
                             <mat-grid-tile [colspan]="6">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Orden</mat-label>
-                                    <input matInput placeholder="Orden" formControlName="vApPaterno" >
+                                    <input matInput placeholder="Orden" formControlName="nNumero" >
                                 </mat-form-field>
                             </mat-grid-tile>
                             <mat-grid-tile [colspan]="6">
                                 <mat-form-field appearance="outline">
                                     <mat-label>DNI</mat-label>
-                                    <input matInput placeholder="DNI" formControlName="vApMaterno">
+                                    <input matInput placeholder="DNI" formControlName="vDocumento">
                                 </mat-form-field>
                             </mat-grid-tile>
                         </mat-grid-list>
@@ -63,13 +63,13 @@
                             <mat-grid-tile [colspan]="6">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Fecha</mat-label>
-                                    <input matInput placeholder="Fecha" formControlName="vApPaterno">
+                                    <input matInput placeholder="Fecha" formControlName="vFecOrden">
                                 </mat-form-field>
                             </mat-grid-tile>
                             <mat-grid-tile [colspan]="6">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Procedencia</mat-label>
-                                    <input matInput placeholder="Procedencia" formControlName="vApMaterno">
+                                    <input matInput placeholder="Procedencia" formControlName="vProcedencia">
                                 </mat-form-field>
                             </mat-grid-tile>
                         </mat-grid-list>
@@ -82,13 +82,13 @@
                             <mat-grid-tile [colspan]="6">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Detalle</mat-label>
-                                    <input matInput placeholder="Detalle" formControlName="vSegundoNombre">
+                                    <input matInput placeholder="Detalle" formControlName="vDetalle">
                                 </mat-form-field>
                             </mat-grid-tile>
                             <mat-grid-tile [colspan]="6">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Servicio</mat-label>
-                                    <input matInput placeholder="Servicio" formControlName="vSegundoNombre">
+                                    <input matInput placeholder="Servicio" formControlName="vServicio">
                                 </mat-form-field>
                             </mat-grid-tile>
                         </mat-grid-list>
@@ -97,7 +97,7 @@
                             <mat-grid-tile [colspan]="12">
                                 <mat-form-field appearance="outline">
                                     <mat-label>Observación</mat-label>
-                                    <input matInput placeholder="Observación" formControlName="vSegundoNombre" minlength="1" maxlength="200" style="text-transform: uppercase;">
+                                    <input matInput placeholder="Observación" formControlName="vObservaciones" minlength="1" maxlength="200" style="text-transform: uppercase;">
                                 </mat-form-field>
                             </mat-grid-tile>
                         </mat-grid-list>
@@ -108,7 +108,29 @@
                         <label class="labelSubtittle">RESULTADOS</label>
                         <mat-divider></mat-divider>
                         
+                        
+                        <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px" style="top: 13px;">
+                            <mat-grid-tile [colspan]="6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Área</mat-label>
+                                        <mat-select 
+                                        placeholder="Área"
+                                        formControlName="vCodArea"
+                                        >
+                                        <mat-option [value]="'999'">TODOS</mat-option>
+                                        <mat-option *ngFor="let c of listaArea" [value]="c.vValor">
+                                          {{c.vDescripcion}}
+                                         </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                            </mat-grid-tile>
+                            <mat-grid-tile [colspan]="6">
+
+                            </mat-grid-tile>
+                        </mat-grid-list>
+                        
                         <div class="spacetable">
+
                             <table class="table2">
                                 <thead>
                                 <tr>
