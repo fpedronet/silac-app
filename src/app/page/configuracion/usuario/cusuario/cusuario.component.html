@@ -111,7 +111,7 @@
                                     <mat-grid-tile [colspan]="8">
                                         <mat-form-field appearance="outline">
                                             <mat-label>Documento</mat-label>
-                                            <input #DOCUMENTO type="text" [readonly]="id>0" matInput placeholder="Documento" formControlName="vDocumento" minlength="1" maxlength="15" required (keyup.enter)="obtenerPersona($event)">
+                                            <input #DOCUMENTO type="text" [readonly]="id>0" matInput placeholder="Documento" formControlName="vDocumento" minlength="1" maxlength="15" required (change)="obtenerPersona($event)" (keyup.enter)="obtenerPersona($event)">
                                             <button *ngIf="DOCUMENTO.value && id===0" type="button" matSuffix mat-icon-button aria-label="Limpiar" (click)="borrarDato()">
                                                 <mat-icon>close</mat-icon>
                                             </button>
@@ -141,13 +141,13 @@
                                     <mat-grid-tile [colspan]="6">
                                         <mat-form-field appearance="outline">
                                             <mat-label>1er Nombre</mat-label>
-                                            <input matInput placeholder="Nombres" formControlName="vSegundoNombre" minlength="1" maxlength="50" required style="text-transform: uppercase;">
+                                            <input matInput placeholder="Nombres" formControlName="vPrimerNombre" minlength="1" maxlength="50" required style="text-transform: uppercase;">
                                         </mat-form-field>
                                     </mat-grid-tile>
                                     <mat-grid-tile [colspan]="6">
                                         <mat-form-field appearance="outline">
                                             <mat-label>2do Nombre</mat-label>
-                                            <input matInput placeholder="Nombres" formControlName="vPrimerNombre" minlength="1" maxlength="20" style="text-transform: uppercase;">
+                                            <input matInput placeholder="Nombres" formControlName="vSegundoNombre" minlength="1" maxlength="20" style="text-transform: uppercase;">
                                         </mat-form-field>
                                     </mat-grid-tile>
                                 </mat-grid-list>

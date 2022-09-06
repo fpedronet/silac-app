@@ -170,6 +170,7 @@ export class CusuarioComponent implements OnInit {
   listarCombo(){
     this.spinnerService.showLoading();
     this.tbmaestraService.cargarDatos(this.tablasMaestras).subscribe(data=>{
+
       this.listaTipoDocumento = this.obtenerSubtabla(data.items,'TDOC');
       this.listaTipoGenero = this.obtenerSubtabla(data.items,'SEXO');
       this.listaEstadoCivil = this.obtenerSubtabla(data.items,'ESCIV');
@@ -474,106 +475,110 @@ export class CusuarioComponent implements OnInit {
   }
 
   obtenerPersona(e?: any){
-    
     var tipoDocu =this.form.value['vTipDocu']
     var documento =this.form.value['vDocumento']
+    debugger;
+    if(documento!=this.documento){
+      var validacion = this.validaDocumento(tipoDocu, documento);
 
-    var validacion = this.validaDocumento(tipoDocu, documento);
-
-    if(validacion === ''){
-
-      this.spinnerService.showLoading();
-      this.usuarioService.obtenerPersona(tipoDocu, documento).subscribe(data=>{
-
-        data.vTipDocu = (data.vTipDocu==null)?  this.idTipoDocumento: data.vTipDocu;
-        data.nPeso = (data.nPeso==0)?  null!: data.nPeso!;
-        data.nTalla = (data.nTalla==0)?  null!: data.nTalla!;
-        data.vCodPais = (data.vCodPais=='' || data.vCodPais==null)?  this.peru!: data.vCodPais!;
-
-        this.selectedPais = data.vCodPais;
-        this.muestraDistrito = true;
-        if(this.selectedPais !== this.peru){
-          this.codDistrito = '';
-          this.distritoColor = 'accent';
-          this.muestraDistrito = false;
-        }
-
-        if(data.vDocumento!="" && data.vDocumento!=null){
-          this.form.patchValue({
-            vApPaterno: data.vApPaterno,
-            vApMaterno: data.vApMaterno,
-            vPrimerNombre: data.vPrimerNombre,
-            vSegundoNombre: data.vSegundoNombre,
-            vSexo: data.vSexo,
-            nEdad: data.nEdad,
-            dFechaNac: data.dFechaNac,
-            vEstCivil: data.vEstCivil,
-            vCodPais: data.vCodPais,
-            vCodDepa: data.vCodDepa,
-            vCodProv: data.vCodProv,
-            vCodDist: data.vCodDist,
-            vDireccion: data.vDireccion,
-          });
-
-          this.codDepartamento = data.vCodDepa!;
-          this.codProvincia = data.vCodProv!;
-          this.codDistrito = data.vCodDist!;
-      
-          this.cambiaPaisDistrito(data.vCodPais, data.vCodDist);
-
-          this.nombres = data.vNombreCompleto!;
-          this.documento = data.vDocumento!;
-          this.codEstado = (data.swt!=null)? data.swt!.toString()! : "1";
-
-          this.spinnerService.hideLoading();
-        }else{
-          this.poclabService.obtenerPersona("1", documento).subscribe(data=>{
-           
-            let pais = (data.vCodPais='PER')? this.peru : data.vCodPais;
-            this.selectedPais = this.peru;
-            this.muestraDistrito = true;
-
-            if(data.vDocumento!="" && data.vDocumento!=null){
-              this.form.patchValue({
-                vApPaterno: data.vApePaterno,
-                vApMaterno: data.vApeMaterno,
-                vPrimerNombre: data.vPrimerNombre,
-                vSegundoNombre: data.vSegundoNombre,
-                vSexo: data.vSexo,
-                nEdad: data.nEdad,
-                dFechaNac: data.dteNacimiento,
-                // vEstCivil: data.vCodEstadoCivil,
-                vCodPais: pais,
-                vCodDepa: data.vCodRegion,
-                vCodProv: data.vCodProvincia,
-                vCodDist: data.vCodDistrito,
-                vDireccion: data.vDireccion,
-              });
-              debugger;
-              this.codDepartamento = data.vCodRegion!;
-              this.codProvincia = data.vCodProvincia!;
-              this.codDistrito = data.vCodDistrito!;
-    
-              this.cambiaPaisDistrito(pais, data.vCodDistrito);
-    
-              this.nombres = data.vApePaterno + " "+ data.vApeMaterno + " "+ data.vPrimerNombre + " "+data.vSegundoNombre
-              this.documento = data.vDocumento!;
-              this.codEstado = "1"; 
-            }  
-            
+      if(validacion === ''){
+  
+        this.spinnerService.showLoading();
+        this.usuarioService.obtenerPersona(tipoDocu, documento).subscribe(data=>{
+  
+          data.vTipDocu = (data.vTipDocu==null)?  this.idTipoDocumento: data.vTipDocu;
+          data.nPeso = (data.nPeso==0)?  null!: data.nPeso!;
+          data.nTalla = (data.nTalla==0)?  null!: data.nTalla!;
+          data.vCodPais = (data.vCodPais=='' || data.vCodPais==null)?  this.peru!: data.vCodPais!;
+  
+          this.selectedPais = data.vCodPais;
+          this.muestraDistrito = true;
+          if(this.selectedPais !== this.peru){
+            this.codDistrito = '';
+            this.distritoColor = 'accent';
+            this.muestraDistrito = false;
+          } 
+  
+          if(data.vDocumento!="" && data.vDocumento!=null){
+            this.form.patchValue({
+              vApPaterno: data.vApPaterno,
+              vApMaterno: data.vApMaterno,
+              vPrimerNombre: data.vPrimerNombre,
+              vSegundoNombre: data.vSegundoNombre,
+              vSexo: data.vSexo,
+              nEdad: data.nEdad,
+              dFechaNac: data.dFechaNac,
+              vEstCivil: data.vEstCivil,
+              vCodPais: data.vCodPais,
+              vCodDepa: data.vCodDepa,
+              vCodProv: data.vCodProv,
+              vCodDist: data.vCodDist,
+              vDireccion: data.vDireccion,
+            });
+  
+            this.codDepartamento = data.vCodDepa!;
+            this.codProvincia = data.vCodProv!;
+            this.codDistrito = data.vCodDist!;
+        
+            this.cambiaPaisDistrito(data.vCodPais, data.vCodDist);
+  
+            this.nombres = data.vNombreCompleto!;
+            this.documento = data.vDocumento!;
+            this.codEstado = (data.swt!=null)? data.swt!.toString()! : "1";
+  
             this.spinnerService.hideLoading();
-          });
-        }
-      });
-    }else{
-      if(validacion !== 'El tipo de documento y el documento no pueden estar vacíos')
-        this.notifierService.showNotification(2,'Mensaje',validacion);
-        this.borrarDato();
-    } 
+          }else{
+            this.poclabService.obtenerPersona("1", documento).subscribe(data=>{
+  
+              let pais = (data.vCodPais=this.peru)? this.peru : data.vCodPais;
+              let estadocivil = (data.vCodEstadoCivil =="01")? "00001": (data.vCodEstadoCivil =="02"? "00002": null)
+  
+              this.selectedPais = this.peru;
+              this.muestraDistrito = true;
+  
+              if(data.vDocumento!="" && data.vDocumento!=null){
+                this.form.patchValue({
+                  vApPaterno: data.vApePaterno,
+                  vApMaterno: data.vApeMaterno,
+                  vPrimerNombre: data.vPrimerNombre,
+                  vSegundoNombre: data.vSegundoNombre,
+                  vSexo: data.vSexo,
+                  nEdad: data.nEdad,
+                  dFechaNac: data.dteNacimiento,
+                  vEstCivil: estadocivil,
+                  vCodPais: pais,
+                  vCodDepa: data.vCodRegion,
+                  vCodProv: data.vCodProvincia,
+                  vCodDist: data.vCodDistrito,
+                  vDireccion: data.vDireccion,
+                });
+                
+                this.codDepartamento = data.vCodRegion!;
+                this.codProvincia = data.vCodProvincia!;
+                this.codDistrito = data.vCodDistrito!;
+      
+                this.cambiaPaisDistrito(pais, data.vCodDistrito);
+      
+                this.nombres = data.vApePaterno + " "+ data.vApeMaterno + " "+ data.vPrimerNombre + " "+data.vSegundoNombre
+                this.documento = data.vDocumento!;
+                this.codEstado = "1"; 
+              }  
+              
+              this.spinnerService.hideLoading();
+            });
+          }
+        });
+      }else{
+        if(validacion !== 'El tipo de documento y el documento no pueden estar vacíos')
+          this.notifierService.showNotification(2,'Mensaje',validacion);
+          this.borrarDato();
+      } 
+   }
   }
 
   borrarDato(){
     this.form.patchValue({
+      vDocumento: null,
       vApPaterno: null,
       vApMaterno: null,
       vPrimerNombre: null,
@@ -582,7 +587,11 @@ export class CusuarioComponent implements OnInit {
       nEdad: null,
       dFechaNac: null,
       vEstCivil: null,
+      vDireccion: null
     });
+
+    this.nombres = "";
+    this.documento = "";
    
     this.cambiaPaisDistrito(this.peru, null!);
   }
