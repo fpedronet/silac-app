@@ -77,7 +77,7 @@ export class FordenComponent implements OnInit {
   }
 
   obtenerSubtabla(tb: TbMaestra[], cod: string){
-    return tb.filter(e => e.vEtiqueta?.toString()?.trim() === cod);
+    return tb.filter(e => e.vCodTabla?.toString()?.trim() === cod);
   }
 
   onSelectChange(id: string, select: string){

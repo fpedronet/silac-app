@@ -31,7 +31,6 @@ export class LoginComponent implements OnInit {
   mensaje?: string;
   error?: string;
   logologin?: string =environment.UrlImage + "logo.png";
-  // loginvideo?: string =environment.UrlImage + "login.mp4";
   input: any;
 
   ngOnInit(): void {
@@ -65,8 +64,6 @@ export class LoginComponent implements OnInit {
 
         if(data.typeResponse==environment.EXITO){
           localStorage.setItem(environment.TOKEN_NAME, data.access_token!);
-          // localStorage.setItem(environment.FOTO, data.strFoto!);
-          // localStorage.setItem(environment.CODIGO_EMPRESA, data.codigoEmpresa!);
 
           this.router.navigate(['/page/home']);
         }

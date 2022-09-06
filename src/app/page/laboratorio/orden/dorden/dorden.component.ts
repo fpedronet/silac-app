@@ -108,6 +108,8 @@ export class DordenComponent implements OnInit {
         vCodArea: data.vCodArea =""? "999":  data.vCodArea    
       });
 
+      this.resultadoexamen();
+
       this.spinnerService.hideLoading();
     });
   }
@@ -115,8 +117,12 @@ export class DordenComponent implements OnInit {
   guardar(){
   }
 
+  resultadoexamen(){
+
+  }
+
   obtenerSubtabla(tb: TbMaestra[], cod: string){
-    return tb.filter(e => e.vEtiqueta?.toString()?.trim() === cod);
+    return tb.filter(e => e.vCodTabla?.toString()?.trim() === cod);
   }
 
 }

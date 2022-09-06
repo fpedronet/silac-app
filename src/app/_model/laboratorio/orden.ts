@@ -1,5 +1,6 @@
 import { pagination } from "../pagination";
 import { Paciente } from "./paciente";
+import { ResultadoExamen } from "./resultadoExamen";
 
 export class Orden  {
     constructor(){
@@ -29,7 +30,8 @@ export class Orden  {
     vResultado?: string;
     vUndMed?: string;
     Flag?: string;
-
+    resultadoExamen?: ResultadoExamen;
+    listaResultadoExamen?: ResultadoExamen[];
 
     nIdPersona?: number;
     vNombreCompleto?: string;

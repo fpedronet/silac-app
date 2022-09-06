@@ -34,7 +34,12 @@ export class OrdenService {
   }
 
   obtenerdetalle(idorden: number,idpaciente: number){
-    let urls = `${this.url}/GetFirstDetalleOrden?idorden=${idorden}&idpaciente=${idpaciente}`;
+    let urls = `${this.url}/GetFirstOrdenDetalle?idorden=${idorden}&idpaciente=${idpaciente}`;
+    return this.http.get<Orden>(urls);
+  }
+
+  obtenerresultado(idorden: number,idarea: string,idpaciente: number){
+    let urls = `${this.url}/GetFirstResultadoExamen?idorden=${idorden}&idarea=${idarea}&&idpaciente=${idpaciente}`;
     return this.http.get<Orden>(urls);
   }
 

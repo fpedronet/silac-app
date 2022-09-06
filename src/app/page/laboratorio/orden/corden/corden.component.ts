@@ -205,7 +205,7 @@ export class CordenComponent implements OnInit {
   }  
 
   obtenerSubtabla(tb: TbMaestra[], cod: string){
-    return tb.filter(e => e.vEtiqueta?.toString()?.trim() === cod);
+    return tb.filter(e => e.vCodTabla?.toString()?.trim() === cod);
   }
 
   inicializar(){
