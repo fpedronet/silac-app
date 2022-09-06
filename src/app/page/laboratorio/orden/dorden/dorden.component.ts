@@ -28,7 +28,6 @@ export class DordenComponent implements OnInit {
   listaArea?: TbMaestra[] = [];
   
   idorden: number = 0;
-  idpaciente: number = 0;
   edit: boolean = true;
   nombres: string = "FRANCISCO PEDRO CONDOR MARTIEZ";
   estado: string = "VALIDACION PARCIAL";
@@ -49,7 +48,6 @@ export class DordenComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe((data: Params)=>{
       this.idorden = (data["id"]==undefined)? 0:data["id"];
-      this.idpaciente = (data["ids"]==undefined)? 0:data["ids"];
       this.edit = (data["edit"]==undefined) ? true : ((data["edit"]=='true') ? true : false)      
     });
 
@@ -94,7 +92,7 @@ export class DordenComponent implements OnInit {
 
   obtener(){
     this.spinnerService.showLoading();
-    this.ordenService.obtenerdetalle(this.idorden, this.idpaciente).subscribe(data=>{
+    this.ordenService.obtenerdetalle(this.idorden).subscribe(data=>{
 
       this.form.patchValue({
         nIdOrden: data.nIdOrden,

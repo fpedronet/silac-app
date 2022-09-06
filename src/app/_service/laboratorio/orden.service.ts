@@ -33,8 +33,8 @@ export class OrdenService {
     return this.http.post<dataCollection>(urls,req);
   }
 
-  obtenerdetalle(idorden: number,idpaciente: number){
-    let urls = `${this.url}/GetFirstOrdenDetalle?idorden=${idorden}&idpaciente=${idpaciente}`;
+  obtenerdetalle(idorden: number){
+    let urls = `${this.url}/GetFirstOrdenDetalle?idorden=${idorden}`;
     return this.http.get<Orden>(urls);
   }
 
