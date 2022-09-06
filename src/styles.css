@@ -865,7 +865,7 @@ mat-header-row {
   justify-content: center;
   align-items: center;
   border-radius: 3px;
-  content: 'Subir archivo';
+  content: 'Subir firma';
   position: absolute;
   left: 0;
   right: 0;

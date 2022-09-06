@@ -72,8 +72,8 @@ export class CusuarioComponent implements OnInit {
   stepper!: MatStepper;
   
   //Webcam
-  public foto?: string =environment.UrlImage + "people.png";
-  public fotoUrl: string = '';
+  public firma?: string =environment.UrlImage + "firma.png";
+  public firmaUrl: string = '';
   public showWebcam = false;
   public allowCameraSwitch = true;
   public multipleWebcamsAvailable = false;
@@ -261,7 +261,7 @@ export class CusuarioComponent implements OnInit {
           });
         }
     
-        this.fotoUrl =(data.vFoto !== undefined && data.vFoto !== null)? data.vFoto! : this.foto!;
+        this.firmaUrl =(data.vFirma !== undefined && data.vFirma !== null)? data.vFirma! : this.firma!;
 
         this.listaPerfil = data.listaPerfil!;
         this.nombres = data.vNombreCompleto!;
@@ -306,7 +306,7 @@ export class CusuarioComponent implements OnInit {
         image.src = e.target.result;
         image.onload = rs => {
           const imgBase64Path = e.target.result;
-          this.fotoUrl = imgBase64Path;
+          this.firmaUrl = imgBase64Path;
         };
       };
       reader.readAsDataURL(fileInput.target.files[0]);
@@ -349,7 +349,7 @@ export class CusuarioComponent implements OnInit {
   }
 
   resetImage(){
-    this.fotoUrl = '';
+    this.firmaUrl = '';
     this.webcamImage = null;
     this.showWebcam = false;
   }
@@ -707,8 +707,8 @@ export class CusuarioComponent implements OnInit {
     model.swt= Number(this.codEstado);
     model.listaPerfil = this.listaPerfil;
 
-    if(this.fotoUrl!='' && this.fotoUrl!=environment.UrlImage + "people.png"){
-      model.vFoto = this.webcamImage?this.webcamImage.imageAsDataUrl:this.fotoUrl;
+    if(this.firmaUrl!='' && this.firmaUrl!=environment.UrlImage + "firma.png"){
+      model.vFirma = this.webcamImage?this.webcamImage.imageAsDataUrl:this.firmaUrl;
     }
 
 

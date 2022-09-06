@@ -51,7 +51,7 @@
                                 <mat-grid-list cols="12" rowHeight="275px" gutterSize="15px">                            
                                     <mat-grid-tile [colspan]="12">                                   
                                         <div class="grid-imagen">
-                                            <div style="display: inline-block;margin-left:20px;">
+                                            <div style="display: inline-block;">
                                             <webcam [height]="222" [width]="210" [trigger]="triggerObservable" (imageCapture)="handleImage($event)" *ngIf="showWebcam"
                                                     [allowCameraSwitch]="allowCameraSwitch" [switchCamera]="nextWebcamObservable"
                                                     [videoOptions]="videoOptions"
@@ -64,13 +64,13 @@
                                                 <img [src]="webcamImage.imageAsDataUrl"/>
                                             </div>
                                             
-                                            <img *ngIf="fotoUrl==='' && (!webcamImage && !showWebcam)" [src]="foto" style="max-width: 200px; height: 222px;">
-                                            <img *ngIf="fotoUrl!=='' && (!webcamImage && !showWebcam)" [src]="fotoUrl" style="max-width: 200px; height: 222px;">
+                                            <img *ngIf="firmaUrl==='' && (!webcamImage && !showWebcam)" [src]="firma" style="width: 260px; height: 180px;">
+                                            <img *ngIf="firmaUrl!=='' && (!webcamImage && !showWebcam)" [src]="firmaUrl" style="width: 260px; height: 180px;">
                                             </div>
-                                            <div *ngIf="edit" style="display: flex;">
+                                            <div *ngIf="edit" style="display: flex;justify-content:center;">
                                             <input class="file-select" type="file" accept="image/*" (change)="subirFoto($event)">
-                                            <button *ngIf="showWebcam" class="photo-btn" type="button" (click)="triggerSnapshot()">Tomar foto</button>
-                                            <button *ngIf="!showWebcam" class="photo-btn" type="button" (click)="toggleWebcam()">Nueva foto</button>
+                                            <!-- <button *ngIf="showWebcam" class="photo-btn" type="button" (click)="triggerSnapshot()">Tomar foto</button> -->
+                                            <!-- <button *ngIf="!showWebcam" class="photo-btn" type="button" (click)="toggleWebcam()">Nueva foto</button> -->
                                             <button class="photo-btn" type="button" (click)="resetImage()">Limpiar</button>
                                             </div>
                                         </div>                                  
