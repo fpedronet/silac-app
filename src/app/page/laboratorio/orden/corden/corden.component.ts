@@ -23,6 +23,7 @@ import { SpinnerService } from 'src/app/page/component/spinner/spinner.service';
 import { PoclabService } from 'src/app/_service/apiexterno/poclab.service';
 
 import forms from 'src/assets/json/formulario.json';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-corden',
@@ -97,7 +98,7 @@ export class CordenComponent implements OnInit {
     this.maxDate = new Date();
 
     this.route.params.subscribe((data: Params)=>{
-      this.id = (data["id"]==undefined)?0:parseInt(data["id"]);
+      this.id = (data["id"]==undefined)? 0:data["id"];
       this.edit = (data["edit"]==undefined) ? true : ((data["edit"]=='true') ? true : false)      
     });
 
@@ -184,7 +185,9 @@ export class CordenComponent implements OnInit {
 
   obtener(){
     this.ordenService.obtener(this.id).subscribe(data=>{
+      debugger;
       data.vTipDocu = (data.vTipDocu==null)?  this.idTipoDocumento: data.vTipDocu;
+      data.dFecOrden= (data.dFecOrden==null)? this.fechaMax: data.dFecOrden;
 
       this.form.patchValue({
         nIdOrden: data.nIdOrden,
@@ -485,64 +488,46 @@ export class CordenComponent implements OnInit {
   }
 
   guardar(){
-      /*let model = new RendicionM();
-     
-      model.ideUsuario = this.form.value['ideUsuario'];
-      model.ideRendicion = this.form.value['ideRendicion'];
-      model.lugar = this.form.value['lugar'];
-      model.motivo = this.form.value['motivo'];
-      model.montoRecibe = this.form.value['ingresos'];
-      model.tipo = this.form.value['tipo'];
-      model.fechaCreacion = new Date();
+    let model = new Orden();
 
-      this.spinner.showLoading();
-      //debugger;
-      this.rendicionService.guardar(model).subscribe(data=>{
-  
-        this.notifierService.showNotification(data.typeResponse!,'Mensaje',data.message!);
-  
-          if(data.typeResponse==environment.EXITO){
+    /*Orden*/
+    model.nIdOrden= this.form.value['nIdOrden'];
+    model.vHC= this.form.value['vHC'];
+    model.dFecOrden= this.form.value['dFecOrden'];
+    model.vProcedencia= this.form.value['vProcedencia'];
+    model.vCama= this.form.value['vCama'];
 
-            if(this.id === 0){ // Cambia de pestaña y actualiza id en el primer registro
-              this.existRendicion = true;
-              this.currentTab = 1; //Segunda pestaña
-              this.id = data.ide!;
-              //debugger;
-              this.router.navigate(['/page/administracion/rendicion/'+this.idPantalla+'/edit/',this.id]);
-            }
-            this.obtener();
-            
-            this.spinner.hideLoading();
-          }else{
-            this.spinner.hideLoading();
-          }
-        });*/
-    }
 
-  /*abrirDetalle(rendDet?: RendicionD){
-    //debugger;
-    var enRevision = this.tienepermiso(this.sgteEstadoR) && this.sgteEstadoR === 6;
+    /*Persona */    
+    model.nIdPersona= this.form.value['nIdPersona'];
+    model.vTipDocu= this.form.value['vTipDocu'];
+    model.vDocumento= this.form.value['vDocumento'];
+    model.vApPaterno= this.form.value['vApPaterno'];
+    model.vApMaterno= this.form.value['vApMaterno'];
+    model.vPrimerNombre= this.form.value['vPrimerNombre'];
+    model.vSegundoNombre= this.form.value['vSegundoNombre'];
+    model.vSexo= this.form.value['vSexo'];
+    model.vEstCivil= this.form.value['vEstCivil'];
+    model.dFechaNac= this.form.value['dFechaNac'];
+    model.nEdad= (this.form.value['nEdad']==null || this.form.value['nEdad']=="")? null : this.form.value['nEdad'].toString();
+    model.swt= 1;
 
-    const dialogRef = this.dialog.open(CdetalleComponent, {
-      maxWidth: '100vw',
-      maxHeight: '100vh',
-      width: '850px',
-      panelClass: 'full-screen-modal',
-      disableClose: true,
-      data: {
-        idPadre: this.id,
-        edit: this.edit,
-        tipoPadre: this.getControlLabel('tipo'),
+    /*Examenes */  
+
+    this.spinnerService.showLoading();
+    this.ordenService.guardar(model).subscribe(data=>{
+
+    this.notifierService.showNotification(data.typeResponse!,'Mensaje',data.message!);
+
+      if(data.typeResponse==environment.EXITO){
+        this.router.navigate(['/page/laboratorio/ordenes']);
+        this.spinnerService.hideLoading();
+      }else{
+        this.spinnerService.hideLoading();
       }
     });
 
-    //dialogRef.beforeClosed().subscribe(res)
+  }
 
-    dialogRef.afterClosed().subscribe(res => {
-      if(res!=""){
-        this.obtener();
-      }
-    })
-  }*/
 }
 
