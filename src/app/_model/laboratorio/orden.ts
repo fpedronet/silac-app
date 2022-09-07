@@ -7,16 +7,9 @@ export class Orden extends Persona  {
     nCantMuestras?: number;
     swt?: number;
     nNumero?: number;
-    vCodBarras?: string;
-    vCodBarras2?: string;
     vObservaciones?: string;
-    nIdUsuReg?: number;
-    nIdUsuMod?: number;
     dFecOrden?: Date;
     vFecOrden?: string;
-    // nCodMedico?:number;
-    // vCodTipoMuestra?: string;
-    // vObsHistorial?: string;
     nIdEstado?: number;
     vEstado?: string;
     vExamen?: string;
@@ -24,14 +17,14 @@ export class Orden extends Persona  {
     vUndMed?: string;
     Flag?: string;
     vHC?: string;
-    dFecha?: Date;
     vCama?: string;
 
+    nIdUsuReg?: number;
+    nIdUsuMod?: number;
+   
     resultadoExamen?: ResultadoExamen;
     listaResultadoExamen?: ResultadoExamen[];
 
-   
-    vTipDocumento?: string;
     vProcedencia?: string;
     vServicio?: string;
     vCodArea?: string;

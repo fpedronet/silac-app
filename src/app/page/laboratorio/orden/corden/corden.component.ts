@@ -190,7 +190,7 @@ export class CordenComponent implements OnInit {
         dFechaNac: data.dFechaNac,
         nEdad: data.nEdad,
         vHC: data.vHC,
-        dFecha: data.dFecha,
+        dFecOrden: data.dFecOrden,
         vProcedencia: data.vProcedencia,
         vCama: data.vCama       
       });
