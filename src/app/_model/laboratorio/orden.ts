@@ -5,7 +5,6 @@ import { ResultadoExamen } from "./resultadoExamen";
 export class Orden extends Persona  {
     nIdOrden?: number;
     nCantMuestras?: number;
-    swt?: number;
     nNumero?: number;
     vObservaciones?: string;
     dFecOrden?: Date;

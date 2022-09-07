@@ -10,7 +10,7 @@
         <mat-icon class="maticonmenu">save</mat-icon>
         <span class="maticontitle">Guardar</span>
       </button>
-      <button *ngIf="edit && permiso.guardar && id===0" mat-stroked-button class="btnHeader" type="button" (click)="limpiar()">
+      <button *ngIf="edit && permiso.guardar && id===0" mat-stroked-button class="btnHeader" type="button">
         <mat-icon class="maticonmenu">cleaning_services</mat-icon>
         <span class="maticontitle">Limpiar</span>
       </button>
@@ -81,13 +81,13 @@
                                 <mat-grid-tile [colspan]="8">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Documento</mat-label>
-                                        <input #DOCUMENTO type="text" [readonly]="id>0" matInput placeholder="Documento" formControlName="vDocumento" minlength="1" maxlength="15" required (blur)="obtenerPaciente($event)" (keydown)="obtenerPacienteEnter($event.keyCode)" >
-                                        <button *ngIf="DOCUMENTO.value && id===0" type="button" matSuffix mat-icon-button aria-label="Limpiar" (mouseup)="DOCUMENTO.value='';reiniciaPaciente()">
-                                            <mat-icon>close</mat-icon>
-                                        </button>
-                                        <button *ngIf="DOCUMENTO.value && id===0" type="button" matSuffix mat-icon-button aria-label="Buscar" (mouseup)="obtenerPaciente($event)">
-                                            <mat-icon>search</mat-icon>
-                                        </button>
+                                        <input #DOCUMENTO type="text" [readonly]="id>0" matInput placeholder="Documento" formControlName="vDocumento" minlength="1" maxlength="15" required (change)="obtenerPersona($event)" (keyup.enter)="obtenerPersona($event)">
+                                            <button *ngIf="DOCUMENTO.value && id===0" type="button" matSuffix mat-icon-button aria-label="Limpiar" (click)="borrarDato()">
+                                                <mat-icon>close</mat-icon>
+                                            </button>
+                                            <button *ngIf="DOCUMENTO.value && id===0" type="button" matSuffix mat-icon-button aria-label="Buscar" (click)="obtenerPersona($event)">
+                                                <mat-icon>search</mat-icon>
+                                            </button>
                                     </mat-form-field>
                                 </mat-grid-tile>
                             </mat-grid-list>

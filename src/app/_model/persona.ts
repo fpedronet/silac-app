@@ -1,3 +1,4 @@
+
 export class Persona{
     nIdPersona?: number;
     vTipDocumento?: string;
@@ -30,5 +31,6 @@ export class Persona{
     dFecUsuReg?: Date;
     nIdeUsuMod?: number;
     dFecUsuMod?: Date;  
-   
+    
+    swt?: number;
 }

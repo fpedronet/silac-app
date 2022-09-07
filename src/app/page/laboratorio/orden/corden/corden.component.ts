@@ -20,6 +20,7 @@ import { TbmaestraService } from 'src/app/_service/tbmaestra.service';
 import { ConfimService } from 'src/app/page/component/confirm/confim.service';
 import { NotifierService } from 'src/app/page/component/notifier/notifier.service';
 import { SpinnerService } from 'src/app/page/component/spinner/spinner.service';
+import { PoclabService } from 'src/app/_service/apiexterno/poclab.service';
 
 import forms from 'src/assets/json/formulario.json';
 
@@ -46,6 +47,8 @@ export class CordenComponent implements OnInit {
   tbProcedencia: TbMaestra[] = [];
   nombresUsuario?: string = '';
 
+  nombres: string = "";
+  documento: string = "";
   idTipoDocumento: string = '';
   findText: string = '';
   selectedArea: string = '';
@@ -79,6 +82,8 @@ export class CordenComponent implements OnInit {
     private configPermisoService : ConfigPermisoService,
     private examenService : ExamenService,
     private ordenService : OrdenService,
+    private poclabService: PoclabService
+
   ) {
 
   }
@@ -173,7 +178,6 @@ export class CordenComponent implements OnInit {
 
   obtener(){
     this.ordenService.obtener(this.id).subscribe(data=>{
-
       data.vTipDocu = (data.vTipDocu==null)?  this.idTipoDocumento: data.vTipDocu;
 
       this.form.patchValue({
@@ -306,16 +310,130 @@ export class CordenComponent implements OnInit {
       this.currentTab = numTab;
   }
 
-  reiniciaPaciente(){
+  obtenerPersona(e?: any){
+    debugger;
+    var tipoDocu =this.form.value['vTipDocu']
+    var documento =this.form.value['vDocumento']
 
+    if(documento!=this.documento){
+      var validacion = this.validaDocumento(tipoDocu, documento);
+
+      if(validacion === ''){
+  
+        this.spinnerService.showLoading();
+        this.poclabService.obtenerPersonaLocal(tipoDocu, documento).subscribe(data=>{
+  
+          data.vTipDocu = (data.vTipDocu==null)?  this.idTipoDocumento: data.vTipDocu;
+  
+          if(data.vDocumento!="" && data.vDocumento!=null){
+            this.form.patchValue({
+              vApPaterno: data.vApPaterno,
+              vApMaterno: data.vApMaterno,
+              vPrimerNombre: data.vPrimerNombre,
+              vSegundoNombre: data.vSegundoNombre,
+              vSexo: data.vSexo,
+              nEdad: data.nEdad,
+              dFechaNac: data.dFechaNac,
+              vEstCivil: data.vEstCivil
+            });  
+             
+            this.nombres = data.vNombreCompleto!;
+            this.documento = data.vDocumento!;
+  
+            this.spinnerService.hideLoading();
+          }else{
+            this.poclabService.obtenerPersonaReniec("1", documento).subscribe(data=>{
+  
+              let estadocivil = (data.vCodEstadoCivil =="01")? "00001": (data.vCodEstadoCivil =="02"? "00002": null)
+
+              if(data.vDocumento!="" && data.vDocumento!=null){
+                this.form.patchValue({
+                  vApPaterno: data.vApePaterno,
+                  vApMaterno: data.vApeMaterno,
+                  vPrimerNombre: data.vPrimerNombre,
+                  vSegundoNombre: data.vSegundoNombre,
+                  vSexo: data.vSexo,
+                  nEdad: data.nEdad,
+                  dFechaNac: data.dteNacimiento,
+                  vEstCivil: estadocivil
+                });
+                      
+                this.nombres = data.vApePaterno + " "+ data.vApeMaterno + " "+ data.vPrimerNombre + " "+data.vSegundoNombre
+                this.documento = data.vDocumento!;
+              }  
+              
+              this.spinnerService.hideLoading();
+            });
+          }
+        });
+      }else{
+        if(validacion !== 'El tipo de documento y el documento no pueden estar vacíos')
+          this.notifierService.showNotification(2,'Mensaje',validacion);
+          this.borrarDato();
+      } 
+   }
   }
 
-  obtenerPacienteEnter(key: number){
-
+  esEntero(cadena: string){
+    const regex = /^[0-9]+$/;
+    return regex.test(cadena);
   }
 
-  obtenerPaciente(e?: Event){
+  borrarDato(){
+    this.form.patchValue({
+      vDocumento: null,
+      vApPaterno: null,
+      vApMaterno: null,
+      vPrimerNombre: null,
+      vSegundoNombre: null,
+      vSexo: null,
+      nEdad: null,
+      dFechaNac: null,
+      vEstCivil: null
+   });
 
+    this.nombres = "";
+    this.documento = "";
+   
+  }
+
+  validaDocumento(tipoDocu: string, numDocu: string){
+    if(tipoDocu == '' && numDocu == '')
+        return 'El tipo de documento y el documento no pueden estar vacíos';
+
+    var noEsNro = !this.esEntero(numDocu);
+    
+    //DNI
+    if(tipoDocu == '00001'){
+      if(numDocu==null  || numDocu=="")
+        return 'Ingrese el Nro Documento';
+      if(numDocu.length !== 8)
+        return 'El DNI debe tener 8 dígitos';
+      if(noEsNro)
+        return 'El DNI debe debe contener solo números';
+    }
+
+    //PASS
+    if(tipoDocu == '00002'){
+      if(numDocu==null || numDocu=="")
+        return 'Ingrese el Nro Documento';
+      if(numDocu.length > 12)
+        return 'El PASS no puede exceder 12 dígitos';
+    }
+
+    //CEXT
+    if(tipoDocu == '00004'){
+      if(numDocu==null || numDocu=="")
+        return 'Ingrese el Nro Documento';
+      if(numDocu.length > 12)
+        return 'El CEXT no puede exceder 12 dígitos';
+    }
+
+    //HC, DIN, PARTNAC, NEO, OTROS
+    if(numDocu==null || numDocu=="")
+        return 'Ingrese el Nro Documento';
+
+    return '';
   }
 
   guardar(){
@@ -352,10 +470,6 @@ export class CordenComponent implements OnInit {
           }
         });*/
     }
-
-  limpiar(){
-    this.inicializar();
-  }
 
   /*abrirDetalle(rendDet?: RendicionD){
     //debugger;

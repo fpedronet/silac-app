@@ -1,4 +1,4 @@
-import { Byte } from '@angular/compiler/src/util';
+import { Byte } from "@angular/compiler/src/util";
 import { pagination } from "../pagination";
 import { Persona } from '../persona';
 import { Perfil } from './perfil';
@@ -8,15 +8,14 @@ export class Usuario extends Persona {
     vUsuario? : string;
     vContrasena? : string;
     dFecUltConex?: Date;
-    swt? : number;
-    iFirma? : Byte;
-    vFirma? : string;
-    iFoto? : Byte;
-    vFoto? : string;
     vCodExternoTipo? : string;
     vCodExternoNum? : string;
     vColegiatura? : string;
     nIdPerfil? : string;
+    iFirma? : Byte;
+    vFirma? : string;
+    iFoto? : Byte;
+    vFoto? : string;
     listaPerfil?:Perfil[];
 }
 
