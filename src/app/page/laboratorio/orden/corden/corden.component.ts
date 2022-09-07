@@ -68,7 +68,11 @@ export class CordenComponent implements OnInit {
   listaExamenes: Examen[] = [];
   listaPerfiles: PerfilExamen[] = [];
 
-  fechaMax?: Date;
+  fechaNac: Date | null = null;
+  maxDate: Date = new Date();
+  minDate: Date = new Date();
+  fechaMax: Date = new Date();
+
   
   constructor(
     private http: HttpClient,
@@ -90,7 +94,7 @@ export class CordenComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.fechaMax = new Date();
+    this.maxDate = new Date();
 
     this.route.params.subscribe((data: Params)=>{
       this.id = (data["id"]==undefined)?0:parseInt(data["id"]);
@@ -106,6 +110,8 @@ export class CordenComponent implements OnInit {
       this.listarPerfiles();        
       this.obtener();
     });
+
+    this.minDate.setMonth(this.maxDate.getMonth() - 12*120);  
   }
 
   ngAfterViewInit() {
@@ -289,25 +295,67 @@ export class CordenComponent implements OnInit {
     return lista?.find(e => e.vValor === value)?.vDescripcion?.toUpperCase();
   }
 
-
-
-  camposCambiados(orden: Orden){
-    /*var lugar: boolean = rend.lugar !== this.getControlLabel('lugar');
-    var motivo: boolean = rend.motivo !== this.getControlLabel('motivo');
-    var tipo: boolean = rend.tipo !== this.getControlLabel('tipo');
-    var ingresos: boolean = rend.ingresos !== Number(this.getControlLabel('ingresos'));
-    //debugger;
-    return lugar || motivo || tipo || ingresos;*/
-    return false;
-  }
-
- 
-
   changestepper(stepper: any, numTab: number = -1){
     if(numTab === -1)
       this.currentTab = stepper._selectedIndex;
     else
       this.currentTab = numTab;
+  }
+
+  cambiaFechaNac(dateStr: string){
+    var arrDate = this.separarFecha(dateStr);
+    if(arrDate.length === 0)
+      this.fechaNac = null;
+    else{
+      var d = new Date(arrDate[2], arrDate[1]-1, arrDate[0]);
+      if(d < this.minDate || d > this.maxDate)
+        this.fechaNac = null;
+      else
+        this.updateFechaNac(d);
+    }
+  }
+
+  separarFecha(cad: string){
+    var arrStr: string[] = [];
+    var arr: number[] = [];
+    arrStr = cad.split('/');
+    if(arrStr.length !== 3)
+      return arr;
+    else{
+      for (let str of arrStr){
+        let num = parseInt(str);
+        if(num === null){
+          arr = [];
+          break;
+        }
+        else
+          arr.push(num)
+      }
+      return arr;
+    }
+  }
+
+  updateFechaNac(d: Date){
+    this.fechaNac = d;
+    if(this.form.get('nEdad') !== undefined){
+      var edad = this.calcularEdad(d);
+      this.form.patchValue({
+        nEdad: edad.toString()
+      });
+    }
+  }
+
+  calcularEdad(date: Date) {
+    var hoy = new Date();
+    var cumpleanos = new Date(date);
+    var edad = hoy.getFullYear() - cumpleanos.getFullYear();
+    var m = hoy.getMonth() - cumpleanos.getMonth();
+
+    if (m < 0 || (m === 0 && hoy.getDate() < cumpleanos.getDate())) {
+        edad--;
+    }
+
+    return edad;
   }
 
   obtenerPersona(e?: any){

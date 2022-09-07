@@ -41,7 +41,7 @@
 
         <mat-stepper #stepper id="stepper" [selectedIndex]="currentTab" (click)="changestepper(stepper)" [linear]="true">
 
-            <mat-step [completed]="(id === 0) || (objCargado !== undefined && id !== 0 && !camposCambiados(objCargado!))">
+            <mat-step>
                 <ng-template matStepperIcon="edit">
                 </ng-template>
                 <ng-template matStepLabel> Datos Personal </ng-template>   
@@ -156,9 +156,9 @@
                                 <mat-grid-tile  [colspan]="6">
                                       <mat-form-field appearance="outline">
                                         <mat-label>Fecha de nacimiento</mat-label>
-                                        <input #inputFecNac matInput [matDatepicker]="dFecNacimiento" [max]="fechaMax" placeholder="dd/mm/aaaa" formControlName="dFechaNac" required>
-                                        <mat-datepicker-toggle matSuffix [for]="dFecNacimiento"></mat-datepicker-toggle>
-                                        <mat-datepicker #dFecNacimiento></mat-datepicker>
+                                        <input #inputFecNac matInput [matDatepicker]="FecNacimiento" [min]="minDate" [max]="maxDate" placeholder="dd/mm/aaaa" formControlName="dFechaNac" required (dateChange)="cambiaFechaNac(inputFecNac.value)">
+                                        <mat-datepicker-toggle matSuffix [for]="FecNacimiento"></mat-datepicker-toggle>
+                                        <mat-datepicker #FecNacimiento></mat-datepicker>
                                       </mat-form-field>
                                 </mat-grid-tile>
                                 <mat-grid-tile [colspan]="6">
