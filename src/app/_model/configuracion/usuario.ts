@@ -1,7 +1,7 @@
 import { Byte } from '@angular/compiler/src/util';
 import { pagination } from "../pagination";
+import { Persona } from '../persona';
 import { Perfil } from './perfil';
-import { Persona } from "./persona";
 
 export class Usuario extends Persona {
     nIdUsuario?: number;

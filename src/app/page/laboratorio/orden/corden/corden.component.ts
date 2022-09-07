@@ -7,16 +7,19 @@ import { MatStepper } from '@angular/material/stepper';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { merge, of as observableOf } from 'rxjs';
 import { catchError, map, startWith, switchMap} from 'rxjs/operators';
+import { TbMaestra } from 'src/app/_model/combobox';
+import { Examen, PerfilExamen } from 'src/app/_model/configuracion/examen';
+
+import { Orden } from 'src/app/_model/laboratorio/orden';
+import { Permiso } from 'src/app/_model/permiso';
+
+import { ConfigPermisoService } from 'src/app/_service/configpermiso.service';
+import { ExamenService } from 'src/app/_service/configuracion/examen.service';
+import { OrdenService } from 'src/app/_service/laboratorio/orden.service';
+import { TbmaestraService } from 'src/app/_service/tbmaestra.service';
 import { ConfimService } from 'src/app/page/component/confirm/confim.service';
 import { NotifierService } from 'src/app/page/component/notifier/notifier.service';
 import { SpinnerService } from 'src/app/page/component/spinner/spinner.service';
-import { TbMaestra } from 'src/app/_model/combobox';
-import { Examen, PerfilExamen } from 'src/app/_model/configuracion/examen';
-import { Orden } from 'src/app/_model/laboratorio/orden';
-import { Permiso } from 'src/app/_model/permiso';
-import { ConfigPermisoService } from 'src/app/_service/configpermiso.service';
-import { ExamenService } from 'src/app/_service/configuracion/examen.service';
-import { TbmaestraService } from 'src/app/_service/tbmaestra.service';
 
 import forms from 'src/assets/json/formulario.json';
 
@@ -33,15 +36,17 @@ export class CordenComponent implements OnInit {
   form: FormGroup = new FormGroup({});
   permiso: Permiso = {};
 
-  tablasMaestras = ['AREXA', 'TDOC', 'SEXO', 'ORIPA', 'SERV'];
+  tablasMaestras = ['AREXA', 'TDOC', 'SEXO', 'ORIPA', 'SERV', 'ESCIV'];
   tbArea: TbMaestra[] = [];
   tbDocu: TbMaestra[] = [];
   tbSexo: TbMaestra[] = [];
+  tbCivil: TbMaestra[] = [];
   tbOrig: TbMaestra[] = [];
   tbServ: TbMaestra[] = [];
   tbProcedencia: TbMaestra[] = [];
   nombresUsuario?: string = '';
 
+  idTipoDocumento: string = '';
   findText: string = '';
   selectedArea: string = '';
   selectedPerfil: number[] = [];
@@ -67,35 +72,69 @@ export class CordenComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,
     private dialog: MatDialog,
-    private spinner: SpinnerService,
+    private spinnerService: SpinnerService,
     private notifierService : NotifierService,
     private confirmService : ConfimService,
     private tbmaestraService: TbmaestraService,
     private configPermisoService : ConfigPermisoService,
-    private examenService : ExamenService
+    private examenService : ExamenService,
+    private ordenService : OrdenService,
   ) {
+
   }
 
 
   ngOnInit(): void {
     this.fechaMax = new Date();
-    
-    this.obtenerpermiso();
-    
-    this.inicializar();
 
     this.route.params.subscribe((data: Params)=>{
       this.id = (data["id"]==undefined)?0:parseInt(data["id"]);
-      this.listarMaestros().then(res => {
-        this.listarExamenes();
-        this.listarPerfiles();        
-        this.obtener(true);
-      });
+      this.edit = (data["edit"]==undefined) ? true : ((data["edit"]=='true') ? true : false)      
+    });
+
+    this.inicializar();
+
+    this.obtenerpermiso();
+
+    this.listarMaestros().then(res => {
+      this.listarExamenes();
+      this.listarPerfiles();        
+      this.obtener();
     });
   }
 
   ngAfterViewInit() {
     this.stepper._getIndicatorType = () => 'number';
+  }
+
+  inicializar(){
+    this.form = new FormGroup({
+      'nIdOrden': new FormControl({ value: 0, disabled: !this.edit}),
+      'nIdPersona': new FormControl({ value: 0, disabled: !this.edit}),
+      'vTipDocu': new FormControl({ value: '', disabled: !this.edit}),
+      'vDocumento': new FormControl({ value: '', disabled: !this.edit}),
+      'vApPaterno': new FormControl({ value: '', disabled: !this.edit}),
+      'vApMaterno': new FormControl({ value: '', disabled: !this.edit}),
+      'vPrimerNombre': new FormControl({ value: '', disabled: !this.edit}),
+      'vSegundoNombre': new FormControl({ value: '', disabled: !this.edit}),
+      'vSexo': new FormControl({ value: '', disabled: !this.edit}),
+      'vEstCivil': new FormControl({ value: '', disabled: !this.edit}),
+      'dFechaNac': new FormControl({ value: '', disabled: !this.edit}),
+      'nEdad': new FormControl({ value: '', disabled: !this.edit}),   
+
+      'vHC': new FormControl({ value: 0, disabled: !this.edit}),
+      'dFecha': new FormControl({ value: new Date(), disabled: !this.edit}),
+      'vProcedencia': new FormControl({ value: '', disabled: !this.edit}),
+      'vCama': new FormControl({ value: '', disabled: !this.edit}),
+      'nNumero': new FormControl({ value: 0, disabled: !this.edit}),
+
+    });
+  }
+
+  obtenerpermiso(){
+    this.configPermisoService.obtenerpermiso(forms.orden.codigo).subscribe(data=>{
+      this.permiso = data;
+    });
   }
 
   async listarMaestros(){
@@ -110,13 +149,16 @@ export class CordenComponent implements OnInit {
             this.notifierService.showNotification(0,'Mensaje','No se ha encontrado información');
           }
           else{
-            var tbCombobox: TbMaestra[] = data.items;
-          
-            this.tbArea = this.obtenerSubtabla(tbCombobox,'AREXA');
-            this.tbDocu = this.obtenerSubtabla(tbCombobox,'TDOC');
-            this.tbSexo = this.obtenerSubtabla(tbCombobox,'SEXO');
-            this.tbOrig = this.obtenerSubtabla(tbCombobox,'ORIPA');
-            this.tbServ = this.obtenerSubtabla(tbCombobox,'SERV');
+         
+            this.tbArea = this.obtenerSubtabla(data.items,'AREXA');
+            this.tbDocu = this.obtenerSubtabla(data.items,'TDOC');
+            this.tbSexo = this.obtenerSubtabla(data.items,'SEXO');
+            this.tbOrig = this.obtenerSubtabla(data.items,'ORIPA');
+            this.tbServ = this.obtenerSubtabla(data.items,'SERV');
+            this.tbCivil = this.obtenerSubtabla(data.items,'ESCIV');
+
+            //DNI por defecto
+            this.idTipoDocumento = this.tbDocu.length>0? this.tbDocu[0].vValor! : '';
 
             //Área por defecto
             if(this.tbArea.length > 0)
@@ -127,6 +169,33 @@ export class CordenComponent implements OnInit {
         resolve('ok')
       });
     })
+  }
+
+  obtener(){
+    this.ordenService.obtener(this.id).subscribe(data=>{
+
+      data.vTipDocu = (data.vTipDocu==null)?  this.idTipoDocumento: data.vTipDocu;
+
+      this.form.patchValue({
+        nIdOrden: data.nIdOrden,
+        nIdPersona: data.nIdPersona,
+        vTipDocu : data.vTipDocu,
+        vDocumento: data.vDocumento,
+        vApPaterno: data.vApPaterno,
+        vApMaterno: data.vApMaterno,
+        vPrimerNombre: data.vPrimerNombre,
+        vSegundoNombre: data.vSegundoNombre,
+        vSexo: data.vSexo,
+        vEstCivil: data.vEstCivil,
+        dFechaNac: data.dFechaNac,
+        nEdad: data.nEdad,
+        vHC: data.vHC,
+        dFecha: data.dFecha,
+        vProcedencia: data.vProcedencia,
+        vCama: data.vCama       
+      });
+
+    });
   }
 
   listarExamenes() {
@@ -208,28 +277,6 @@ export class CordenComponent implements OnInit {
     return tb.filter(e => e.vCodTabla?.toString()?.trim() === cod);
   }
 
-  inicializar(){
-    this.form = new FormGroup({
-      'nIdOrden': new FormControl({ value: 0, disabled: false}),
-      'nNumero': new FormControl({ value: 0, disabled: false}),
-      'dFecha': new FormControl({ value: new Date(), disabled: false}),
-      'vTipDocu': new FormControl({ value: '', disabled: false}),
-      'vDocumento': new FormControl({ value: '', disabled: false}),
-      'vHC': new FormControl({ value: 0, disabled: false}),
-      'dFecNacimiento': new FormControl({ value: '', disabled: false}),
-      'nEdad': new FormControl({ value: '', disabled: false}),
-      'vApPaterno': new FormControl({ value: '', disabled: false}),
-      'vApMaterno': new FormControl({ value: '', disabled: false}),
-      'vPrimerNombre': new FormControl({ value: '', disabled: false}),
-      'vSegundoNombre': new FormControl({ value: '', disabled: false}),
-      'vSexo': new FormControl({ value: '', disabled: false}),
-      'vProcedencia': new FormControl({ value: '', disabled: false}),
-      'vCama': new FormControl({ value: '', disabled: false}),
-      //'vOrigen': new FormControl({ value: '', disabled: false}),
-      //'vServicio': new FormControl({ value: '', disabled: false}),
-    });
-  }
-
   getControlLabel(type: string){
     return this.form.controls[type].value;
   }
@@ -238,94 +285,7 @@ export class CordenComponent implements OnInit {
     return lista?.find(e => e.vValor === value)?.vDescripcion?.toUpperCase();
   }
 
-  obtener(primeraObs: boolean = false){
-    /*if(this.idPantalla === 2)
-      this.pantallaPrev = 'SEGUIMIENTO -';
-    if(this.idPantalla === 3)
-      this.pantallaPrev = 'REVISIÓN -';
-    if(this.idPantalla === 4)
-      this.pantallaPrev = 'APROBACIÓN -';
 
-    this.nombreAprobador = '';
-
-    if(this.id > 0){
-      this.spinner.showLoading();
-      this.rendicionService.obtener(this.id).subscribe(data=>{
-        if(data!== undefined && data.ideRendicion !== 0){
-          //debugger;
-          this.rendicionCargada = data;
-          this.existRendicion = true;
-          this.form.patchValue({
-            ideRendicion: data.ideRendicion,
-            codigo: data.codigo,
-            lugar: data.lugar,
-            motivo: data.motivo,
-            ideUsuario: data.ideUsuario,
-            ingresos: data.ingresos?.toFixed(2),
-            gastos: data.gastos?.toFixed(2),
-            ideEstado: data.ideEstado,
-            estado: this.listaEstados?.find(e => e.valor === data.ideEstado)?.descripcion,
-            fechaCreacion: data.vFechaCreacion,
-            tipo: data.tipo,
-            //Aprobador
-            fechaApruebaRechaza: data.vFechaApruebaRechaza,
-            ideUsuApruebaRechaza: data.ideUsuApruebaRechaza,
-            obsAprobador: data.obsAprobador,
-            //Revisor
-            fechaRevisado: data.vFechaRevisado,
-            ideUsuRevisa: data.ideUsuRevisa,
-            obsRevisor: data.obsRevisor
-          });
-
-          if(data.tipo === 'M'){
-            this.muestraIngresos = false;
-            this.displayedColumns = this.initDisplayedColumns.filter(e => e !== 'adjunto');
-          }            
-          else{
-            this.muestraIngresos = true;
-            this.displayedColumns = this.initDisplayedColumns;
-          }
-            
-
-          if(data.ideEstado === 2 && data.ideUsuApruebaRechaza !== undefined && data.ideUsuApruebaRechaza !== 0)
-            this.nombreAprobador = this.buscaUsuario(data.ideUsuApruebaRechaza);
-
-          this.url_m = data.url_M!;
-          //Muestra creador de rendición
-          this.curUsuario = data.ideUsuario!;
-          this.nombresUsuario = this.buscaUsuario(this.curUsuario);
-          //Código de rendición actual
-          this.curCodigo = data.codigo!;
-
-          this.vIngresos = data.ingresos?.toFixed(2);
-          this.vGastos = data.gastos?.toFixed(2);
-          this.vBalance = (data.ingresos!-data.gastos!).toFixed(2);
-          //debugger;
-          this.muestraEstado(data.ideEstado);
-
-          //Muestra observaciones
-          this.existenObs = data.ideEstado === 1 && ((data.obsAprobador !== undefined && data.obsAprobador !== '') || (data.obsRevisor !== undefined && data.obsRevisor !== ''));
-          if(this.existenObs && primeraObs)
-            this.observacion();
-
-          this.documento= data.codigo!;
-          this.dataSource = data.listaDetalle!;
-          //debugger;
-          if(this.dataSource.length > 0){
-            this.existDetalle = true;
-            this.curMoneda = this.dataSource[0].codMoneda!;
-          }
-          else{
-            //debugger;
-            this.existRendicion = true;
-            setTimeout(this.changestepper, 250, undefined, 1);
-          }
-          
-        }
-        this.spinner.hideLoading();
-      });
-    }*/
-  }
 
   camposCambiados(orden: Orden){
     /*var lugar: boolean = rend.lugar !== this.getControlLabel('lugar');
@@ -337,14 +297,7 @@ export class CordenComponent implements OnInit {
     return false;
   }
 
-  obtenerpermiso(){
-    this.spinner.showLoading();
-    this.configPermisoService.obtenerpermiso(forms.orden.codigo).subscribe(data=>{
-      //debugger;
-      this.permiso = data;
-      this.spinner.hideLoading();
-    });
-  }
+ 
 
   changestepper(stepper: any, numTab: number = -1){
     if(numTab === -1)

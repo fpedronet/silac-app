@@ -1,12 +1,8 @@
 import { pagination } from "../pagination";
-import { Paciente } from "./paciente";
+import { Persona } from "../persona";
 import { ResultadoExamen } from "./resultadoExamen";
 
-export class Orden  {
-    constructor(){
-        this.paciente = new Paciente();
-    }
-
+export class Orden extends Persona  {
     nIdOrden?: number;
     nCantMuestras?: number;
     swt?: number;
@@ -18,28 +14,24 @@ export class Orden  {
     nIdUsuMod?: number;
     dFecOrden?: Date;
     vFecOrden?: string;
-    nCodMedico?:number;
-    vCodTipoMuestra?: string;
-    vObsHistorial?: string;
+    // nCodMedico?:number;
+    // vCodTipoMuestra?: string;
+    // vObsHistorial?: string;
     nIdEstado?: number;
-    nIdeAtencion?: number;
     vEstado?: string;
-    nIdPaciente?: number;
-    paciente?: Paciente;
     vExamen?: string;
     vResultado?: string;
     vUndMed?: string;
     Flag?: string;
+    vHC?: string;
+    dFecha?: Date;
+    vCama?: string;
+
     resultadoExamen?: ResultadoExamen;
     listaResultadoExamen?: ResultadoExamen[];
 
-    nIdPersona?: number;
-    vNombreCompleto?: string;
-    vTipDocu?: string;
+   
     vTipDocumento?: string;
-    vSexo?: string;
-    vDocumento?: string;
-    nEdad?: number;
     vProcedencia?: string;
     vServicio?: string;
     vCodArea?: string;

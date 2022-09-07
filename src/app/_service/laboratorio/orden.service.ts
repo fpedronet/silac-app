@@ -33,6 +33,11 @@ export class OrdenService {
     return this.http.post<dataCollection>(urls,req);
   }
 
+  obtener(idorden: number){
+    let urls = `${this.url}/GetFirstOrden?idorden=${idorden}`;
+    return this.http.get<Orden>(urls);
+  }
+
   obtenerdetalle(idorden: number){
     let urls = `${this.url}/GetFirstOrdenDetalle?idorden=${idorden}`;
     return this.http.get<Orden>(urls);
