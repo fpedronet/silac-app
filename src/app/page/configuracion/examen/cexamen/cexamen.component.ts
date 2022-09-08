@@ -1,14 +1,16 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatStepper } from '@angular/material/stepper';
 import { ConfimService } from 'src/app/page/component/confirm/confim.service';
 import { NotifierService } from 'src/app/page/component/notifier/notifier.service';
 import { SpinnerService } from 'src/app/page/component/spinner/spinner.service';
 import { TbMaestra } from 'src/app/_model/combobox';
-import { Examen } from 'src/app/_model/configuracion/examen';
+import { EquivResultado, Examen, RangoResu } from 'src/app/_model/configuracion/examen';
 import { ExamenService } from 'src/app/_service/configuracion/examen.service';
 import { TbmaestraService } from 'src/app/_service/tbmaestra.service';
 import { environment } from 'src/environments/environment';
+import numeral from 'numeral';
 
 
 @Component({
@@ -40,11 +42,24 @@ export class CexamenComponent implements OnInit {
   form: FormGroup = new FormGroup({});
   loading = true;
 
-  tablasMaestras = ['AREXA', 'TMUE', 'SGRPO', 'RPTA'];
+  currentTab: number = 0;
+
+  tablasMaestras = ['AREXA', 'TMUE', 'SGRPO', 'RPTA', 'EQRTA'];
   tbArea: TbMaestra[] = [];
   tbMuestra: TbMaestra[] = [];
   tbGrupo: TbMaestra[] = [];
   tbRpta: TbMaestra[] = [];
+  tbEquivRpta: TbMaestra[] = [];
+
+  incluirExtremos: boolean = true;
+  invierteColores: boolean = false;
+  incluirMensaje: boolean = false;
+
+  selEquicRpta: TbMaestra[] = [];
+
+  @ViewChild(MatStepper)
+  stepper!: MatStepper;
+  
   /*carBuscaAuto: number = 1;
   nroMuestraAuto: number = 0;
 
@@ -62,8 +77,14 @@ export class CexamenComponent implements OnInit {
     this.listarCombo();
   }
 
+  ngAfterViewInit() {
+    this.stepper._getIndicatorType = () => 'number';
+  }
+
   inicializar(){
-    //debugger;
+    
+    numeral.defaultFormat('0');
+
     var examen = new Examen();
 
     this.form = new FormGroup({
@@ -140,6 +161,9 @@ export class CexamenComponent implements OnInit {
           this.tbMuestra = this.obtenerSubtabla(tbCombobox,'TMUE');
           this.tbGrupo = this.obtenerSubtabla(tbCombobox,'SGRPO');
           this.tbRpta = this.obtenerSubtabla(tbCombobox,'RPTA');
+          this.tbEquivRpta = this.obtenerSubtabla(tbCombobox,'EQRTA');
+
+          this.selEquicRpta = this.tbEquivRpta.slice();
 
           this.obtener(this.examen);
         }
@@ -224,6 +248,8 @@ export class CexamenComponent implements OnInit {
     model.vTipoRespuesta = this.form.value['vTipoRespuesta'];
     model.vRespuesta = this.form.value['vRespuesta'];
 
+    model.listaEquivalencias = this.examen.listaEquivalencias;
+
     //model.ideSede = this.ideSede;
 
     //var nMonto = Number(this.form.value['monto']);
@@ -297,5 +323,53 @@ export class CexamenComponent implements OnInit {
     var respuesta: boolean = examen.vRespuesta !== this.getControlLabel('vRespuesta');
 
     return codExamen || descripcion || area || muestra || formato || formula || abreviatura || unidad || rango || grupo || tiporpta || respuesta;
+  }
+
+  changestepper(stepper: any, numTab: number = -1){
+    if(numTab === -1)
+      this.currentTab = stepper._selectedIndex;
+    else
+      this.currentTab = numTab;
+  }
+
+  actualizaCheckbox(condicion: number, checked: boolean){
+    switch (condicion){
+      case 1:
+        this.incluirExtremos = checked;
+        if(!checked)
+          this.selEquicRpta = this.tbEquivRpta.filter(e => e.vAux1 === '1');
+        else
+          this.selEquicRpta = this.tbEquivRpta.slice();
+        break;
+      case 2:
+        this.invierteColores = checked;
+        break;
+      case 3:
+        this.incluirMensaje = checked;
+        break;
+    }
+  }
+
+  agregarFila(){
+    var lista = this.examen.listaEquivalencias;
+    lista?.push(new EquivResultado());
+  }
+  
+  eliminarFila(){
+    var lista = this.examen.listaEquivalencias;
+    lista?.pop();
+  }
+
+  obtieneLimites(codigo: string = '', resultados: RangoResu[] = []){
+    var formato = this.getControlLabel('vFormato');
+    var rangos: string = '';
+    var min, max;
+    var resu = resultados.find(e => e.vEtiqueta === codigo);
+    if(resu !== undefined){
+      min = numeral(resu.nValMin);
+      max = numeral(resu.nValMax);
+      rangos = '> ' + min.format(formato) + ' ≤ ' + max.format(formato);
+    }
+    return rangos;
   }
 }
