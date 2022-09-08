@@ -122,6 +122,17 @@ export class CordenComponent implements OnInit {
   inicializar(){
     this.form = new FormGroup({
       'nIdOrden': new FormControl({ value: 0, disabled: !this.edit}),
+      'nNumero': new FormControl({ value: '', disabled: !this.edit}),
+      'vHC': new FormControl({ value: '', disabled: !this.edit}),
+      'nCantMuestras': new FormControl({ value: '', disabled: !this.edit}),
+      'dFecOrden': new FormControl({ value: new Date(), disabled: !this.edit}),
+      'vCodBarras': new FormControl({ value: '', disabled: !this.edit}),
+      'vProcedencia': new FormControl({ value: '', disabled: !this.edit}),
+      'vCama': new FormControl({ value: '', disabled: !this.edit}),
+      'vOrigen': new FormControl({ value: '', disabled: !this.edit}),
+      'vServicio': new FormControl({ value: '', disabled: !this.edit}),
+
+
       'nIdPersona': new FormControl({ value: 0, disabled: !this.edit}),
       'vTipDocu': new FormControl({ value: '', disabled: !this.edit}),
       'vDocumento': new FormControl({ value: '', disabled: !this.edit}),
@@ -133,12 +144,6 @@ export class CordenComponent implements OnInit {
       'vEstCivil': new FormControl({ value: '', disabled: !this.edit}),
       'dFechaNac': new FormControl({ value: '', disabled: !this.edit}),
       'nEdad': new FormControl({ value: '', disabled: !this.edit}),   
-
-      'vHC': new FormControl({ value: 0, disabled: !this.edit}),
-      'dFecha': new FormControl({ value: new Date(), disabled: !this.edit}),
-      'vProcedencia': new FormControl({ value: '', disabled: !this.edit}),
-      'vCama': new FormControl({ value: '', disabled: !this.edit}),
-      'nNumero': new FormControl({ value: 0, disabled: !this.edit}),
 
     });
   }
@@ -185,12 +190,27 @@ export class CordenComponent implements OnInit {
 
   obtener(){
     this.ordenService.obtener(this.id).subscribe(data=>{
-      debugger;
+
       data.vTipDocu = (data.vTipDocu==null)?  this.idTipoDocumento: data.vTipDocu;
       data.dFecOrden= (data.dFecOrden==null)? this.fechaMax: data.dFecOrden;
 
       this.form.patchValue({
         nIdOrden: data.nIdOrden,
+        nNumero: data.nNumero,
+        vHC: data.vHC,
+        nCantMuestras: data.nCantMuestras,
+        dFecOrden: data.dFecOrden,
+        vCodBarras: data.vCodBarras,
+        vObservaciones: data.vObservaciones,
+        nIdEstado: data.nIdEstado,
+        vProcedencia: data.vProcedencia,
+        vCama: data.vCama,
+        vOrigen: data.vOrigen,
+        vServicio: data.vServicio,
+        vEstado: data.vEstado,
+        nFlagHemograma: data.nFlagHemograma,
+        nFlagOrina: data.nFlagOrina,
+
         nIdPersona: data.nIdPersona,
         vTipDocu : data.vTipDocu,
         vDocumento: data.vDocumento,
@@ -201,11 +221,7 @@ export class CordenComponent implements OnInit {
         vSexo: data.vSexo,
         vEstCivil: data.vEstCivil,
         dFechaNac: data.dFechaNac,
-        nEdad: data.nEdad,
-        vHC: data.vHC,
-        dFecOrden: data.dFecOrden,
-        vProcedencia: data.vProcedencia,
-        vCama: data.vCama       
+        nEdad: data.nEdad,      
       });
 
     });

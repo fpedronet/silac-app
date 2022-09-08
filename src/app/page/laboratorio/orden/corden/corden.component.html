@@ -189,7 +189,7 @@
                                 <mat-grid-tile [colspan]="6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>H.C.</mat-label>
-                                        <input type="text" [readonly]="!edit" matInput placeholder="H.C." formControlName="vHC" minlength="1" maxlength="15" required>
+                                        <input type="text" [readonly]="!edit" matInput placeholder="H.C." formControlName="vHC" minlength="1" maxlength="15">
                                     </mat-form-field>
                                 </mat-grid-tile>
                                 <mat-grid-tile [colspan]="6">
@@ -204,18 +204,37 @@
 
                             <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
                                 <mat-grid-tile [colspan]="6">
-                                    <mat-form-field appearance="outline">
+                                    <!-- <mat-form-field appearance="outline">
                                         <mat-select placeholder="Procedencia" formControlName="vProcedencia" required>
                                         <mat-option *ngFor="let el of tbProcedencia" [value]="el.vValor">
                                             {{el.vDescripcion}}
                                         </mat-option>              
                                         </mat-select>
+                                    </mat-form-field> -->
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Procedencia</mat-label>
+                                        <input type="text" [readonly]="!edit" matInput placeholder="Procedencia" formControlName="vProcedencia" minlength="1" maxlength="50">
                                     </mat-form-field>
                                 </mat-grid-tile>
                                 <mat-grid-tile [colspan]="6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Cama</mat-label>
-                                        <input type="text" [readonly]="!edit" matInput placeholder="Cama" formControlName="vCama" minlength="1" maxlength="15" required>
+                                        <input type="text" [readonly]="!edit" matInput placeholder="Cama" formControlName="vCama" minlength="1" maxlength="50">
+                                    </mat-form-field>
+                                </mat-grid-tile>
+                            </mat-grid-list>
+
+                            <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                                <mat-grid-tile [colspan]="6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Origen</mat-label>
+                                        <input type="text" [readonly]="!edit" matInput placeholder="Origen" formControlName="vOrigen" minlength="1" maxlength="50">
+                                    </mat-form-field>
+                                </mat-grid-tile>
+                                <mat-grid-tile [colspan]="6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Servicio</mat-label>
+                                        <input type="text" [readonly]="!edit" matInput placeholder="Servicio" formControlName="vServicio" minlength="1" maxlength="50">
                                     </mat-form-field>
                                 </mat-grid-tile>
                             </mat-grid-list>
