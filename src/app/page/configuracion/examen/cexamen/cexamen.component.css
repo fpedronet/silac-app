@@ -32,3 +32,31 @@
   table tr:nth-of-type(even) {
     background: #f9f9f9;
   }
+
+  .table-input{
+    margin-top: -1.15em;
+    margin-bottom: -1.25em;
+    font-size: 12px;
+    width: 50%;
+  }
+
+  .table-equiv:mat-form-field-infix{
+    border: 0
+  }
+
+  .table-criterio{
+    text-align: center;
+    max-width: 30px;
+  }
+
+  .table-input .mat-form-field-wrapper{
+    padding: 0;
+  }
+  
+  .table-input .mat-form-field-wrapper .mat-form-field-flex .mat-form-field-infix{
+    border: 0 !important;
+    padding-bottom: 0.5em;
+    padding-top: 0.75em;
+    padding-inline: 0;
+  }
+  

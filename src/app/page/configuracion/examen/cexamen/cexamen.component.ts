@@ -1,5 +1,5 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { Component, Inject, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { FormControl, FormGroup, FormsModule } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatStepper } from '@angular/material/stepper';
 import { ConfimService } from 'src/app/page/component/confirm/confim.service';
@@ -16,7 +16,8 @@ import numeral from 'numeral';
 @Component({
   selector: 'app-cexamen',
   templateUrl: './cexamen.component.html',
-  styleUrls: ['./cexamen.component.css']
+  styleUrls: ['./cexamen.component.css'],
+  encapsulation : ViewEncapsulation.None,
 })
 export class CexamenComponent implements OnInit {
   
@@ -44,12 +45,13 @@ export class CexamenComponent implements OnInit {
 
   currentTab: number = 0;
 
-  tablasMaestras = ['AREXA', 'TMUE', 'SGRPO', 'RPTA', 'EQRTA'];
+  tablasMaestras = ['AREXA', 'TMUE', 'SGRPO', 'RPTA', 'EQRTA', 'SEXO'];
   tbArea: TbMaestra[] = [];
   tbMuestra: TbMaestra[] = [];
   tbGrupo: TbMaestra[] = [];
   tbRpta: TbMaestra[] = [];
   tbEquivRpta: TbMaestra[] = [];
+  tbSexo: TbMaestra[] = [];
 
   incluirExtremos: boolean = true;
   invierteColores: boolean = false;
@@ -162,6 +164,7 @@ export class CexamenComponent implements OnInit {
           this.tbGrupo = this.obtenerSubtabla(tbCombobox,'SGRPO');
           this.tbRpta = this.obtenerSubtabla(tbCombobox,'RPTA');
           this.tbEquivRpta = this.obtenerSubtabla(tbCombobox,'EQRTA');
+          this.tbSexo = this.obtenerSubtabla(data.items,'SEXO');
 
           this.selEquicRpta = this.tbEquivRpta.slice();
 
@@ -350,26 +353,65 @@ export class CexamenComponent implements OnInit {
     }
   }
 
-  agregarFila(){
-    var lista = this.examen.listaEquivalencias;
-    lista?.push(new EquivResultado());
+  cambiaRangoResu(codigo: string = '', resultados: RangoResu[] = [], $event: any){
+    this.obtieneResultado(codigo, resultados)!.nValMin = $event.target.value
   }
+
+  agregarFila(){
+    var lista = this.examen.listaEquivalencias!;
+    var ultimo: EquivResultado = lista[lista.length - 1]
+    if(this.setEdicionEquivResu(ultimo, false)){
+      //Continúa numeración anterior
+      var nuevo: EquivResultado = new EquivResultado();
+      nuevo.nResuNumMin = parseInt(ultimo.nResuNumMax!.toString()) + 1;
+      nuevo.nResuNumMax = nuevo.nResuNumMin + (ultimo.nResuNumMax! - ultimo.nResuNumMin!)
+      lista?.push(nuevo);
+    }
+  }  
   
   eliminarFila(){
-    var lista = this.examen.listaEquivalencias;
+    var lista = this.examen.listaEquivalencias!;
     lista?.pop();
+
+    //Agrega equivalencia vacía
+    if(lista.length === 0) lista?.push(new EquivResultado());
+    
+    var ultimo: EquivResultado = lista[lista.length - 1]
+    this.setEdicionEquivResu(ultimo, true);
+  }
+
+  setEdicionEquivResu(equiv: EquivResultado, estado: boolean){
+    var msgError = this.rangoValido(equiv);
+    if(msgError !== ''){
+      this.notifierService.showNotification(2,'Mensaje',msgError);
+      return false;
+    }
+    equiv.edicion = estado;
+    if(!estado) equiv.swt = 1;
+    return true;
+  }
+
+  rangoValido(equiv: EquivResultado){
+    if(equiv.nResuNumMax! < equiv.nResuNumMin!)
+      return 'El valor máximo no debe ser menor al mínimo.'
+
+    return '';
   }
 
   obtieneLimites(codigo: string = '', resultados: RangoResu[] = []){
     var formato = this.getControlLabel('vFormato');
     var rangos: string = '';
     var min, max;
-    var resu = resultados.find(e => e.vEtiqueta === codigo);
+    var resu = this.obtieneResultado(codigo, resultados);
     if(resu !== undefined){
       min = numeral(resu.nValMin);
       max = numeral(resu.nValMax);
-      rangos = '> ' + min.format(formato) + ' ≤ ' + max.format(formato);
+      rangos = '≥ ' + min.format(formato) + ' < ' + max.format(formato);
     }
     return rangos;
+  }
+
+  obtieneResultado(codigo: string = '', resultados: RangoResu[] = []){
+    return resultados.find(e => e.vEtiqueta === codigo);
   }
 }

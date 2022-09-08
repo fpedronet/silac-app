@@ -160,11 +160,13 @@
                 
 
               <div div fxFlex="100%" fxFlex.xs="100%" fxFlex.sm="100%" style="padding: 0px 0px 0px 0px;">
-                <div>
-                  <mat-checkbox [checked]="incluirExtremos" (change)="actualizaCheckbox(1,$event.checked)">Incluye extremos</mat-checkbox>
-                  <mat-checkbox [checked]="invierteColores" (change)="actualizaCheckbox(2,$event.checked)">Colores alternos</mat-checkbox>
-                  <mat-checkbox [checked]="incluirMensaje" (change)="actualizaCheckbox(3,$event.checked)">Incluye mensaje</mat-checkbox>
-                </div>                
+                <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                  <div>
+                    <mat-checkbox [checked]="incluirExtremos" (change)="actualizaCheckbox(1,$event.checked)">Incluye extremos</mat-checkbox>
+                    <mat-checkbox [checked]="invierteColores" (change)="actualizaCheckbox(2,$event.checked)">Colores alternos</mat-checkbox>
+                    <mat-checkbox [checked]="incluirMensaje" (change)="actualizaCheckbox(3,$event.checked)">Incluye mensaje</mat-checkbox>
+                  </div>  
+                </mat-grid-list>                              
 
                 <div *ngIf="getControlLabel('vTipoRespuesta') === '00002'" class="example-container mat-elevation-z0" style="margin-left:-14px">
                   
@@ -172,35 +174,74 @@
                     <thead>
                       <tr>
                         <th style="padding: 0; width: 100px; border: 0"></th>
-                        <th *ngFor="let eTitulo of selEquicRpta" style="padding: 0; width: 100px;">
-                          <div *ngIf="!invierteColores" style="background-color: {{eTitulo.vAux2}}">
-                            {{eTitulo.vDescripcion}}
+                        <th *ngFor="let eTitulo of selEquicRpta" style="padding: 0; width: 100px; max-height: 0;">
+                          <div *ngIf="!invierteColores" style="background-color: {{eTitulo.vAux2}}; height: 100%;">
+                            <span style="vertical-align: -webkit-baseline-middle;">{{eTitulo.vDescripcion}}</span>
                           </div>
-                          <div *ngIf="invierteColores" style="background-color: {{eTitulo.vAux3}}">
-                            {{eTitulo.vDescripcion}}
+                          <div *ngIf="invierteColores" style="background-color: {{eTitulo.vAux3}}; height: 100%;">
+                            <span style="vertical-align: -webkit-baseline-middle;">{{eTitulo.vDescripcion}}</span>
                           </div>
                         </th>
                       </tr>
                     </thead>
                     <tbody>
                       <tr *ngFor="let eRango of examen.listaEquivalencias">
-                        <td style="text-align: center;">
-                          <span>{{eRango.nResuNumMin}} - {{eRango.nResuNumMax}}</span>
+                        <td class="table-criterio">
+                          <div *ngIf="eRango.edicion" style="display: flex;">
+                            <mat-form-field class="table-input" appearance="outline">
+                              <input name="nResuMin" matInput placeholder="Desde" type="number" class="example-right-align"
+                              oninput="if(this.value.length>=3) { this.value = this.value.slice(0,3); }"
+                              onkeypress="if(this.value == 0) {this.value = this.value.slice(1,this.value.lenght-1)} return /[0-9]/i.test(event.key)"
+                              [value]="eRango.nResuNumMin"
+                              (input)="eRango.nResuNumMin = $any($event.target).value"
+                              [readonly]="examen.listaEquivalencias!.length > 1">
+                            </mat-form-field>  
+                            <!--span> - </span-->
+                            <mat-form-field class="table-input" appearance="outline">
+                              <input name="nResuMax" matInput placeholder="Hasta" type="number" class="example-right-align"
+                              oninput="if(this.value.length>=3) { this.value = this.value.slice(0,3); }"
+                              onkeypress="if(this.value == 0) {this.value = this.value.slice(1,this.value.lenght-1)} return /[0-9]/i.test(event.key)"
+                              [value]="eRango.nResuNumMax"
+                              (input)="eRango.nResuNumMax = $any($event.target).value">
+                            </mat-form-field>
+                          </div>
+                          <div *ngIf="!eRango.edicion">
+                            <span>{{eRango.nResuNumMin}} a {{eRango.nResuNumMax}}</span>
+                          </div>                          
                         </td>
-                        <td *ngFor="let eTitulo of selEquicRpta">
-                          <span>
-                            {{obtieneLimites(eTitulo.vValor, eRango.listaRangos)}}
-                          </span>
+                        <td *ngFor="let eTitulo of selEquicRpta" style="max-width: 100px;">
+                          <div *ngIf="eRango.edicion" style="display: flex;">
+                            <mat-form-field class="table-input" appearance="outline">
+                              <input name="nValMin" matInput placeholder="Mínimo" type="number" class="example-right-align"
+                              oninput="if(this.value.length>=5) { this.value = this.value.slice(0,5); }"
+                              onkeypress="return /[0-9|.]/i.test(event.key)"
+                              [value]="eRango.swt === 0 ? '' : obtieneResultado(eTitulo.vValor, eRango.listaRangos)!.nValMin"
+                              (change)="cambiaRangoResu(eTitulo.vValor, eRango.listaRangos, $event)"
+                              (input)="obtieneResultado(eTitulo.vValor, eRango.listaRangos)!.nValMin = $any($event.target).value">
+                            </mat-form-field>
+                            <mat-form-field class="table-input" appearance="outline">
+                              <input name="nValMax" matInput placeholder="Máximo" type="number" class="example-right-align"
+                              oninput="if(this.value.length>=5) { this.value = this.value.slice(0,5); }"
+                              onkeypress="return /[0-9|.]/i.test(event.key)"
+                              [value]="eRango.swt === 0 ? '' : obtieneResultado(eTitulo.vValor, eRango.listaRangos)!.nValMax"
+                              (input)="obtieneResultado(eTitulo.vValor, eRango.listaRangos)!.nValMax = $any($event.target).value">
+                            </mat-form-field>
+                          </div>
+                          <div *ngIf="!eRango.edicion">
+                            <span>
+                              {{obtieneLimites(eTitulo.vValor, eRango.listaRangos)}}
+                            </span>
+                          </div>                          
                         </td>
                         <td *ngIf="incluirMensaje">
-                          <input matInput placeholder="Mensaje opcional" type="text" (value)="eRango.vMensaje">
+                          <input matInput placeholder="Mensaje opcional" type="text" [value]="eRango.vMensaje">
                         </td>
                       </tr>                          
                     </tbody>
                   </table>
                   <div class="form-group">
                     <button type="button" class="btn btn-primary mr-2" (click)="agregarFila()">Agregar Fila</button>
-                    <button *ngIf="examen.listaEquivalencias!.length > 1" type="button" class="btn btn-danger" (click)="eliminarFila()">Eliminar Fila</button>
+                    <button *ngIf="examen.listaEquivalencias!.length > 0" type="button" class="btn btn-danger" (click)="eliminarFila()">Eliminar Fila</button>
                   </div>
                 </div>
               </div>
