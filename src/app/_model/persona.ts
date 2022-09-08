@@ -1,5 +1,7 @@
+
 export class Persona{
     nIdPersona?: number;
+    vTipDocumento?: string;
     vTipDocu?: string;
     vDocumento?: string;
     vPrimerNombre?: string;
@@ -29,5 +31,6 @@ export class Persona{
     dFecUsuReg?: Date;
     nIdeUsuMod?: number;
     dFecUsuMod?: Date;  
-   
+    
+    swt?: number;
 }

@@ -477,14 +477,14 @@ export class CusuarioComponent implements OnInit {
   obtenerPersona(e?: any){
     var tipoDocu =this.form.value['vTipDocu']
     var documento =this.form.value['vDocumento']
-    debugger;
+
     if(documento!=this.documento){
       var validacion = this.validaDocumento(tipoDocu, documento);
 
       if(validacion === ''){
   
         this.spinnerService.showLoading();
-        this.usuarioService.obtenerPersona(tipoDocu, documento).subscribe(data=>{
+        this.poclabService.obtenerPersonaLocal(tipoDocu, documento).subscribe(data=>{
   
           data.vTipDocu = (data.vTipDocu==null)?  this.idTipoDocumento: data.vTipDocu;
           data.nPeso = (data.nPeso==0)?  null!: data.nPeso!;
@@ -528,7 +528,7 @@ export class CusuarioComponent implements OnInit {
   
             this.spinnerService.hideLoading();
           }else{
-            this.poclabService.obtenerPersona("1", documento).subscribe(data=>{
+            this.poclabService.obtenerPersonaReniec("1", documento).subscribe(data=>{
   
               let pais = (data.vCodPais=this.peru)? this.peru : data.vCodPais;
               let estadocivil = (data.vCodEstadoCivil =="01")? "00001": (data.vCodEstadoCivil =="02"? "00002": null)

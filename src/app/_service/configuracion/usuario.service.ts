@@ -42,9 +42,4 @@ export class UsuarioService {
     let urls = `${this.url}/GetFirstUsuario?id=${id}`;
     return this.http.get<Usuario>(urls);
   }
-
-  obtenerPersona(tipodoc:string, documento: string){
-    let urls = `${this.url}/GetFirstPersona?tipodoc=${tipodoc}&id=${documento}&`;
-    return this.http.get<Usuario>(urls);
-  }
 }

@@ -4,6 +4,7 @@ import { SortDirection } from '@angular/material/sort';
 import { dataCollection } from 'src/app/_model/dataCollection';
 import { Orden, OrdenRequest } from 'src/app/_model/laboratorio/orden';
 import { environment } from 'src/environments/environment';
+import { Response } from '../../_model/response';
 
 @Injectable({
   providedIn: 'root'
@@ -31,6 +32,16 @@ export class OrdenService {
     req.order = order;
 
     return this.http.post<dataCollection>(urls,req);
+  }
+
+  guardar(model: Orden){
+    let urls = `${this.url}/PostSaveOrden`;
+    return this.http.post<Response>(urls, model);
+  }
+
+  obtener(idorden: number){
+    let urls = `${this.url}/GetFirstOrden?idorden=${idorden}`;
+    return this.http.get<Orden>(urls);
   }
 
   obtenerdetalle(idorden: number){
