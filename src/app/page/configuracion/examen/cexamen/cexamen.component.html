@@ -8,134 +8,210 @@
   
   <mat-dialog-content class="modal">
     <form onkeydown="return event.key != 'Enter';" class="forms" id="ngForm" [formGroup]="form" #frmGrupo="ngForm" >
-        <div class="content">
-        <div fxLayout="row wrap" fxLayoutGap="16px grid">
+      <mat-stepper #stepper id="stepper" [selectedIndex]="currentTab" (click)="changestepper(stepper)" [linear]="true">
+        <mat-step>
+            <ng-template matStepperIcon="edit">
+            </ng-template>
+            <ng-template matStepLabel>Principal</ng-template>
+            <div class="content">
+              <div fxLayout="row wrap" fxLayoutGap="16px grid">
+              
+              <div [hidden]="true">
+                <mat-form-field appearance="outline">
+                    <input matInput placeholder="Id" formControlName="nIdExamen">
+                </mat-form-field>
+              </div>
         
-        <div [hidden]="true">
-          <mat-form-field appearance="outline">
-              <input matInput placeholder="Id" formControlName="nIdExamen">
-          </mat-form-field>
-        </div>
-  
-          <div div fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="100%" style="padding: 0px 0px 0px 0px;">
-            <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
-              <mat-grid-tile [colspan]="12">
-                  <mat-form-field appearance="outline">
-                      <mat-label>Cod. Examen</mat-label>
-                      <input type="text" matInput placeholder="Cod. Examen" formControlName="vCodExamen" minlength="1" maxlength="10" required>
-                  </mat-form-field>
-              </mat-grid-tile>
-            </mat-grid-list>
-            <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
-                <mat-grid-tile [colspan]="12">
+                <div div fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="100%" style="padding: 0px 0px 0px 0px;">
+                  <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                    <mat-grid-tile [colspan]="12">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Cod. Examen</mat-label>
+                            <input type="text" matInput placeholder="Cod. Examen" formControlName="vCodExamen" minlength="1" maxlength="10" required>
+                        </mat-form-field>
+                    </mat-grid-tile>
+                  </mat-grid-list>
+                  <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                      <mat-grid-tile [colspan]="12">
+                          <mat-form-field appearance="outline">
+                              <mat-label>Examen</mat-label>
+                              <input type="text" matInput placeholder="Examen" formControlName="vDescripcion" minlength="1" maxlength="100" required>
+                          </mat-form-field>
+                      </mat-grid-tile>
+                  </mat-grid-list>
+                  <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                    <mat-grid-tile [colspan]="12">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Área</mat-label>
+                        <mat-select placeholder="Área" formControlName="vCodAreaExamen">
+                          <mat-option *ngFor="let el of tbArea" [value]="el.vValor">
+                              {{el.vDescripcion}}
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                    </mat-grid-tile>
+                  </mat-grid-list>
+                  <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                    <mat-grid-tile [colspan]="12">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Muestra</mat-label>
+                        <mat-select placeholder="Muestra" formControlName="vCodTipoMuestra">
+                          <mat-option *ngFor="let el of tbMuestra" [value]="el.vValor">
+                            {{el.vDescripcion}}
+                          </mat-option>              
+                        </mat-select>
+                      </mat-form-field>
+                    </mat-grid-tile>
+                  </mat-grid-list>
+                </div>
+                <div div fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="100%" style="padding: 0px 0px 0px 0px;">
+                    <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                      <mat-grid-tile [colspan]="12">
+                          <mat-form-field appearance="outline">
+                              <mat-label>Abreviatura</mat-label>
+                              <input type="text" matInput placeholder="Abreviatura" formControlName="vAbreviatura" minlength="1" maxlength="10">
+                          </mat-form-field>
+                      </mat-grid-tile>
+                    </mat-grid-list>
+                    <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                        <mat-grid-tile [colspan]="12">
+                            <mat-form-field appearance="outline">
+                                <mat-label>Unidad de medida</mat-label>
+                                <input type="text" matInput placeholder="Ud. de medida" formControlName="vUndMed" minlength="1" maxlength="20">
+                            </mat-form-field>
+                        </mat-grid-tile>
+                    </mat-grid-list>
+                    <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                      <mat-grid-tile [colspan]="12">
+                          <mat-form-field appearance="outline">
+                              <mat-label>Rango de referencia</mat-label>
+                              <input type="text" matInput placeholder="Ran. referencia" formControlName="vRangoRef" minlength="1" maxlength="50">
+                          </mat-form-field>
+                      </mat-grid-tile>
+                  </mat-grid-list>
+                  <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                    <mat-grid-tile [colspan]="12">
+                      <mat-form-field appearance="outline">
+                        <mat-label>Grupo</mat-label>
+                          <mat-select placeholder="Grupo" formControlName="vCodSubGrupo">
+                            <mat-option *ngFor="let el of tbGrupo" [value]="el.vValor">
+                              {{el.vDescripcion}}
+                            </mat-option>
+                          </mat-select>
+                      </mat-form-field>
+                    </mat-grid-tile>
+                  </mat-grid-list>
+                  <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                    <mat-grid-tile [colspan]="12">
+                        <mat-form-field appearance="outline">
+                            <mat-label>Fórmula</mat-label>
+                            <input type="text" matInput placeholder="Fórmula" formControlName="vFormula" minlength="1" maxlength="100">
+                        </mat-form-field>
+                    </mat-grid-tile>
+                  </mat-grid-list>
+                </div>
+              </div>
+            </div>
+        </mat-step>
+
+        <mat-step style="padding: 0 0 24px 0;">
+          <ng-template matStepLabel>Respuesta</ng-template>
+          <div class="content">
+            <div fxLayout="row wrap" fxLayoutGap="16px grid">
+            
+            <div [hidden]="true">
+              <mat-form-field appearance="outline">
+                  <input matInput placeholder="Id" formControlName="nIdExamen">
+              </mat-form-field>
+            </div>
+      
+              <div div fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="100%" style="padding: 0px 0px 0px 0px;">
+                <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                  <mat-grid-tile [colspan]="12">
                     <mat-form-field appearance="outline">
-                        <mat-label>Examen</mat-label>
-                        <input type="text" matInput placeholder="Examen" formControlName="vDescripcion" minlength="1" maxlength="100" required>
+                      <mat-label>Tipo de respuesta</mat-label>
+                      <mat-select placeholder="Tipo de Rpta" formControlName="vTipoRespuesta">
+                        <mat-option *ngFor="let el of tbRpta" [value]="el.vValor">
+                          {{el.vDescripcion}}
+                        </mat-option>              
+                      </mat-select>
                     </mat-form-field>
-                </mat-grid-tile>
-            </mat-grid-list>
-            <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
-              <mat-grid-tile [colspan]="12">
-                <mat-form-field appearance="outline">
-                  <mat-label>Área</mat-label>
-                  <mat-select placeholder="Área" formControlName="vCodAreaExamen">
-                    <mat-option *ngFor="let el of tbArea" [value]="el.vValor">
-                        {{el.vDescripcion}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </mat-grid-tile>
-            </mat-grid-list>
-            <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
-              <mat-grid-tile [colspan]="12">
-                <mat-form-field appearance="outline">
-                  <mat-label>Muestra</mat-label>
-                  <mat-select placeholder="Muestra" formControlName="vCodTipoMuestra">
-                    <mat-option *ngFor="let el of tbMuestra" [value]="el.vValor">
-                      {{el.vDescripcion}}
-                    </mat-option>              
-                  </mat-select>
-                </mat-form-field>
-              </mat-grid-tile>
-            </mat-grid-list>
-            <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
-              <mat-grid-tile [colspan]="12">
-                  <mat-form-field appearance="outline">
-                      <mat-label>Fórmula</mat-label>
-                      <input type="text" matInput placeholder="Fórmula" formControlName="vFormula" minlength="1" maxlength="100">
-                  </mat-form-field>
-              </mat-grid-tile>
-            </mat-grid-list>
-            <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
-              <mat-grid-tile [colspan]="12">
-                  <mat-form-field appearance="outline">
-                      <mat-label>Formato</mat-label>
-                      <input type="text" matInput placeholder="Formato" formControlName="vFormato" minlength="1" maxlength="20">
-                  </mat-form-field>
-              </mat-grid-tile>
-            </mat-grid-list>
-          </div>
-          <div div fxFlex="50%" fxFlex.xs="100%" fxFlex.sm="100%" style="padding: 0px 0px 0px 0px;">
-              <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
-                <mat-grid-tile [colspan]="12">
-                    <mat-form-field appearance="outline">
-                        <mat-label>Abreviatura</mat-label>
-                        <input type="text" matInput placeholder="Abreviatura" formControlName="vAbreviatura" minlength="1" maxlength="10">
-                    </mat-form-field>
-                </mat-grid-tile>
-              </mat-grid-list>
-              <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                  </mat-grid-tile>
+                </mat-grid-list>
+                <mat-grid-list cols="12" rowHeight="110px" gutterSize="15px">
                   <mat-grid-tile [colspan]="12">
                       <mat-form-field appearance="outline">
-                          <mat-label>Unidad de medida</mat-label>
-                          <input type="text" matInput placeholder="Ud. de medida" formControlName="vUndMed" minlength="1" maxlength="20">
+                          <mat-label>Respuesta</mat-label>
+                          <textarea class="input-rpta" type="text" matInput placeholder="Respuesta" formControlName="vRespuesta" minlength="1" maxlength="200" rows="3">
+                          </textarea>
                       </mat-form-field>
                   </mat-grid-tile>
-              </mat-grid-list>
-              <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
-                <mat-grid-tile [colspan]="12">
-                    <mat-form-field appearance="outline">
-                        <mat-label>Rango de referencia</mat-label>
-                        <input type="text" matInput placeholder="Ran. referencia" formControlName="vRangoRef" minlength="1" maxlength="50">
-                    </mat-form-field>
-                </mat-grid-tile>
-            </mat-grid-list>
-            <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
-              <mat-grid-tile [colspan]="12">
-                <mat-form-field appearance="outline">
-                  <mat-label>Grupo</mat-label>
-                    <mat-select placeholder="Grupo" formControlName="vCodSubGrupo">
-                      <mat-option *ngFor="let el of tbGrupo" [value]="el.vValor">
-                        {{el.vDescripcion}}
-                      </mat-option>
-                    </mat-select>
-                </mat-form-field>
-              </mat-grid-tile>
-            </mat-grid-list>
-            <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
-              <mat-grid-tile [colspan]="12">
-                <mat-form-field appearance="outline">
-                  <mat-label>Tipo de respuesta</mat-label>
-                  <mat-select placeholder="Tipo de Rpta" formControlName="vTipoRespuesta">
-                    <mat-option *ngFor="let el of tbRpta" [value]="el.vValor">
-                      {{el.vDescripcion}}
-                    </mat-option>              
-                  </mat-select>
-                </mat-form-field>
-              </mat-grid-tile>
-            </mat-grid-list>
-            <mat-grid-list cols="12" rowHeight="110px" gutterSize="15px">
-              <mat-grid-tile [colspan]="12">
-                  <mat-form-field appearance="outline">
-                      <mat-label>Respuesta</mat-label>
-                      <textarea class="input-rpta" type="text" matInput placeholder="Respuesta" formControlName="vRespuesta" minlength="1" maxlength="200" rows="3">
-                      </textarea>
-                  </mat-form-field>
-              </mat-grid-tile>
-            </mat-grid-list>
+                </mat-grid-list>
+                <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                  <mat-grid-tile [colspan]="12">
+                      <mat-form-field appearance="outline">
+                          <mat-label>Formato</mat-label>
+                          <input type="text" matInput placeholder="Formato" formControlName="vFormato" minlength="1" maxlength="20">
+                      </mat-form-field>
+                  </mat-grid-tile>
+                </mat-grid-list>
+              </div>
+
+                
+
+              <div div fxFlex="100%" fxFlex.xs="100%" fxFlex.sm="100%" style="padding: 0px 0px 0px 0px;">
+                <div>
+                  <mat-checkbox [checked]="incluirExtremos" (change)="actualizaCheckbox(1,$event.checked)">Incluye extremos</mat-checkbox>
+                  <mat-checkbox [checked]="invierteColores" (change)="actualizaCheckbox(2,$event.checked)">Colores alternos</mat-checkbox>
+                  <mat-checkbox [checked]="incluirMensaje" (change)="actualizaCheckbox(3,$event.checked)">Incluye mensaje</mat-checkbox>
+                </div>                
+
+                <div *ngIf="getControlLabel('vTipoRespuesta') === '00002'" class="example-container mat-elevation-z0" style="margin-left:-14px">
+                  
+                  <table class="table-equiv table" id="tabla-rango">
+                    <thead>
+                      <tr>
+                        <th style="padding: 0; width: 100px; border: 0"></th>
+                        <th *ngFor="let eTitulo of selEquicRpta" style="padding: 0; width: 100px;">
+                          <div *ngIf="!invierteColores" style="background-color: {{eTitulo.vAux2}}">
+                            {{eTitulo.vDescripcion}}
+                          </div>
+                          <div *ngIf="invierteColores" style="background-color: {{eTitulo.vAux3}}">
+                            {{eTitulo.vDescripcion}}
+                          </div>
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let eRango of examen.listaEquivalencias">
+                        <td style="text-align: center;">
+                          <span>{{eRango.nResuNumMin}} - {{eRango.nResuNumMax}}</span>
+                        </td>
+                        <td *ngFor="let eTitulo of selEquicRpta">
+                          <span>
+                            {{obtieneLimites(eTitulo.vValor, eRango.listaRangos)}}
+                          </span>
+                        </td>
+                        <td *ngIf="incluirMensaje">
+                          <input matInput placeholder="Mensaje opcional" type="text" (value)="eRango.vMensaje">
+                        </td>
+                      </tr>                          
+                    </tbody>
+                  </table>
+                  <div class="form-group">
+                    <button type="button" class="btn btn-primary mr-2" (click)="agregarFila()">Agregar Fila</button>
+                    <button *ngIf="examen.listaEquivalencias!.length > 1" type="button" class="btn btn-danger" (click)="eliminarFila()">Eliminar Fila</button>
+                  </div>
+                </div>
+              </div>
+
+              
+            </div>
           </div>
-        </div>
-      </div>
+
+        </mat-step>
+      </mat-stepper>
+      
     </form>
   </mat-dialog-content>
   
@@ -144,3 +220,5 @@
     <button *ngIf="edit" style="margin-right: 4px;" mat-stroked-button class="btnYellow"(click)="limpiar()"><mat-icon>cleaning_services</mat-icon>Limpiar</button>
     <button *ngIf="edit" mat-stroked-button class="btnBlue" (click)="guardar()" [disabled]="frmGrupo.invalid"><mat-icon>save</mat-icon>Guardar</button>
   </div>
+
+  <script src="//cdnjs.cloudflare.com/ajax/libs/numeral.js/2.0.6/numeral.min.js"></script>

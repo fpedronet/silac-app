@@ -30,6 +30,7 @@
     "ng-apexcharts": "^1.7.0",
     "ngx-toastr": "^14.2.1",
     "ngx-webcam": "^0.4.1",
+    "numeral": "^2.0.6",
     "qr-scanner": "^1.4.1",
     "rxjs": "7.5.5",
     "tslib": "2.3.1",
