@@ -10,7 +10,7 @@
         <mat-icon class="maticonmenu">save</mat-icon>
         <span class="maticontitle">Guardar</span>
       </button>
-      <button *ngIf="edit && permiso.guardar && id===0" mat-stroked-button class="btnHeader" type="button">
+      <button *ngIf="edit && permiso.guardar && id===0" mat-stroked-button class="btnHeader" type="button" (click)="limpiar()">
         <mat-icon class="maticonmenu">cleaning_services</mat-icon>
         <span class="maticontitle">Limpiar</span>
       </button>
@@ -28,12 +28,11 @@
 
     <mat-divider></mat-divider>
     
-    <div id="content" *ngIf="id !== 0"> 
-        <div style="width: 100%; float:left;margin-bottom: -17px;">
-            <div style="text-align: center; color: #1a0da4; font-weight:600;">
-            <span>CODIGO: {{codigo}}</span>
+    <div id="content"> 
+        <div style="width: 100%; float:left;margin-bottom: -17px;"> 
+            <div style="text-align: center; color: #1a0da4; font-weight: 500;padding-top: 11px;">{{nombres}}</div> 
+            <div style="text-align: center; color: #1a0da4; font-weight:600" *ngIf="id!==0">N° Orden : {{nroorden}}</div> 
             </div> 
-        </div> 
     </div>
 
     <br style="clear:both;"/>
@@ -188,8 +187,8 @@
                             <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
                                 <mat-grid-tile [colspan]="6">
                                     <mat-form-field appearance="outline">
-                                        <mat-label>H.C.</mat-label>
-                                        <input type="text" [readonly]="!edit" matInput placeholder="H.C." formControlName="vHC" minlength="1" maxlength="15" required>
+                                        <mat-label>N° Orden</mat-label>
+                                        <input type="text" [readonly]="true" matInput placeholder="N° Orden" formControlName="nNumero">
                                     </mat-form-field>
                                 </mat-grid-tile>
                                 <mat-grid-tile [colspan]="6">
@@ -205,21 +204,49 @@
                             <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
                                 <mat-grid-tile [colspan]="6">
                                     <mat-form-field appearance="outline">
-                                        <mat-select placeholder="Procedencia" formControlName="vProcedencia" required>
-                                        <mat-option *ngFor="let el of tbProcedencia" [value]="el.vValor">
-                                            {{el.vDescripcion}}
-                                        </mat-option>              
-                                        </mat-select>
+                                        <mat-label>H.C.</mat-label>
+                                        <input type="text" [readonly]="!edit" matInput placeholder="H.C." formControlName="vHC" minlength="1" maxlength="50">
+                                    </mat-form-field>
+                                </mat-grid-tile>
+                                <mat-grid-tile [colspan]="3">
+                                    <button [disabled]="!edit" *ngIf="flaghemograma=='0'" style="font-size: 11px; width: 100%; height: 50px; margin-top: -18px;" type="button" mat-stroked-button color="primary" (click)="changeflag('1','hemograma')">HEMOGRAMA</button>
+                                    <button [disabled]="!edit" *ngIf="flaghemograma=='1'" style="font-size: 11px; width: 100%; height: 50px; margin-top: -18px;" type="button" mat-flat-button color="primary" (click)="changeflag('0','hemograma')">HEMOGRAMA</button>
+                                </mat-grid-tile>
+                                <mat-grid-tile [colspan]="3">
+                                    <button [disabled]="!edit" *ngIf="flagorina=='0'" style="font-size: 11px; width: 100%; height: 50px; margin-top: -18px;" type="button" mat-stroked-button color="primary" (click)="changeflag('1','orina')">ORINA</button>
+                                    <button [disabled]="!edit" *ngIf="flagorina=='1'" style="font-size: 11px; width: 100%; height: 50px; margin-top: -18px;" type="button" mat-flat-button color="primary" (click)="changeflag('0','orina')">ORINA</button>
+                                </mat-grid-tile>
+                            </mat-grid-list>
+
+                            <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                                <mat-grid-tile [colspan]="6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Procedencia</mat-label>
+                                        <input type="text" [readonly]="!edit" matInput placeholder="Procedencia" formControlName="vProcedencia" minlength="1" maxlength="50">
                                     </mat-form-field>
                                 </mat-grid-tile>
                                 <mat-grid-tile [colspan]="6">
                                     <mat-form-field appearance="outline">
                                         <mat-label>Cama</mat-label>
-                                        <input type="text" [readonly]="!edit" matInput placeholder="Cama" formControlName="vCama" minlength="1" maxlength="15" required>
+                                        <input type="text" [readonly]="!edit" matInput placeholder="Cama" formControlName="vCama" minlength="1" maxlength="50">
                                     </mat-form-field>
                                 </mat-grid-tile>
                             </mat-grid-list>
-                
+
+                            <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
+                                <mat-grid-tile [colspan]="6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Origen</mat-label>
+                                        <input type="text" [readonly]="!edit" matInput placeholder="Origen" formControlName="vOrigen" minlength="1" maxlength="50">
+                                    </mat-form-field>
+                                </mat-grid-tile>
+                                <mat-grid-tile [colspan]="6">
+                                    <mat-form-field appearance="outline">
+                                        <mat-label>Servicio</mat-label>
+                                        <input type="text" [readonly]="!edit" matInput placeholder="Servicio" formControlName="vServicio" minlength="1" maxlength="50">
+                                    </mat-form-field>
+                                </mat-grid-tile>
+                            </mat-grid-list>                
                         </div>                        
                     </div>
                 </div>

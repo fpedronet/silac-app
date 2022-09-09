@@ -4,34 +4,32 @@ import { ResultadoExamen } from "./resultadoExamen";
 
 export class Orden extends Persona  {
     nIdOrden?: number;
+    nNumero?: string;
+    vHC?: string;
     nCantMuestras?: number;
-    nNumero?: number;
-    vObservaciones?: string;
     dFecOrden?: Date;
     vFecOrden?: string;
+    vCodBarras?: string;
+    vObservaciones?: string;
     nIdEstado?: number;
+    vProcedencia?: string;
+    vCama?: string;
+    vOrigen?: string;
+    vServicio?: string
     vEstado?: string;
+    nFlagHemograma?: number;
+    nFlagOrina?: number;
+
     vExamen?: string;
     vResultado?: string;
     vUndMed?: string;
     Flag?: string;
-    vHC?: string;
-    vCama?: string;
 
-    nIdUsuReg?: number;
-    nIdUsuMod?: number;
+    vDetalle?: string;
+    curUsuario?: number;
    
     resultadoExamen?: ResultadoExamen;
     listaResultadoExamen?: ResultadoExamen[];
-
-    vProcedencia?: string;
-    vServicio?: string;
-    vCodArea?: string;
-    vArea?: string;
-    vOrigen?: string;
-    vCodOrigen?: string;
-    vCodAtencion?: string;
-    vDetalle?: string;
 }
 
 export class OrdenRequest extends pagination {

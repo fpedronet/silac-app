@@ -50,6 +50,7 @@ export class CordenComponent implements OnInit {
 
   nombres: string = "";
   documento: string = "";
+  nroorden: string = "";
   idTipoDocumento: string = '';
   findText: string = '';
   selectedArea: string = '';
@@ -61,6 +62,8 @@ export class CordenComponent implements OnInit {
   edit: boolean = true;
   $disable: boolean =false;
   currentTab: number = 0;
+  flaghemograma: string = '0';
+  flagorina: string = '0';
 
   //dataSource: RendicionD[] = [];
   initDisplayedColumns: string[] = ['concepto', 'vFecha', 'documento', 'vMonto', 'proveedor', 'descripcion', 'comodato', 'adjunto', 'accion', 'mo'];
@@ -79,10 +82,8 @@ export class CordenComponent implements OnInit {
     private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
-    private dialog: MatDialog,
     private spinnerService: SpinnerService,
     private notifierService : NotifierService,
-    private confirmService : ConfimService,
     private tbmaestraService: TbmaestraService,
     private configPermisoService : ConfigPermisoService,
     private examenService : ExamenService,
@@ -122,6 +123,17 @@ export class CordenComponent implements OnInit {
   inicializar(){
     this.form = new FormGroup({
       'nIdOrden': new FormControl({ value: 0, disabled: !this.edit}),
+      'nNumero': new FormControl({ value: '', disabled: !this.edit}),
+      'vHC': new FormControl({ value: '', disabled: !this.edit}),
+      'nCantMuestras': new FormControl({ value: '', disabled: !this.edit}),
+      'dFecOrden': new FormControl({ value: new Date(), disabled: !this.edit}),
+      'vCodBarras': new FormControl({ value: '', disabled: !this.edit}),
+      'vProcedencia': new FormControl({ value: '', disabled: !this.edit}),
+      'vCama': new FormControl({ value: '', disabled: !this.edit}),
+      'vOrigen': new FormControl({ value: '', disabled: !this.edit}),
+      'vServicio': new FormControl({ value: '', disabled: !this.edit}),
+
+
       'nIdPersona': new FormControl({ value: 0, disabled: !this.edit}),
       'vTipDocu': new FormControl({ value: '', disabled: !this.edit}),
       'vDocumento': new FormControl({ value: '', disabled: !this.edit}),
@@ -133,12 +145,6 @@ export class CordenComponent implements OnInit {
       'vEstCivil': new FormControl({ value: '', disabled: !this.edit}),
       'dFechaNac': new FormControl({ value: '', disabled: !this.edit}),
       'nEdad': new FormControl({ value: '', disabled: !this.edit}),   
-
-      'vHC': new FormControl({ value: 0, disabled: !this.edit}),
-      'dFecha': new FormControl({ value: new Date(), disabled: !this.edit}),
-      'vProcedencia': new FormControl({ value: '', disabled: !this.edit}),
-      'vCama': new FormControl({ value: '', disabled: !this.edit}),
-      'nNumero': new FormControl({ value: 0, disabled: !this.edit}),
 
     });
   }
@@ -185,12 +191,27 @@ export class CordenComponent implements OnInit {
 
   obtener(){
     this.ordenService.obtener(this.id).subscribe(data=>{
-      debugger;
+
       data.vTipDocu = (data.vTipDocu==null)?  this.idTipoDocumento: data.vTipDocu;
       data.dFecOrden= (data.dFecOrden==null)? this.fechaMax: data.dFecOrden;
 
       this.form.patchValue({
         nIdOrden: data.nIdOrden,
+        nNumero: data.nNumero,
+        vHC: data.vHC,
+        nCantMuestras: data.nCantMuestras,
+        dFecOrden: data.dFecOrden,
+        vCodBarras: data.vCodBarras,
+        vObservaciones: data.vObservaciones,
+        nIdEstado: data.nIdEstado,
+        vProcedencia: data.vProcedencia,
+        vCama: data.vCama,
+        vOrigen: data.vOrigen,
+        vServicio: data.vServicio,
+        vEstado: data.vEstado,
+        nFlagHemograma: data.nFlagHemograma,
+        nFlagOrina: data.nFlagOrina,
+
         nIdPersona: data.nIdPersona,
         vTipDocu : data.vTipDocu,
         vDocumento: data.vDocumento,
@@ -201,12 +222,15 @@ export class CordenComponent implements OnInit {
         vSexo: data.vSexo,
         vEstCivil: data.vEstCivil,
         dFechaNac: data.dFechaNac,
-        nEdad: data.nEdad,
-        vHC: data.vHC,
-        dFecOrden: data.dFecOrden,
-        vProcedencia: data.vProcedencia,
-        vCama: data.vCama       
+        nEdad: data.nEdad,      
       });
+
+      if(this.id != 0){
+        this.flaghemograma = data.nFlagHemograma?.toString()!;
+        this.flagorina = data.nFlagOrina?.toString()!;
+        this.nombres = data.vNombreCompleto!;
+        this.nroorden = data.nNumero!;
+      }
 
     });
   }
@@ -490,16 +514,7 @@ export class CordenComponent implements OnInit {
   guardar(){
     let model = new Orden();
 
-    /*Orden*/
-    model.nIdOrden= this.form.value['nIdOrden'];
-    model.vHC= this.form.value['vHC'];
-    model.dFecOrden= this.form.value['dFecOrden'];
-    model.vProcedencia= this.form.value['vProcedencia'];
-    model.vCama= this.form.value['vCama'];
-
-
     /*Persona */    
-    model.nIdPersona= this.form.value['nIdPersona'];
     model.vTipDocu= this.form.value['vTipDocu'];
     model.vDocumento= this.form.value['vDocumento'];
     model.vApPaterno= this.form.value['vApPaterno'];
@@ -511,6 +526,22 @@ export class CordenComponent implements OnInit {
     model.dFechaNac= this.form.value['dFechaNac'];
     model.nEdad= (this.form.value['nEdad']==null || this.form.value['nEdad']=="")? null : this.form.value['nEdad'].toString();
     model.swt= 1;
+
+    
+    /*Orden*/
+    model.nIdOrden= this.form.value['nIdOrden'];
+    model.nNumero= this.form.value['nNumero'];
+    model.vHC= this.form.value['vHC'];
+    model.nCantMuestras= 1;
+    model.dFecOrden= this.form.value['dFecOrden'];
+    model.vProcedencia= this.form.value['vProcedencia'];
+    model.vCama= this.form.value['vCama'];
+    model.vOrigen= this.form.value['vOrigen'];
+    model.vServicio= this.form.value['vServicio'];
+    model.nFlagHemograma=  parseInt(this.flaghemograma);
+    model.nFlagOrina= parseInt(this.flagorina);
+    model.nIdEstado= 1;
+
 
     /*Examenes */  
 
@@ -529,5 +560,26 @@ export class CordenComponent implements OnInit {
 
   }
 
+  limpiar(){
+    this.inicializar();
+    this.flaghemograma = "0";
+    this.flagorina = "0";
+    this.documento = "";
+    this.nombres = "";
+    this.nroorden = "";
+    
+    this.form.patchValue({      
+      vTipDocu : this.idTipoDocumento          
+    });     
+  }
+
+  changeflag(estado: string, flag: string){
+    if(flag=='hemograma'){
+      this.flaghemograma = estado
+    }
+    else if(flag=='orina'){
+      this.flagorina = estado
+    }
+  }
 }
 

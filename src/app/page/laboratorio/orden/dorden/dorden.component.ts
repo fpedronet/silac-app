@@ -103,7 +103,7 @@ export class DordenComponent implements OnInit {
         vServicio: data.vServicio,
         vObservaciones: data.vObservaciones,
         vDetalle: data.vDetalle,
-        vCodArea: data.vCodArea =""? "999":  data.vCodArea    
+        // vCodArea: data.vCodArea =""? "999":  data.vCodArea    
       });
 
       this.resultadoexamen();

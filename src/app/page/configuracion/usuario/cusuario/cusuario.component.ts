@@ -162,7 +162,7 @@ export class CusuarioComponent implements OnInit {
   }
 
   obtenerpermiso(){
-    this.configPermisoService.obtenerpermiso(forms.usuario.codigo).subscribe(data=>{
+    this.configPermisoService.obtenerpermiso(forms.orden.codigo).subscribe(data=>{
       this.permiso = data;
     });   
   }
