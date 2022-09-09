@@ -50,6 +50,7 @@ export class CordenComponent implements OnInit {
 
   nombres: string = "";
   documento: string = "";
+  nroorden: string = "";
   idTipoDocumento: string = '';
   findText: string = '';
   selectedArea: string = '';
@@ -81,10 +82,8 @@ export class CordenComponent implements OnInit {
     private http: HttpClient,
     private route: ActivatedRoute,
     private router: Router,
-    private dialog: MatDialog,
     private spinnerService: SpinnerService,
     private notifierService : NotifierService,
-    private confirmService : ConfimService,
     private tbmaestraService: TbmaestraService,
     private configPermisoService : ConfigPermisoService,
     private examenService : ExamenService,
@@ -229,6 +228,8 @@ export class CordenComponent implements OnInit {
       if(this.id != 0){
         this.flaghemograma = data.nFlagHemograma?.toString()!;
         this.flagorina = data.nFlagOrina?.toString()!;
+        this.nombres = data.vNombreCompleto!;
+        this.nroorden = data.nNumero!;
       }
 
     });
@@ -557,6 +558,19 @@ export class CordenComponent implements OnInit {
       }
     });
 
+  }
+
+  limpiar(){
+    this.inicializar();
+    this.flaghemograma = "0";
+    this.flagorina = "0";
+    this.documento = "";
+    this.nombres = "";
+    this.nroorden = "";
+    
+    this.form.patchValue({      
+      vTipDocu : this.idTipoDocumento          
+    });     
   }
 
   changeflag(estado: string, flag: string){

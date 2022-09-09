@@ -10,7 +10,7 @@
         <mat-icon class="maticonmenu">save</mat-icon>
         <span class="maticontitle">Guardar</span>
       </button>
-      <button *ngIf="edit && permiso.guardar && id===0" mat-stroked-button class="btnHeader" type="button">
+      <button *ngIf="edit && permiso.guardar && id===0" mat-stroked-button class="btnHeader" type="button" (click)="limpiar()">
         <mat-icon class="maticonmenu">cleaning_services</mat-icon>
         <span class="maticontitle">Limpiar</span>
       </button>
@@ -28,12 +28,11 @@
 
     <mat-divider></mat-divider>
     
-    <div id="content" *ngIf="id !== 0"> 
-        <div style="width: 100%; float:left;margin-bottom: -17px;">
-            <div style="text-align: center; color: #1a0da4; font-weight:600;">
-            <span>CODIGO: {{codigo}}</span>
+    <div id="content"> 
+        <div style="width: 100%; float:left;margin-bottom: -17px;"> 
+            <div style="text-align: center; color: #1a0da4; font-weight: 500;padding-top: 11px;">{{nombres}}</div> 
+            <div style="text-align: center; color: #1a0da4; font-weight:600" *ngIf="id!==0">N° Orden : {{nroorden}}</div> 
             </div> 
-        </div> 
     </div>
 
     <br style="clear:both;"/>
