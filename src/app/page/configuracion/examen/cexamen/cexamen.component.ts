@@ -129,6 +129,7 @@ export class CexamenComponent implements OnInit {
   }
 
   obtener(examen: Examen){
+    examen.listaEquivalencias?.push(new EquivResultado(this.tbEquivRpta, true));
     if(examen.nIdExamen === 0){
       
       /*let filtro = this.usuarioService.sessionDetalle();
@@ -139,8 +140,6 @@ export class CexamenComponent implements OnInit {
         rendDet.codMoneda = filtro[3];
       }*/
     }
-
-    //debugger;
 
     this.form.patchValue({
       nIdExamen: examen.nIdExamen,
@@ -272,7 +271,7 @@ export class CexamenComponent implements OnInit {
     model.vTipoRespuesta = this.form.value['vTipoRespuesta'];
     model.vRespuesta = this.form.value['vRespuesta'];
 
-    model.listaEquivalencias = this.examen.listaEquivalencias;
+    model.listaEquivalencias = this.examen.listaEquivalencias?.slice(0, this.examen.listaEquivalencias.length-1);
 
     //model.ideSede = this.ideSede;
 
@@ -375,15 +374,15 @@ export class CexamenComponent implements OnInit {
   }
 
   cambiaRangoResu(codigo: string = '', resultados: RangoResu[] = [], $event: any){
-    this.obtieneResultado(codigo, resultados)!.nValMin = $event.target.value
+    this.obtieneResultado(codigo, resultados)!.nMinVal = $event.target.value
   }
 
-  async agregarFila(){
+  agregarFila(){
     var lista = this.examen.listaEquivalencias!;
     var ultimo: EquivResultado = lista[lista.length - 1]
     //Si se validó y guardó el registro anterior
     if(this.setEdicionEquivResu(ultimo, false)){
-      var nuevo: EquivResultado = new EquivResultado();
+      var nuevo: EquivResultado = new EquivResultado(this.tbEquivRpta);
 
       //Copia lista de valores de resultados anteriores
       nuevo.listaRangos! = JSON.parse(JSON.stringify(ultimo.listaRangos!.slice()));
@@ -401,7 +400,7 @@ export class CexamenComponent implements OnInit {
     lista?.pop();
 
     //Agrega equivalencia vacía
-    if(lista.length === 0) lista?.push(new EquivResultado());
+    if(lista.length === 0) lista?.push(new EquivResultado(this.tbEquivRpta));
 
     var ultimo: EquivResultado = lista[lista.length - 1]
     this.setEdicionEquivResu(ultimo, true);
@@ -420,7 +419,11 @@ export class CexamenComponent implements OnInit {
 
   rangoValido(equiv: EquivResultado){
     if(equiv.nResuNumMax! < equiv.nResuNumMin!)
-      return 'El valor máximo no debe ser menor al mínimo.'
+      return 'Error en el rango de edades.'
+
+    var rangoError = equiv.listaRangos?.find(e => parseFloat(e.nMinVal!.toString()) >= parseFloat(e.nMaxVal!.toString()))
+    if(rangoError !== undefined)
+      return 'Existe un rango de valores incorrecto.'
 
     return '';
   }
@@ -431,8 +434,8 @@ export class CexamenComponent implements OnInit {
     var min, max;
     var resu = this.obtieneResultado(codigo, resultados);
     if(resu !== undefined){
-      min = numeral(resu.nValMin);
-      max = numeral(resu.nValMax);
+      min = numeral(resu.nMinVal);
+      max = numeral(resu.nMaxVal);
       rangos = '≥ ' + min.format(formato) + ' < ' + max.format(formato);
     }
     return rangos;
@@ -467,11 +470,11 @@ export class CexamenComponent implements OnInit {
     switch(tipo){
       case 'min':
         if(anteResu !== undefined)
-          anteResu.nValMax = target.value;
+          anteResu.nMaxVal = target.value;
         break;
       case 'max':
         if(sgteResu !== undefined)
-          sgteResu.nValMin = target.value;
+          sgteResu.nMinVal = target.value;
         break;
     }
   }

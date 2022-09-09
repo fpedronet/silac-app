@@ -168,12 +168,12 @@
                   </div>  
                 </mat-grid-list>                              
 
-                <div *ngIf="getControlLabel('vTipoRespuesta') === '00002'" class="example-container mat-elevation-z0" style="margin-left:-14px">
+                <div *ngIf="['00002','00003'].includes(getControlLabel('vTipoRespuesta'))" class="example-container mat-elevation-z0" style="margin-left:-14px">
                   
                   <table class="table-equiv table" id="tabla-rango">
                     <thead>
                       <tr>
-                        <th style="padding: 0; width: 100px; border: 0"></th>
+                        <th *ngIf="getControlLabel('vTipoRespuesta') === '00002'" style="padding: 0; width: 100px; border: 0"></th>
                         <th *ngFor="let eTitulo of selEquicRpta" style="padding: 0; width: 100px; max-height: 0;">
                           <div *ngIf="!invierteColores" style="background-color: {{eTitulo.vAux2}}; height: 100%;">
                             <span style="vertical-align: -webkit-baseline-middle;">{{eTitulo.vDescripcion}}</span>
@@ -186,7 +186,7 @@
                     </thead>
                     <tbody>
                       <tr *ngFor="let eRango of examen.listaEquivalencias">
-                        <td class="table-criterio">
+                        <td *ngIf="getControlLabel('vTipoRespuesta') === '00002'" class="table-criterio">
                           <div id="rangoCriterio" *ngIf="eRango.edicion" style="display: flex;">
                             <mat-form-field class="table-input" appearance="outline">
                               <input name="nResuMin" matInput placeholder="Desde" type="number" class="example-right-align"
@@ -214,20 +214,20 @@
                         <td *ngFor="let eTitulo of selEquicRpta" style="max-width: 100px;">
                           <div *ngIf="eRango.edicion" style="display: flex;">
                             <mat-form-field class="table-input" appearance="outline">
-                              <input name="nValMin" matInput placeholder="Mín." type="number" class="example-right-align"
+                              <input name="nMinVal" matInput placeholder="Mín." type="number" class="example-right-align"
                               oninput="if(this.value.length>=5) { this.value = this.value.slice(0,5); }"
                               onkeypress="return /[0-9|.]/i.test(event.key)"
-                              [value]="cantidadRangos() === 0 ? '' : obtieneResultado(eTitulo.vValor, eRango.listaRangos)!.nValMin"                              
-                              (input)="obtieneResultado(eTitulo.vValor, eRango.listaRangos)!.nValMin = $any($event.target).value"
+                              [value]="eRango.vacio ? '' : obtieneResultado(eTitulo.vValor, eRango.listaRangos)!.nMinVal"                              
+                              (input)="obtieneResultado(eTitulo.vValor, eRango.listaRangos)!.nMinVal = $any($event.target).value"
                               (change)="actualizaVecino(eTitulo.vValor, eRango.listaRangos, 'min', $event.target)"
                               (keyup.enter)="agregarFila()">
                             </mat-form-field>
                             <mat-form-field class="table-input" appearance="outline">
-                              <input name="nValMax" matInput placeholder="Máx." type="number" class="example-right-align"
+                              <input name="nMaxVal" matInput placeholder="Máx." type="number" class="example-right-align"
                               oninput="if(this.value.length>=5) { this.value = this.value.slice(0,5); }"
                               onkeypress="return /[0-9|.]/i.test(event.key)"
-                              [value]="cantidadRangos() === 0 ? '' : obtieneResultado(eTitulo.vValor, eRango.listaRangos)!.nValMax"
-                              (input)="obtieneResultado(eTitulo.vValor, eRango.listaRangos)!.nValMax = $any($event.target).value"
+                              [value]="eRango.vacio ? '' : obtieneResultado(eTitulo.vValor, eRango.listaRangos)!.nMaxVal"
+                              (input)="obtieneResultado(eTitulo.vValor, eRango.listaRangos)!.nMaxVal = $any($event.target).value"
                               (change)="actualizaVecino(eTitulo.vValor, eRango.listaRangos, 'max', $event.target)"
                               (keyup.enter)="agregarFila()">
                             </mat-form-field>

@@ -1,3 +1,5 @@
+import { TbMaestra } from "../combobox";
+
 export class Examen{
     constructor() {
         this.nIdExamen = 0
@@ -11,10 +13,10 @@ export class Examen{
         this.vUndMed = '',
         this.vRangoRef = '',
         this.vCodSubGrupo = '',
-        this.vTipoRespuesta = '00002',
+        this.vTipoRespuesta = '00003',
         this.vRespuesta = '',
         this.selected = true;
-        this.listaEquivalencias = [new EquivResultado()];
+        this.listaEquivalencias = [];
     }
     nIdExamen?: number;
     vCodExamen?: string;
@@ -51,7 +53,7 @@ export class PerfilExamen{
 }
 
 export class EquivResultado{
-    constructor() {
+    constructor(titulos: TbMaestra[], vacio: boolean = false) {
         this.nIdEquivResultado = 0;
         this.nIdExamen = 0;
         this.vResuNominal = '';
@@ -59,27 +61,14 @@ export class EquivResultado{
         this.nResuNumMax = 18;
         this.vMensaje = '';
 
-        this.vCodVal1 = '00005'; this.nMinVal1 = 36.01; this.nMaxVal1 = 1999;
-        this.vCodVal2 = '00001'; this.nMinVal2 = 0; this.nMaxVal2 = 20.2334;
-        this.vCodVal3 = '00002'; this.nMinVal3 = 20.25; this.nMaxVal3 = 30;
-        this.vCodVal4 = '00003'; this.nMinVal4 = 30.01; this.nMaxVal4 = 32.04;
-        this.vCodVal5 = '00004'; this.nMinVal5 = 32.05; this.nMaxVal5 = 36;
-
         this.listaRangos = [];
-        var ran: RangoResu;
-        ran = {vEtiqueta: this.vCodVal1, nValMin: this.nMinVal1, nValMax: this.nMaxVal1}
-        this.listaRangos.push(ran);
-        ran = {vEtiqueta: this.vCodVal2, nValMin: this.nMinVal2, nValMax: this.nMaxVal2}
-        this.listaRangos.push(ran);
-        ran = {vEtiqueta: this.vCodVal3, nValMin: this.nMinVal3, nValMax: this.nMaxVal3}
-        this.listaRangos.push(ran);
-        ran = {vEtiqueta: this.vCodVal4, nValMin: this.nMinVal4, nValMax: this.nMaxVal4}
-        this.listaRangos.push(ran);
-        ran = {vEtiqueta: this.vCodVal5, nValMin: this.nMinVal5, nValMax: this.nMaxVal5}
-        this.listaRangos.push(ran);
+        titulos.forEach(e => {
+            this.listaRangos?.push(new RangoResu(e.vValor!))
+        });
 
         this.edicion = true;
         this.swt = 0;
+        this.vacio = vacio;
     }
     nIdEquivResultado?: number;
     nIdExamen?: number;
@@ -105,13 +94,17 @@ export class EquivResultado{
     nMaxVal5?: number;
     listaRangos?: RangoResu[];
     swt?: number;
+    vacio?: boolean;
 
     edicion?: boolean;
 }
 
 export class RangoResu
 {
+    constructor(vEtiqueta: string){
+        this.vEtiqueta = vEtiqueta;
+    }
     vEtiqueta?: string;
-    nValMin?: number;
-    nValMax?: number;
+    nMinVal: number = -1;
+    nMaxVal: number = -1;
 }
