@@ -226,6 +226,11 @@ export class CordenComponent implements OnInit {
         nEdad: data.nEdad,      
       });
 
+      if(this.id != 0){
+        this.flaghemograma = data.nFlagHemograma?.toString()!;
+        this.flagorina = data.nFlagOrina?.toString()!;
+      }
+
     });
   }
 
@@ -507,7 +512,7 @@ export class CordenComponent implements OnInit {
 
   guardar(){
     let model = new Orden();
-    debugger;
+
     /*Persona */    
     model.vTipDocu= this.form.value['vTipDocu'];
     model.vDocumento= this.form.value['vDocumento'];
