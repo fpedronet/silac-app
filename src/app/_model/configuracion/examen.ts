@@ -11,7 +11,7 @@ export class Examen{
         this.vUndMed = '',
         this.vRangoRef = '',
         this.vCodSubGrupo = '',
-        this.vTipoRespuesta = '',
+        this.vTipoRespuesta = '00002',
         this.vRespuesta = '',
         this.selected = true;
         this.listaEquivalencias = [new EquivResultado()];
@@ -77,6 +77,9 @@ export class EquivResultado{
         this.listaRangos.push(ran);
         ran = {vEtiqueta: this.vCodVal5, nValMin: this.nMinVal5, nValMax: this.nMaxVal5}
         this.listaRangos.push(ran);
+
+        this.edicion = true;
+        this.swt = 0;
     }
     nIdEquivResultado?: number;
     nIdExamen?: number;
@@ -101,6 +104,7 @@ export class EquivResultado{
     nMinVal5?: number;
     nMaxVal5?: number;
     listaRangos?: RangoResu[];
+    swt?: number;
 
     edicion?: boolean;
 }
