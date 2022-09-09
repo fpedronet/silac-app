@@ -56,7 +56,7 @@ export class EquivResultado{
         this.nIdExamen = 0;
         this.vResuNominal = '';
         this.nResuNumMin = 0;
-        this.nResuNumMax = 0;
+        this.nResuNumMax = 18;
         this.vMensaje = '';
 
         this.vCodVal1 = '00005'; this.nMinVal1 = 36.01; this.nMaxVal1 = 1999;

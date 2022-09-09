@@ -11,6 +11,7 @@ import { ExamenService } from 'src/app/_service/configuracion/examen.service';
 import { TbmaestraService } from 'src/app/_service/tbmaestra.service';
 import { environment } from 'src/environments/environment';
 import numeral from 'numeral';
+import { tick } from '@angular/core/testing';
 
 
 @Component({
@@ -86,6 +87,26 @@ export class CexamenComponent implements OnInit {
   inicializar(){
     
     numeral.defaultFormat('0');
+    /*var observer = new MutationObserver(function(mutations_list) {
+      mutations_list.forEach(function(mutation) {
+        mutation.addedNodes.forEach(function(added_node: any) {
+          if(added_node.id == 'rangoCriterio') {
+            console.log('#child has been added');
+            observer.disconnect();
+          }
+        });
+      });
+    });*/
+    /*(function(mutations) {
+      const $lastAge: any = Array.from(
+        document.querySelectorAll('.lastRowAge')
+      ).pop();
+      
+      $lastAge?.focus();
+      $lastAge?.select();
+   });*/
+
+   //observer.observe(document, {attributes: false, childList: true, characterData: false, subtree:true});
 
     var examen = new Examen();
 
@@ -357,14 +378,20 @@ export class CexamenComponent implements OnInit {
     this.obtieneResultado(codigo, resultados)!.nValMin = $event.target.value
   }
 
-  agregarFila(){
+  async agregarFila(){
     var lista = this.examen.listaEquivalencias!;
     var ultimo: EquivResultado = lista[lista.length - 1]
+    //Si se validó y guardó el registro anterior
     if(this.setEdicionEquivResu(ultimo, false)){
-      //Continúa numeración anterior
       var nuevo: EquivResultado = new EquivResultado();
+
+      //Copia lista de valores de resultados anteriores
+      nuevo.listaRangos! = JSON.parse(JSON.stringify(ultimo.listaRangos!.slice()));
+
+      //Continúa numeración anterior de edades      
       nuevo.nResuNumMin = parseInt(ultimo.nResuNumMax!.toString()) + 1;
-      nuevo.nResuNumMax = nuevo.nResuNumMin + (ultimo.nResuNumMax! - ultimo.nResuNumMin!)
+      nuevo.nResuNumMax = nuevo.nResuNumMin + (ultimo.nResuNumMax! - ultimo.nResuNumMin!);
+
       lista?.push(nuevo);
     }
   }  
@@ -375,7 +402,7 @@ export class CexamenComponent implements OnInit {
 
     //Agrega equivalencia vacía
     if(lista.length === 0) lista?.push(new EquivResultado());
-    
+
     var ultimo: EquivResultado = lista[lista.length - 1]
     this.setEdicionEquivResu(ultimo, true);
   }
@@ -411,7 +438,41 @@ export class CexamenComponent implements OnInit {
     return rangos;
   }
 
-  obtieneResultado(codigo: string = '', resultados: RangoResu[] = []){
-    return resultados.find(e => e.vEtiqueta === codigo);
+  obtieneResultado(codigo: string = '', resultados: RangoResu[] = [], offset: number = 0){
+    var resu = undefined;
+    var indice: number;
+    var newCodigo: string;
+    //Equivalencia actual según el código
+    var current = this.tbEquivRpta.find(e => e.vValor === codigo);
+    if(current !== undefined){
+      //Busca equivalencia correcta desplazandose según indice
+      indice = this.tbEquivRpta.indexOf(current) + offset;
+      if(indice >= 0 && indice < resultados.length){
+        newCodigo = this.tbEquivRpta[indice].vValor!;
+        //Resultado obtenido usando a la tbala maestra de equivalencias como guía
+        resu = resultados.find(e => e.vEtiqueta === newCodigo);
+      }
+    }
+    return resu;
+  }
+
+  cantidadRangos(){
+    return this.examen.listaEquivalencias?.filter(e => e.swt === 1).length;
+  }
+
+  actualizaVecino(codigo: string = '', resultados: RangoResu[] = [], tipo: string, target?: any){
+    var anteResu = this.obtieneResultado(codigo, resultados, -1);
+    var sgteResu = this.obtieneResultado(codigo, resultados, 1);
+
+    switch(tipo){
+      case 'min':
+        if(anteResu !== undefined)
+          anteResu.nValMax = target.value;
+        break;
+      case 'max':
+        if(sgteResu !== undefined)
+          sgteResu.nValMin = target.value;
+        break;
+    }
   }
 }
