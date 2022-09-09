@@ -61,6 +61,8 @@ export class CordenComponent implements OnInit {
   edit: boolean = true;
   $disable: boolean =false;
   currentTab: number = 0;
+  flaghemograma: string = '0';
+  flagorina: string = '0';
 
   //dataSource: RendicionD[] = [];
   initDisplayedColumns: string[] = ['concepto', 'vFecha', 'documento', 'vMonto', 'proveedor', 'descripcion', 'comodato', 'adjunto', 'accion', 'mo'];
@@ -505,17 +507,8 @@ export class CordenComponent implements OnInit {
 
   guardar(){
     let model = new Orden();
-
-    /*Orden*/
-    model.nIdOrden= this.form.value['nIdOrden'];
-    model.vHC= this.form.value['vHC'];
-    model.dFecOrden= this.form.value['dFecOrden'];
-    model.vProcedencia= this.form.value['vProcedencia'];
-    model.vCama= this.form.value['vCama'];
-
-
+    debugger;
     /*Persona */    
-    model.nIdPersona= this.form.value['nIdPersona'];
     model.vTipDocu= this.form.value['vTipDocu'];
     model.vDocumento= this.form.value['vDocumento'];
     model.vApPaterno= this.form.value['vApPaterno'];
@@ -527,6 +520,22 @@ export class CordenComponent implements OnInit {
     model.dFechaNac= this.form.value['dFechaNac'];
     model.nEdad= (this.form.value['nEdad']==null || this.form.value['nEdad']=="")? null : this.form.value['nEdad'].toString();
     model.swt= 1;
+
+    
+    /*Orden*/
+    model.nIdOrden= this.form.value['nIdOrden'];
+    model.nNumero= this.form.value['nNumero'];
+    model.vHC= this.form.value['vHC'];
+    model.nCantMuestras= 1;
+    model.dFecOrden= this.form.value['dFecOrden'];
+    model.vProcedencia= this.form.value['vProcedencia'];
+    model.vCama= this.form.value['vCama'];
+    model.vOrigen= this.form.value['vOrigen'];
+    model.vServicio= this.form.value['vServicio'];
+    model.nFlagHemograma=  parseInt(this.flaghemograma);
+    model.nFlagOrina= parseInt(this.flagorina);
+    model.nIdEstado= 1;
+
 
     /*Examenes */  
 
@@ -545,5 +554,13 @@ export class CordenComponent implements OnInit {
 
   }
 
+  changeflag(estado: string, flag: string){
+    if(flag=='hemograma'){
+      this.flaghemograma = estado
+    }
+    else if(flag=='orina'){
+      this.flagorina = estado
+    }
+  }
 }
 
