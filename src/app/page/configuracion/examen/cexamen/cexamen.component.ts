@@ -10,8 +10,9 @@ import { EquivResultado, Examen, RangoResu } from 'src/app/_model/configuracion/
 import { ExamenService } from 'src/app/_service/configuracion/examen.service';
 import { TbmaestraService } from 'src/app/_service/tbmaestra.service';
 import { environment } from 'src/environments/environment';
+import {COMMA, ENTER} from '@angular/cdk/keycodes';
 import numeral from 'numeral';
-import { tick } from '@angular/core/testing';
+import { MatChipInputEvent, MatChipList } from '@angular/material/chips';
 
 
 @Component({
@@ -58,10 +59,14 @@ export class CexamenComponent implements OnInit {
   invierteColores: boolean = false;
   incluirMensaje: boolean = false;
 
+  readonly separatorKeysCodes = [ENTER, COMMA] as const;
+
   selEquicRpta: TbMaestra[] = [];
 
   @ViewChild(MatStepper)
   stepper!: MatStepper;
+
+  chipsResuNominal: MatChipList[] = [];
   
   /*carBuscaAuto: number = 1;
   nroMuestraAuto: number = 0;
@@ -157,6 +162,9 @@ export class CexamenComponent implements OnInit {
       vTipoRespuesta: examen.vTipoRespuesta,
       vRespuesta: examen.vRespuesta
     });
+
+    //Filtrar criterios de equivalencias de la respuesta según su tipo
+    this.selEquicRpta = this.tbEquivRpta.filter(e => e.vAux1 === examen.vTipoRespuesta);
 
     /*var sedeFind = this.tbSede.find(e => e.valor === rendDet.ideSede?.toString()); //Ruc
     if(sedeFind !== undefined){
@@ -360,9 +368,9 @@ export class CexamenComponent implements OnInit {
       case 1:
         this.incluirExtremos = checked;
         if(!checked)
-          this.selEquicRpta = this.tbEquivRpta.filter(e => e.vAux1 === '1');
+          this.selEquicRpta = this.tbEquivRpta.filter(e => e.vAux2 === '1' && e.vAux1 === this.getControlLabel('vTipoRespuesta'));
         else
-          this.selEquicRpta = this.tbEquivRpta.slice();
+          this.selEquicRpta = this.tbEquivRpta.filter(e => e.vAux1 === this.getControlLabel('vTipoRespuesta'));
         break;
       case 2:
         this.invierteColores = checked;
@@ -476,6 +484,28 @@ export class CexamenComponent implements OnInit {
         if(sgteResu !== undefined)
           sgteResu.nMinVal = target.value;
         break;
+    }
+  }
+
+  cambiaTipoRpta(codTipRpta: string){
+    this.selEquicRpta = this.tbEquivRpta.filter(e => e.vAux1 === codTipRpta);
+  }
+
+  addListResuNominal(event: MatChipInputEvent, listResuNominal: string[] = []): void {
+    const value = (event.value || '').trim();
+
+    if (value) {
+      listResuNominal.push(value);
+    }
+
+    event.chipInput!.clear();
+  }
+
+  removeListResuNominal(resu: string, listResuNominal: string[] = []): void {
+    const index = listResuNominal.indexOf(resu);
+
+    if (index >= 0) {
+      listResuNominal.splice(index, 1);
     }
   }
 }

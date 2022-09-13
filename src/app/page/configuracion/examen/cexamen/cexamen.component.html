@@ -130,7 +130,7 @@
                   <mat-grid-tile [colspan]="12">
                     <mat-form-field appearance="outline">
                       <mat-label>Tipo de respuesta</mat-label>
-                      <mat-select placeholder="Tipo de Rpta" formControlName="vTipoRespuesta">
+                      <mat-select placeholder="Tipo de Rpta" formControlName="vTipoRespuesta" (selectionChange)="cambiaTipoRpta($event.value)">
                         <mat-option *ngFor="let el of tbRpta" [value]="el.vValor">
                           {{el.vDescripcion}}
                         </mat-option>              
@@ -162,7 +162,7 @@
               <div div fxFlex="100%" fxFlex.xs="100%" fxFlex.sm="100%" style="padding: 0px 0px 0px 0px;">
                 <mat-grid-list cols="12" rowHeight="75px" gutterSize="15px">
                   <div>
-                    <mat-checkbox [checked]="incluirExtremos" (change)="actualizaCheckbox(1,$event.checked)">Incluye extremos</mat-checkbox>
+                    <mat-checkbox *ngIf="getControlLabel('vTipoRespuesta') === '00002'" [checked]="incluirExtremos" (change)="actualizaCheckbox(1,$event.checked)">Incluye extremos</mat-checkbox>
                     <mat-checkbox [checked]="invierteColores" (change)="actualizaCheckbox(2,$event.checked)">Colores alternos</mat-checkbox>
                     <mat-checkbox [checked]="incluirMensaje" (change)="actualizaCheckbox(3,$event.checked)">Incluye mensaje</mat-checkbox>
                   </div>  
@@ -175,18 +175,18 @@
                       <tr>
                         <th *ngIf="getControlLabel('vTipoRespuesta') === '00002'" style="padding: 0; width: 100px; border: 0"></th>
                         <th *ngFor="let eTitulo of selEquicRpta" style="padding: 0; width: 100px; max-height: 0;">
-                          <div *ngIf="!invierteColores" style="background-color: {{eTitulo.vAux2}}; height: 100%;">
+                          <div *ngIf="!invierteColores" style="background-color: {{eTitulo.vAux3}}; height: 100%;">
                             <span style="vertical-align: -webkit-baseline-middle;">{{eTitulo.vDescripcion}}</span>
                           </div>
-                          <div *ngIf="invierteColores" style="background-color: {{eTitulo.vAux3}}; height: 100%;">
+                          <div *ngIf="invierteColores" style="background-color: {{eTitulo.vAux4}}; height: 100%;">
                             <span style="vertical-align: -webkit-baseline-middle;">{{eTitulo.vDescripcion}}</span>
                           </div>
                         </th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <tbody *ngIf="getControlLabel('vTipoRespuesta') === '00002'">
                       <tr *ngFor="let eRango of examen.listaEquivalencias">
-                        <td *ngIf="getControlLabel('vTipoRespuesta') === '00002'" class="table-criterio">
+                        <td class="table-criterio">
                           <div id="rangoCriterio" *ngIf="eRango.edicion" style="display: flex;">
                             <mat-form-field class="table-input" appearance="outline">
                               <input name="nResuMin" matInput placeholder="Desde" type="number" class="example-right-align"
@@ -243,8 +243,32 @@
                         </td>
                       </tr>                          
                     </tbody>
+                    <tbody *ngIf="getControlLabel('vTipoRespuesta') === '00003'">
+                      <tr *ngFor="let eRango of examen.listaEquivalencias">
+                        <td *ngFor="let eTitulo of selEquicRpta; let i = index;">
+                          <mat-form-field class="example-chip-list" appearance="fill">
+                            <mat-chip-list class="chipsResuNominal">
+                              <mat-chip *ngFor="let elResuNominal of eRango.listaResuNominal" (removed)="removeListResuNominal(elResuNominal, eRango.listaResuNominal)">
+                                {{elResuNominal}}
+                                <button matChipRemove>
+                                  <mat-icon>cancel</mat-icon>
+                                </button>
+                              </mat-chip>
+                              <input placeholder="Nueva equivalencia"
+                                     [matChipInputFor]="chipsResuNominal[i]"
+                                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                                     [matChipInputAddOnBlur]="true"
+                                     (matChipInputTokenEnd)="addListResuNominal($event, eRango.listaResuNominal)">
+                            </mat-chip-list>
+                          </mat-form-field>
+                        </td>
+                        <td *ngIf="incluirMensaje">
+                          <input matInput placeholder="Mensaje opcional" type="text" [value]="eRango.vMensaje">
+                        </td>
+                      </tr>
+                    </tbody>
                   </table>
-                  <div class="form-group">
+                  <div *ngIf="getControlLabel('vTipoRespuesta') === '00002'" class="form-group">
                     <button type="button" class="btn btn-primary mr-2" (click)="agregarFila()">Agregar Fila</button>
                     <button *ngIf="examen.listaEquivalencias!.length > 0" type="button" class="btn btn-danger" (click)="eliminarFila()">Eliminar Fila</button>
                   </div>

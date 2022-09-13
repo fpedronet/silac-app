@@ -66,6 +66,8 @@ export class EquivResultado{
             this.listaRangos?.push(new RangoResu(e.vValor!))
         });
 
+        this.listaResuNominal = [];
+
         this.edicion = true;
         this.swt = 0;
         this.vacio = vacio;
@@ -95,6 +97,7 @@ export class EquivResultado{
     listaRangos?: RangoResu[];
     swt?: number;
     vacio?: boolean;
+    listaResuNominal?: string[];
 
     edicion?: boolean;
 }
