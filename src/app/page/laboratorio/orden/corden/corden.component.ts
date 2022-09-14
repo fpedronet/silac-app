@@ -10,7 +10,7 @@ import { catchError, map, startWith, switchMap} from 'rxjs/operators';
 import { TbMaestra } from 'src/app/_model/combobox';
 import { Examen, PerfilExamen } from 'src/app/_model/configuracion/examen';
 
-import { Orden } from 'src/app/_model/laboratorio/orden';
+import { Orden, OrdenExamen } from 'src/app/_model/laboratorio/orden';
 import { Permiso } from 'src/app/_model/permiso';
 
 import { ConfigPermisoService } from 'src/app/_service/configpermiso.service';
@@ -109,8 +109,7 @@ export class CordenComponent implements OnInit {
 
     this.listarMaestros().then(res => {
       this.listarExamenes();
-      this.listarPerfiles();        
-      this.obtener();
+      this.listarPerfiles();
     });
 
     this.minDate.setMonth(this.maxDate.getMonth() - 12*120);  
@@ -184,9 +183,16 @@ export class CordenComponent implements OnInit {
           }          
         }
 
-        resolve('ok')
+        resolve('ok');
       });
     })
+  }
+
+  async listaExamenesYperfiles(){
+    return new Promise(async (resolve) => {
+      
+      resolve('ok');
+    });
   }
 
   obtener(){
@@ -232,6 +238,12 @@ export class CordenComponent implements OnInit {
         this.nroorden = data.nNumero!;
       }
 
+      //Seleeccionar examenes registrados o orden
+      this.listaExamenes.forEach(e => {
+        if(data.listaExamenes?.find(f => f.nIdExamen === e.nIdExamen) !== undefined)
+          e.selected = true;
+      });
+
     });
   }
 
@@ -255,7 +267,11 @@ export class CordenComponent implements OnInit {
 
           return res.items;
         }),
-      ).subscribe(data => (this.listaExamenes = data));
+      ).subscribe(data => {
+        this.listaExamenes = data;
+        this.obtener();
+      }
+      );
   }
 
   listarPerfiles(search: string = ''){ 
@@ -543,7 +559,13 @@ export class CordenComponent implements OnInit {
     model.nIdEstado= 1;
 
 
-    /*Examenes */  
+    /*Examenes */
+    model.listaExamenes = [];
+    this.listaExamenes.filter(e => e.selected).forEach(f => {
+        model.listaExamenes?.push(new OrdenExamen(model.nIdOrden, f.nIdExamen));
+      }
+    )
+
 
     this.spinnerService.showLoading();
     this.ordenService.guardar(model).subscribe(data=>{

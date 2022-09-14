@@ -1,8 +1,14 @@
+import { Examen } from "../configuracion/examen";
 import { pagination } from "../pagination";
 import { Persona } from "../persona";
 import { ResultadoExamen } from "./resultadoExamen";
 
 export class Orden extends Persona  {
+    constructor(){
+        super();
+        this.listaExamenes = [];
+    }
+
     nIdOrden?: number;
     nNumero?: string;
     vHC?: string;
@@ -27,9 +33,25 @@ export class Orden extends Persona  {
 
     vDetalle?: string;
     curUsuario?: number;
+
+    listaExamenes?: OrdenExamen[];
    
-    resultadoExamen?: ResultadoExamen;
-    listaResultadoExamen?: ResultadoExamen[];
+    //resultadoExamen?: ResultadoExamen;
+    //listaResultadoExamen?: ResultadoExamen[];
+}
+
+export class OrdenExamen{
+    constructor(nIdOrden?: number, nIdExamen?: number){
+        this.nIdOrden = nIdOrden;
+        this.nIdExamen = nIdExamen;
+    }
+    nIdOrden?: number;
+    nIdExamen?: number;
+    nIncDetalle?: number;
+    vResultado?: string;
+    vResultadoAtm?: string;
+    vResultado2?: string;
+    vResultado2Atm?: string;
 }
 
 export class OrdenRequest extends pagination {
