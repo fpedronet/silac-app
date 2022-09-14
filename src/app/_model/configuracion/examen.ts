@@ -17,6 +17,9 @@ export class Examen{
         this.vRespuesta = '',
         this.selected = true;
         this.listaEquivalencias = [];
+        this.nIncluirExtremos = 1;
+        this.nInvertirColores = 0;
+        this.nIncluirMensaje = 0;
     }
     nIdExamen?: number;
     vCodExamen?: string;
@@ -37,6 +40,9 @@ export class Examen{
     nIncDetalle?: number;
     listaEquivalencias?: EquivResultado[];
     selected?: boolean;
+    nIncluirExtremos?: number;
+    nInvertirColores?: number;
+    nIncluirMensaje?: number;
 }
 
 export class PerfilExamen{

@@ -55,18 +55,21 @@ export class CexamenComponent implements OnInit {
   tbEquivRpta: TbMaestra[] = [];
   tbSexo: TbMaestra[] = [];
 
-  incluirExtremos: boolean = true;
-  invierteColores: boolean = false;
-  incluirMensaje: boolean = false;
-
+  
+  chips = [];
+  baskets = [
+    { name: "baseket1", fruits: [] },
+    { name: "baseket2", fruits: [] },
+    { name: "baseket3", fruits: [] }
+  ];
   readonly separatorKeysCodes = [ENTER, COMMA] as const;
 
-  selEquicRpta: TbMaestra[] = [];
+  selEquivRpta: TbMaestra[] = [];
 
   @ViewChild(MatStepper)
   stepper!: MatStepper;
 
-  chipsResuNominal: MatChipList[] = [];
+  //chipsResuNominal: MatChipList[] = [];
   
   /*carBuscaAuto: number = 1;
   nroMuestraAuto: number = 0;
@@ -134,7 +137,6 @@ export class CexamenComponent implements OnInit {
   }
 
   obtener(examen: Examen){
-    examen.listaEquivalencias?.push(new EquivResultado(this.tbEquivRpta, true));
     if(examen.nIdExamen === 0){
       
       /*let filtro = this.usuarioService.sessionDetalle();
@@ -164,7 +166,10 @@ export class CexamenComponent implements OnInit {
     });
 
     //Filtrar criterios de equivalencias de la respuesta según su tipo
-    this.selEquicRpta = this.tbEquivRpta.filter(e => e.vAux1 === examen.vTipoRespuesta);
+    this.selEquivRpta = this.tbEquivRpta.filter(e => e.vAux1 === examen.vTipoRespuesta);
+
+    //Añade fila para agregar
+    examen.listaEquivalencias?.push(new EquivResultado(this.selEquivRpta, true));
 
     /*var sedeFind = this.tbSede.find(e => e.valor === rendDet.ideSede?.toString()); //Ruc
     if(sedeFind !== undefined){
@@ -193,8 +198,6 @@ export class CexamenComponent implements OnInit {
           this.tbRpta = this.obtenerSubtabla(tbCombobox,'RPTA');
           this.tbEquivRpta = this.obtenerSubtabla(tbCombobox,'EQRTA');
           this.tbSexo = this.obtenerSubtabla(data.items,'SEXO');
-
-          this.selEquicRpta = this.tbEquivRpta.slice();
 
           this.obtener(this.examen);
         }
@@ -278,6 +281,10 @@ export class CexamenComponent implements OnInit {
     model.vCodSubGrupo = this.form.value['vCodSubGrupo'];
     model.vTipoRespuesta = this.form.value['vTipoRespuesta'];
     model.vRespuesta = this.form.value['vRespuesta'];
+
+    model.nIncluirExtremos = this.examen.nIncluirExtremos;
+    model.nInvertirColores = this.examen.nInvertirColores;
+    model.nIncluirMensaje = this.examen.nIncluirMensaje;
 
     model.listaEquivalencias = this.examen.listaEquivalencias?.slice(0, this.examen.listaEquivalencias.length-1);
 
@@ -366,17 +373,17 @@ export class CexamenComponent implements OnInit {
   actualizaCheckbox(condicion: number, checked: boolean){
     switch (condicion){
       case 1:
-        this.incluirExtremos = checked;
+        this.examen.nIncluirExtremos = checked ? 1 : 0;
         if(!checked)
-          this.selEquicRpta = this.tbEquivRpta.filter(e => e.vAux2 === '1' && e.vAux1 === this.getControlLabel('vTipoRespuesta'));
+          this.selEquivRpta = this.tbEquivRpta.filter(e => e.vAux2 === '1' && e.vAux1 === this.getControlLabel('vTipoRespuesta'));
         else
-          this.selEquicRpta = this.tbEquivRpta.filter(e => e.vAux1 === this.getControlLabel('vTipoRespuesta'));
+          this.selEquivRpta = this.tbEquivRpta.filter(e => e.vAux1 === this.getControlLabel('vTipoRespuesta'));
         break;
       case 2:
-        this.invierteColores = checked;
+        this.examen.nInvertirColores = checked ? 1 : 0;
         break;
       case 3:
-        this.incluirMensaje = checked;
+        this.examen.nIncluirMensaje = checked ? 1 : 0;
         break;
     }
   }
@@ -390,7 +397,7 @@ export class CexamenComponent implements OnInit {
     var ultimo: EquivResultado = lista[lista.length - 1]
     //Si se validó y guardó el registro anterior
     if(this.setEdicionEquivResu(ultimo, false)){
-      var nuevo: EquivResultado = new EquivResultado(this.tbEquivRpta);
+      var nuevo: EquivResultado = new EquivResultado(this.selEquivRpta);
 
       //Copia lista de valores de resultados anteriores
       nuevo.listaRangos! = JSON.parse(JSON.stringify(ultimo.listaRangos!.slice()));
@@ -408,7 +415,7 @@ export class CexamenComponent implements OnInit {
     lista?.pop();
 
     //Agrega equivalencia vacía
-    if(lista.length === 0) lista?.push(new EquivResultado(this.tbEquivRpta));
+    if(lista.length === 0) lista?.push(new EquivResultado(this.selEquivRpta, true));
 
     var ultimo: EquivResultado = lista[lista.length - 1]
     this.setEdicionEquivResu(ultimo, true);
@@ -488,24 +495,17 @@ export class CexamenComponent implements OnInit {
   }
 
   cambiaTipoRpta(codTipRpta: string){
-    this.selEquicRpta = this.tbEquivRpta.filter(e => e.vAux1 === codTipRpta);
+    this.selEquivRpta = this.tbEquivRpta.filter(e => e.vAux1 === codTipRpta);
   }
 
-  addListResuNominal(event: MatChipInputEvent, listResuNominal: string[] = []): void {
-    const value = (event.value || '').trim();
-
-    if (value) {
-      listResuNominal.push(value);
-    }
-
-    event.chipInput!.clear();
+  add(basket: any, event: MatChipInputEvent) {
+    const value = (event.value || "").trim();
+    basket.fruits.push({ name: value, removable: true, selectable: true });
+    console.log(basket);
+    event.input.value = "";
   }
 
-  removeListResuNominal(resu: string, listResuNominal: string[] = []): void {
-    const index = listResuNominal.indexOf(resu);
-
-    if (index >= 0) {
-      listResuNominal.splice(index, 1);
-    }
+  remove(basket: { fruits: any[]; }, chip: any) {
+    basket.fruits = basket.fruits.filter(r => r !== chip);
   }
 }
