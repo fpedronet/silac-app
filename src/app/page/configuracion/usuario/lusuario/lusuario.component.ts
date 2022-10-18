@@ -72,6 +72,8 @@ export class LusuarioComponent implements OnInit {
       .pipe(
         startWith({}),
         switchMap(() => {
+          this.loading = true;
+          
           let filtro = this.logeoService.sessionFiltro();
 
           return this.usuarioService!.listar(

@@ -3,16 +3,19 @@
         "codigo":"0101"
     },
     "usuario":{
-        "codigo":"0301"
+        "codigo":"0201"
     },
-    "perfil":{
-        "codigo":"0302"
+    "permiso":{
+        "codigo":"0202"
     },
     "interface":{
-        "codigo":"0303"
+        "codigo":"0205"
     },
     "examen":{
-        "codigo":"0304"
+        "codigo":"0203"
+    },
+    "perfil":{
+        "codigo":"0204"
     },
     "generarreporte":{
         "codigo":"0401"
