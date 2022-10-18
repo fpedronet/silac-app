@@ -26,11 +26,6 @@
                 <li *ngFor="let s of m.listaSubMenu1">
                   <a *ngIf="m.vUrl==''"  class="opcion">{{s.vPantalla}}</a>
                   <a *ngIf="m.vUrl!=''" (click)="clearLocalStore()" routerLink="{{s.vUrl}}" class="opcion">{{s.vPantalla}}</a>
-                  <!-- <ul>
-                    <li *ngFor="let s1 of s.listaSubMenu2">
-                      <a (click)="clearLocalStore()" routerLink="{{s1.url}}" class="opcion">{{s1.desSubMenuWeb}}</a>                    
-                    </li>
-                  </ul> -->
                 </li>
               </ul>
             </li>

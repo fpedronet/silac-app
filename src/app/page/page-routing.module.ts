@@ -1,10 +1,11 @@
+import { CexamenComponent } from './configuracion/examen/cexamen/cexamen.component';
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { GuardService } from '../_service/guard.service';
 
 import { HomeComponent } from './home/home.component';
 
-import { Not403Component } from './configuracion/not403/not403.component';
+import { Not403Component } from './component/not403/not403.component';
 
 import { CpermisoComponent } from './configuracion/permiso/cpermiso/cpermiso.component';
 import { LexamenComponent } from './configuracion/examen/lexamen/lexamen.component';
@@ -33,23 +34,20 @@ const routes: Routes = [
   {path:'laboratorio/ordenes/create', component: CordenComponent, canActivate: [GuardService]},
   {path:'laboratorio/ordenes/edit/:id/:edit', component: CordenComponent, canActivate: [GuardService]},
   {path:'laboratorio/ordenes/detail/:id/:detail', component: DordenComponent, canActivate: [GuardService]},
-
-
-  {path:'configuracion/examenes', component: LexamenComponent, canActivate: [GuardService]},
-  //{path:'configuracion/examenes', component: CordenComponent, canActivate: [GuardService]},
   
-  {path:'configuracion/permiso', component: CpermisoComponent, canActivate: [GuardService]},
-
   {path:'configuracion/usuario', component: LusuarioComponent, canActivate: [GuardService]},
   {path:'configuracion/usuario/create', component: CusuarioComponent, canActivate: [GuardService]},
   {path:'configuracion/usuario/edit/:id/:edit', component: CusuarioComponent, canActivate: [GuardService]},
 
-  {path:'configuracion/interface', component: LinterfaceComponent, canActivate: [GuardService]},
-  {path:'configuracion/interface/create', component: CinterfaceComponent, canActivate: [GuardService]},
-  {path:'configuracion/interface/edit/:id/:edit', component: CinterfaceComponent, canActivate: [GuardService]},
+  {path:'configuracion/permiso', component: CpermisoComponent, canActivate: [GuardService]},
+
+  {path:'configuracion/examen', component: CexamenComponent, canActivate: [GuardService]},
 
   {path:'configuracion/perfil', component: LperfilexamenComponent, canActivate: [GuardService]},
 
+  {path:'configuracion/interface', component: LinterfaceComponent, canActivate: [GuardService]},
+  {path:'configuracion/interface/create', component: CinterfaceComponent, canActivate: [GuardService]},
+  {path:'configuracion/interface/edit/:id/:edit', component: CinterfaceComponent, canActivate: [GuardService]},
 ];
 
 @NgModule({

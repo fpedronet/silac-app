@@ -8,8 +8,8 @@ import { CommonModule, HashLocationStrategy, LocationStrategy } from '@angular/c
 import { HomeComponent } from './home/home.component';
 import { PageRoutingModule } from './page-routing.module';
 import { InterceptorService } from '../_interceptors/interceptor.service';
-import { Not404Component } from './configuracion/not404/not404.component';
-import { Not403Component } from './configuracion/not403/not403.component';
+import { Not404Component } from './component/not404/not404.component';
+import { Not403Component } from './component/not403/not403.component';
 import { CpermisoComponent } from './configuracion/permiso/cpermiso/cpermiso.component';
 import { CexamenComponent } from './configuracion/examen/cexamen/cexamen.component';
 import { LexamenComponent } from './configuracion/examen/lexamen/lexamen.component';
