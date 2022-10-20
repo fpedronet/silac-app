@@ -246,8 +246,9 @@ export class CusuarioComponent implements OnInit {
         }  
 
         this.cambiaPaisDistrito(data.vCodPais, data.vCodDist);
-
+     
         if(data.nIdPerfil!="" && data.nIdPerfil!=null){
+          data.nIdPerfil = data.nIdPerfil.replace(/ /g, "");
           var listaIdPerfil = data.nIdPerfil!.split("|");
 
           data.listaPerfil?.forEach(y=>{
@@ -498,7 +499,7 @@ export class CusuarioComponent implements OnInit {
             this.distritoColor = 'accent';
             this.muestraDistrito = false;
           } 
-  
+         
           if(data.vDocumento!="" && data.vDocumento!=null){
             this.form.patchValue({
               vApPaterno: data.vApPaterno,
